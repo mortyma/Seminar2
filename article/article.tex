@@ -1,48 +1,33 @@
-\documentclass[a4paper,10pt, twocolumn]{article}
-\usepackage[utf8]{inputenc}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsthm}
-\usepackage[usenames,dvipsnames]{color}
-\usepackage{comment}
-\usepackage{tikz}
-\usepackage{verbatim}
-\usetikzlibrary{arrows,shapes}
-\usepackage{listings}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
-\usepackage{hyperref}
-\usepackage{graphicx}
-\usepackage{epstopdf}
-\usepackage{tabularx}
-\usepackage{enumitem}
-\setlist{nolistsep}
-\setlength{\parindent}{0cm}
+\documentclass{acm_proc_article-sp}
 
-%page boarders
-\usepackage[top=3cm, bottom=3cm, left=2cm, right=2cm]{geometry}
-\usepackage[style=numeric,backend=bibtex]{biblatex}
-\addbibresource{../sources}
-
-\newtheorem{lemma}{Lemma}
-\newtheorem{corollary}[lemma]{Corollary}
-\newtheorem{theorem}[lemma]{Theorem}
-
-\title{The Power of Two Random Choices \\ 
-\large A follow up seminar to the Parallel Algorithms lecture\footnote{Jesper Larsson Träff and Francesco Versaci, lecture "Parallel Algorithms", 2012 winter term at TU Wien.}}
-\author{Martin Kalany, 0825673}
+%\newtheorem{lemma}{Lemma}
+%\newtheorem{corollary}[lemma]{Corollary}
+%\newtheorem{theorem}[lemma]{Theorem}
 
 \begin{document}
-\maketitle
 
-\section{Abstract}
-\label{sec:abstract}
-\cite{mitzen01}
+\title{The Power of Two Random Choices}
+\subtitle{\large A follow up seminar to the lecture "Parallel Algorithms"\\ by Jesper Larsson Tr\"aff and Francesco Versaci, 2012 winter term at TU Wien.}
+
+\numberofauthors{1}
+\author{
+\alignauthor
+Martin Kalany\\
+       0825673
+}    
+\date{\today}
+
+\maketitle
+\begin{abstract}
+
+\end{abstract}
+
 
 \section{Introduction}
+\cite{mitzen01}
 \label{sec:intro}
 
-
-%\pagebreak
-\printbibliography
+%bibliography
+\bibliographystyle{abbrv}
+\bibliography{../sources} 
 \end{document}
