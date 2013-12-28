@@ -1,5 +1,11 @@
 \documentclass{acm_proc_article-sp}
 
+\usepackage{comment}
+\usepackage{hyperref}
+\usepackage{amssymb}
+
+\newcommand*{\PH}{\makebox[1ex]{\textbf{$\cdot$}}}
+
 %\newtheorem{lemma}{Lemma}
 %\newtheorem{corollary}[lemma]{Corollary}
 %\newtheorem{theorem}[lemma]{Theorem}
@@ -24,8 +30,26 @@ Martin Kalany\\
 
 
 \section{Introduction}
-\cite{mitzen01}
 \label{sec:intro}
+
+\subsection{Notation}
+\label{sec:notation}
+Throughout this paper the number of balls is denoted by $m$ and the number of bins by $n$. An event $\mathcal E$ occurs with high probability if $\Pr\left[\mathcal E \right] = 1 - o(1)$. Asymptotic notations ($O(\PH)$, $o(\PH)$ and $\omega(\PH)$) are always with respect to $n$. Let $f$, $g$ be arbitrary functions. Then, $f \ll g$ means $f = o(g)$ and $ f \gg g$ means $f = \omega(g)$.
+
+\subsection{Balls into Bins}
+\label{sec:ballsIntoBins}
+Suppose that $m$ balls are sequentially thrown into $n$ bins, where each ball is placed in an independently and uniformly chosen random bin. We are interested in the \emph{number of balls in the fullest bin}, or equivalently the \emph{gap} of the allocation, that is the difference of the number of balls in the fullest bin and the average amount of balls in the bins. 
+
+These \emph{balls into bins games} or \emph{allocation problems} have been studied extensively in the probability literature (see e.g., \cite{JK77}). For the case of $m = n$, the fullest bin contains $\Theta \left( \frac{\log n}{\log \log n} \right)$ \cite{RS98} with high probability. Since the average load of the bins is 1, this is also a bound for the gap. %More accurately, the number of balls in the bin with the most balls is $\Gamma^{-1}\left(n\right)\left(1+O\left(\frac{1}{\log \Gamma^{-1}\left(n\right)}\right)\right)$ \cite{G91}. %TODO: really include Gonnet? 
+For the case $m \gg n$ the number of balls in the fullest bin is $\frac{m}{n} + \Theta\left(\sqrt{\frac{m \log n}{n}}\right)$ with high probability.
+
+Consider a variation of the above \emph{balls-into-bins} problem, which we will call \emph{d-choice balls into bins}: For each ball, chose $d \geq 2$ bins independently and uniformly at random and place the ball into the \emph{least full bin}\footnote{Assuming a fixed ordering of the bins, a ball will be put into the left-most bin in case of a tie}. In this variant, the number of balls in the fullest bin is $\frac{\log \log n}{log d} \left( 1 + O\left(1\right)\right)$ for all $m$ with high probability.
+
+ 
+
+\subsection{Applications}
+\label{sec:applications}
+
 
 %bibliography
 \bibliographystyle{abbrv}
