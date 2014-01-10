@@ -16,7 +16,7 @@
 \begin{document}
 
 \title{The Power of Two Random Choices}
-\subtitle{\large A follow up seminar to the lecture "Parallel Algorithms"\\ by Jesper Larsson Tr\"aff and Francesco Versaci, 2012 winter term at TU Wien.}
+\subtitle{\large A follow up seminar to the lecture ``Parallel Algorithms''\\ by Jesper Larsson Tr\"aff and Francesco Versaci, 2012 winter term at TU Wien.}
 
 \numberofauthors{1}
 \author{
@@ -34,30 +34,57 @@ Martin Kalany\\
 
 \section{Introduction}
 \label{sec:intro}
+Suppose that $m$ balls are thrown into $n$ bins, according to some strategy. We are interested in the \emph{number of balls in the fullest bin}, also called the \emph{maximum load}. Equivalently, one can look at the \emph{addative gap} of the allocation, that is the difference of the number of balls in the fullest bin and the average amount of balls in the bins. These \emph{balls into bins games} or \emph{allocation problems} have been studied extensively in the probability literature (see e.g., \cite{JK77}). In the context of Computer Science, the balls into bins model is useful to study e.g., strategies for distributing \emph{tasks} (balls) to \emph{processors} (bins) as evenly as possible without having to query all processors for the number of tasks currently assigned to them.
 
-\subsection{Notation}
-\label{sec:notation}
-Throughout this paper the number of balls is denoted by $m$ and the number of bins by $n$. We say that an event $\mathcal E$ occurs \emph{with high probability} (w.h.p.) if $\Pr\left[\mathcal E \right] = 1 - o(1)$, except when stated otherwise. Asymptotic notations ($O(\PH)$, $o(\PH)$ and $\omega(\PH)$) are always with respect to $n$. Let $f$, $g$ be arbitrary functions. Then, $f \ll g$ means $f = o(g)$ and $ f \gg g$ means $f = \omega(g)$.
+We will first introduce different variations of the \emph{balls into bins problem} in Section \ref{sec:classification} to provide some overview of different directions in research as well as possibilities of abstraction from applications, some of which are listed in Section \ref{sec:applications}. Sections \ref{sec:strategies} to TODO will deal with the most basic variation of the balls into bins problem, namely the sequential and static variant. Thus, the balls are assumed to arrive sequentially and no strategy for deleting balls in the bins has to be considered. TODO: finite or infinite process?
 
-\subsection{Balls into Bins}
-\label{sec:ballsIntoBins}
-Suppose that $m$ balls are sequentially thrown into $n$ initially empty bins, where each ball is placed in an independently and uniformly chosen random bin. We are interested in the \emph{number of balls in the fullest bin}, also called the \emph{maximum load}. Equivalently, one can look at the \emph{gap} of the allocation, that is the difference of the number of balls in the fullest bin and the average amount of balls in the bins. 
+A simple strategy for the balls into bins problem is to choose one bin uniformly and independently at random for each ball, which we will call the \emph{single-choice balls into bins} strategy. In Section \ref{sec:strategies}, we will provide asymptotic bounds for the addative gap of this strategy, which we will then use to devise more complex strategies that significantly reduce these bounds. These result may sometimes seem surprising, which is why we will denote a significant part of this article to demonstrate a proof technique that may be useful for devising asymptotic bounds for the additive gap of different balls into bins scenarios and strategies. TODO
 
-These \emph{balls into bins games} or \emph{allocation problems} have been studied extensively in the probability literature (see e.g., \cite{JK77}). Two basic variants of this problem exists (\cite{ABKU99}, \cite{RMS01}):
+\section{Classification}
+\label{sec:classification}
+Several different variations of this problem exist, which may be classified by the following properties:
 \begin{itemize}
-\item In a \emph{static problem}, the balls are placed into the bins and no balls are ever removed.
-\item In a \emph{dynamic problem}, balls can also be removed from the system. In a simple dynamic model, for each newly inserted ball a ball choosen uniformly and independently at random from among the balls currently in the bins is removed from the system.
+\item In a \emph{sequential process}, the balls arrive one after another. A  ball is dealt with only after the previous ball has been placed. Contrary, in a \emph{parallel process}, balls arrive in sets and the balls in one set are dealt with simultaneously \cite{ABS98}. 
+\item In a \emph{static problem}, the balls are placed into the bins and no balls are ever removed. In a \emph{dynamic problem}, balls can also be removed from the system. In a simple \emph{random deletions} model, for each newly inserted ball a ball choosen uniformly and independently at random from among the balls currently in the bins is removed from the system \cite{ABKU99} \cite{RMS01}. More elaborate shemes exists: An \emph{oblivious adversery} specifies the sequence of insertions and deletions of balls in advance, without any knowledge of the placement of the balls \cite{CFM+98}. Another approach was studied by Adler et. al \cite{ABS98} in the context of the parallel balls into bins problem: In each bin, the balls are stored in FIFO-order and at every time step the first ball in each of the bins is deleted. 
+\item A \emph{finite process} is analyzed for a given time interval that is known beforehand, whereas for an \emph{infinite process}, a placement and a deletion process is defined over an infinite time span \cite{ABS98}.
 \end{itemize}
 
+\section{Applications}
+\label{sec:applications}
+\subsection{Hashing}
+\subsection{On-line load balancing}
+\subsection{Dynamic resource allocation}
+\subsection{Shared memory emulation on distributed memory machines}
 
-When using the \emph{one-choice balls into bins} strategy as outlined above (that is, choose a bin independently and uniformly at random for each ball), the fullest bin contains $\Theta \left( \frac{\log n}{\log \log n} \right)$ for the case of $m = n$ w.h.p. \cite{RS98}. Since the average load of the bins is 1, this is also a bound for the gap. %More accurately, the number of balls in the bin with the most balls is $\Gamma^{-1}\left(n\right)\left(1+O\left(\frac{1}{\log \Gamma^{-1}\left(n\right)}\right)\right)$ \cite{G91}. %TODO: really include Gonnet? 
-For the \emph{heavily loaded case}, where $m \gg n \log n$ the maximum load is $\frac{m}{n} + \Theta\left(\sqrt{\frac{m \log n}{n}}\right)$ with high probability \cite{RS98}. In the remainder of this paper, "heavily loaded case" will denote the case where $m = \omega\left(n\right)$.
+\section{Strategies}
+\label{sec:strategies}
+We will now consider the most basic variant of the balls into bins problem: Namely the static and sequential variant. Thus, the balls are assumed to arrived one after the other and we do not delete any balls from the bins. Additionally, all bins are empty at the start of the placement process.
 
-Consider a variation of the above \emph{once-choice balls into bins} strategy, which we will call \emph{multiple-choice balls into bins}: For each ball, chose $d \geq 2$ bins independently and uniformly at random and place the ball into the \emph{least full bin}\footnote{If a tie occurs, chose one of the least full bins arbitrarily.}. Note that the $d$ selected bins are not necessarily distinct.
+We will distinguish two cases with respect to the number of balls $m$. In the \emph{lightly loaded case}, $m$ is in the order of $n$, whereas in the \emph{heavily loaded case}, $m$ is aribtrarily large. For clarity, we will assume that $m = n$ in the slightly loaded case and that $m \ll n$\footnote{Let $f$, $g$ be arbitrary functions. Then, $f \ll g$ means $f = o(g)$ and $ f \gg g$ means $f = \omega(g)$} in the heavily loaded case. 
 
-A \emph{uniform balls into bins problem} is a \emph{multiple choice balls and bins problem} where the $d$ random choices for one ball are independent and uniform. \emph{Non-uniform balls into bins problems} can reduce the maximum load and where first studied by Vöcking \cite{}.
+\subsection{Single-choice balls into bins}
+\label{sec:single-choice}
+In the \emph{single-choice balls into bins} strategy, each ball is placed into a bin choosen uniformly and independently at random. 
 
-In this variant, the maximum load is $\frac{m}{n} + \frac{\log \log n}{log d} \left( 1 + O\left(1\right)\right)$ for all $m$ with high probability. This was first proven by Azar et al. \cite{ABKU99} for the case $m = n$. (However, the case $d = 2$ was implicitly proven by Karp et al. \cite{KLM92}). See also \cite{RMS01} for a simplified proof and an overview of proof techniques for the given problem.  Unfortunately, the analysis breaks down for the heavily loaded case, where $m = \omega\left(n\right)$. Berenbrink at. all \cite{BFZR08} were the first to proof that the same bound holds for the heavily loaded case\footnote{However, they say that an event $\mathcal E$ occurs with high probability if $\Pr\left[\mathcal E \right]  \geq 1- n^{-\alpha}$, for an arbitrarily chosen constant $\alpha \geq 1$.}. A simplified proof may be found in \cite{TW13}. 
+The fullest bin contains $\Theta \left( \frac{\log n}{\log \log n} \right)$ for the lightly loaded case with high probability\footnote{We say that an event $\mathcal E$ occurs \emph{with high probability} (w.h.p.) if $\Pr\left[\mathcal E \right] = 1 - o(1)$, except when stated otherwise.} \cite{RS98}. Since the average load of the bins is 1, this is also a bound for the gap. 
+%More accurately, the number of balls in the bin with the most balls is $\Gamma^{-1}\left(n\right)\left(1+O\left(\frac{1}{\log \Gamma^{-1}\left(n\right)}\right)\right)$ \cite{G91}. %TODO: really include Gonnet? 
+For the \emph{heavily loaded case} the maximum load is $\frac{m}{n} + \Theta\left(\sqrt{\frac{m \log n}{n}}\right)$ w.h.p.
+
+TODO: proof? Maybe just outline the $m = n$ case as in \cite{RS98}?
+
+\subsection{Multiple-choice balls into bins}
+\label{sec:multiple-choice}
+The \emph{single-choice balls into bins strategy} (Section \ref{sec:single-choice}) chooses one bin for each ball. A \emph{multiple-choice balls into bins strategy} generalizes this idea by choosing $d$ bins and placing the ball into the least full bin. We will discuss two different multiple-choice schemes: The \emph{Greedy$[d]$} scheme (Section \ref{sec:greedy}) places the ball into the least full bin among $d$ bins chosen uniformly and independently at random whereas the \emph{Always-Go-Left} scheme (Section \ref{sec:AlwaysGoLeft}) uses a nonuniform selection of $d$ bins.
+
+\subsubsection{The Greedy$[d]$ scheme}
+\label{sec:greedy}
+
+Consider a variation of the above \emph{one-choice balls into bins} strategy, which we will call the \emph{Greedy$[d]$ scheme}: For each ball, chose $d \geq 2$ bins independently and uniformly at random and place the ball into the \emph{least full bin}. If there are multiple bins with the same minimal load, chose one among them arbitrarily. Note that the $d$ selected bins are not necessarily distinct. 
+
+The \emph{Greedy$[d]$ scheme} achieves a maximum load of $\frac{m}{n} + \frac{\log \log n}{\log d} \left( 1 + O\left(1\right)\right)$ for all $m$ w.h.p. (see \cite{ABKU99}, \cite{BCSV06}).
+
+
+This was first proven by Azar et al. \cite{ABKU99} for the case $m = n$. (However, the case $d = 2$ was implicitly proven by Karp et al. \cite{KLM92}). See also \cite{RMS01} for a simplified proof and an overview of proof techniques for the given problem.  Unfortunately, the analysis breaks down for the heavily loaded case, where $m = \omega\left(n\right)$. Berenbrink at. all \cite{BFZR08} were the first to proof that the same bound holds for the heavily loaded case\footnote{However, they say that an event $\mathcal E$ occurs with high probability if $\Pr\left[\mathcal E \right]  \geq 1- n^{-\alpha}$, for an arbitrarily chosen constant $\alpha \geq 1$.}. A simplified proof may be found in \cite{TW13}. 
 
 The result stated above implies a gap of $\Theta\left(\log \log n \right)$ for arbitrarily large $m$. This is remarkable in several ways:
 \begin{itemize}
@@ -67,14 +94,13 @@ The result stated above implies a gap of $\Theta\left(\log \log n \right)$ for a
 \item The given bounds are \emph{tight}, meaning that no other strategy that places each ball into one of $d$ randomly selected bins achieves a gap that is asymptotically lower.
 \end{itemize}
 
-\subsection{Applications}
-\label{sec:applications}
-\begin{enumerate}
-\item Hashing
-\item On-line load balancing
-\item Dynamic resource allocation
-\item Shared memory emulation on distributed memory machines
-\end{enumerate}
+\subsubsection{The Always-Go-Left scheme}
+\label{sec:AlwaysGoLeft}
+The multiple-choice balls into bins strategy presented in Section \ref{sec:multiple-choice} assumes that $d$ bins are chosen uniformly and independently at random. V\"ocking \cite{VOC03} was the first to study the impact of non-uniform and dependent selections of the $d$ bins. Surprisingly, a multiple-choice balls into bins strategy with a \emph{nonuniform and dependent} selection of the $d$ bins, such as the \emph{Always-Go-Left} algorithm introduced in \cite{VOC03}, achieves better\cite{BCSV06} load balancing than the \emph{Greedy} scheme (Section \ref{sec:multiple-choice}).
+
+TODO: algorithm
+TODO: analysis
+
 
 
 %bibliography
