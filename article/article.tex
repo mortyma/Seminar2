@@ -58,8 +58,10 @@ A simple hash table implementation typically uses a single hash function to map 
 
 It is easy to see how the balls-into-bins idea can be applied: Assuming a perfect hash function\footnote{i.e., each of the $n$ elements is mapped to one of the $n$ table entries uniformly and independently at random}, the elements are balls to be mapped to table entries or bins, implying a worst case look-up time of $\Theta\left(\frac{\log n}{\log \log n}\right)$ w.h.p. Applying the two-choice paradigm by using two hash functions and mapping elements to the least full of two table entries implies a bound of $\Theta\left(\log \log n\right)$ w.h.p. This approach is easy to parallelize, it does not require re-hashing of data and requires only two hash functions \cite{MRS01} \cite{ABKU99}.
 
-\subsection{On-line load balancing}
+\subsection{Online load balancing}
+The following simple scenario is a typical application of online load balancing: Consider $n$ servers\footnote{Such as file-, database- or network servers} and $m$ requests issued by clients that need to be handled by these servers. For simplicity, assume that each task can be handled by any server and that all tasks are of the same size, i.e., require the same amount of execution time.
 
+To maximize the throughput of the servers, a uniform distribution of tasks to servers is desireable. This can easily be achieved by a central dispatcher. However, such a central dispatcher poses a bottleneck within a distributed system and querying $m$ servers for their current load involves significant overhead, e.g., sending a message to each server and waiting for the reply and more efficient solutions are neccessary. As with hashing, the balls-into-bins model can be applied easily: we need to assign tasks (the balls) to servers (the bins). Assuming tasks are assigned to servers uniformly and independently at random, the two-choice paradigm is directly applicable: If each client samples two random servers for their load and sends issues its request to the least loaded server, the overhead is comperatively small and the difference in load on the $n$ servers is bounded by $\Theta\left(\log \log n\right)$ w.h.p. \cite{RS98} \cite{MRS01} \cite{KLM92}.  
 
 \subsection{Dynamic resource allocation}
 
