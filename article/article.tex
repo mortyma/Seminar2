@@ -49,6 +49,8 @@ Several different variations of this problem exist, which may be classified by t
 \item A \emph{finite process} is analyzed for a given time interval that is known beforehand, whereas for an \emph{infinite process}, a placement and a deletion process is defined over an infinite time span \cite{ABS98}.
 \end{itemize}
 
+We will distinguish two cases with respect to the number of balls $m$. In the \emph{lightly loaded case}, $m$ is in the order of $n$, whereas in the \emph{heavily loaded case}, $m$ is aribtrarily large. For clarity, we will assume that $m = n$ in the slightly loaded case and that $m \ll n$\footnote{Let $f$, $g$ be arbitrary functions. Then, $f \ll g$ means $f = o(g)$ and $ f \gg g$ means $f = \omega(g)$} in the heavily loaded case. 
+
 \section{Applications}
 \label{sec:applications}
 \subsection{Hashing}
@@ -59,8 +61,6 @@ Several different variations of this problem exist, which may be classified by t
 \section{Strategies}
 \label{sec:strategies}
 We will now consider the most basic variant of the balls into bins problem: Namely the static and sequential variant. Thus, the balls are assumed to arrived one after the other and we do not delete any balls from the bins. Additionally, all bins are empty at the start of the placement process.
-
-We will distinguish two cases with respect to the number of balls $m$. In the \emph{lightly loaded case}, $m$ is in the order of $n$, whereas in the \emph{heavily loaded case}, $m$ is aribtrarily large. For clarity, we will assume that $m = n$ in the slightly loaded case and that $m \ll n$\footnote{Let $f$, $g$ be arbitrary functions. Then, $f \ll g$ means $f = o(g)$ and $ f \gg g$ means $f = \omega(g)$} in the heavily loaded case. 
 
 \subsection{Single-choice balls into bins}
 \label{sec:single-choice}
