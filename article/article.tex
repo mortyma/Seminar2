@@ -1,10 +1,17 @@
-\documentclass{acm_proc_article-sp}
+\documentclass[a4paper,10pt, twocolumn]{article}
+\usepackage[utf8]{inputenc}
 
 \usepackage{comment}
 \usepackage{hyperref}
 \usepackage{amssymb}
+%page boarders
+\usepackage[top=3cm, bottom=3cm, left=2cm, right=2cm]{geometry}
+\usepackage{enumitem}
+\usepackage{float}
+\floatstyle{plaintop}
 
-
+\restylefloat{table}
+\setlist{nolistsep}
 
 
 \newcommand*{\PH}{\makebox[1ex]{\textbf{$\cdot$}}}
@@ -15,16 +22,9 @@
 
 \begin{document}
 
-\title{The Power of Two Random Choices}
-\subtitle{\large A follow up seminar to the lecture ``Parallel Algorithms''\\ by Jesper Larsson Tr\"aff and Francesco Versaci, 2012 winter term at TU Wien.}
-
-\numberofauthors{1}
-\author{
-\alignauthor
-Martin Kalany\\
-       0825673
-}    
-\date{\today}
+\title{The Power of Two Random Choices\\ 
+\large A follow up seminar to the Parallel Algorithms lecture\footnote{Jesper Larsson Träff, lecture ``Parallel Algorithms'', 2012 winter term at TU Wien.}}
+\author{Martin Kalany, 0825673}
 
 \maketitle
 \begin{abstract}
