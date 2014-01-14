@@ -36,9 +36,22 @@ Martin Kalany\\
 \label{sec:intro}
 Suppose that $m$ balls are thrown into $n$ bins, according to some strategy. We are interested in the \emph{number of balls in the fullest bin}, also called the \emph{maximum load}. Equivalently, one can look at the \emph{addative gap} of the allocation, that is the difference of the number of balls in the fullest bin and the average amount of balls in the bins. These \emph{balls-into-bins games} or \emph{allocation problems} have been studied extensively in the probability literature (see e.g., \cite{JK77}). In the context of Computer Science, the balls-into-bins model is useful to study e.g., strategies for distributing \emph{tasks} (balls) to \emph{processors} (bins) as evenly as possible without having to query all processors for the number of tasks currently assigned to them.
 
-We will first introduce different variations of the \emph{balls-into-bins problem} in Section \ref{sec:classification} to provide some overview of different directions in research as well as possibilities of abstraction from applications, some of which are listed in Section \ref{sec:applications}. Sections \ref{sec:strategies} to TODO will deal with the most basic variation of the balls-into-bins problem, namely the sequential and static variant. Thus, the balls are assumed to arrive sequentially and no strategy for deleting balls in the bins has to be considered. TODO: finite or infinite process?
+A simple strategy for the balls-into-bins problem is to choose one bin uniformly and independently at random for each ball, which we will call the \emph{single-choice balls-into-bins} strategy. Using this strategy, the maximum load of the fullest bin will be $\frac{m}{n} + \Theta\left(\sqrt{\frac{m \log n}{n}}\right)$ w.h.p.~\cite{RS98}.
 
-A simple strategy for the balls-into-bins problem is to choose one bin uniformly and independently at random for each ball, which we will call the \emph{single-choice balls-into-bins} strategy. In Section \ref{sec:strategies}, we will provide asymptotic bounds for the addative gap of this strategy, which we will then use to devise more complex strategies that significantly reduce these bounds. These result may sometimes seem surprising, which is why we will denote a significant part of this article to demonstrate a proof technique that may be useful for devising asymptotic bounds for the additive gap of different balls-into-bins scenarios and strategies. TODO
+Consider a variation of the above \emph{single-choice balls-into-bins} strategy: For each ball, chose $d \geq 2$ bins independently and uniformly at random and place the ball into the \emph{least full bin}\footnote{If there are multiple bins with the same minimal load, chose one among them arbitrarily.}. This simple \emph{multiple-choice balls-into-bins} scheme, which we will call the \emph{Greedy} algorithm, achieves a maximum load of $\frac{m}{n} + \Theta\left(\frac{\log \log n}{\log d}\right)$ w.h.p.~\cite{ABKU99}~\cite{BCSV06}. This apperantly minor change introduces a small amount of choice which, compared to the single-choice scheme, leads to a significant reduction in the maximum load. Curiously, the exponential decrease in the gap is already achieved having just two choices (that is, $d=2$). Each additional choice decreases the bound for the maximum gap by just a constant factor~\cite{MRS01}. Extensive research following the influental paper by Azar et. al \cite{ABKU99}, who were the first to explicitly prove this phenomenon, suggests that this \emph{two-choice paradigm} is not just an artificat of the simple balls-into-bins model, but a general principle applicable to a variety of problems. 
+
+The paper is organized as follows: We will first introduce different variations of the \emph{balls-into-bins problem} in Section \ref{sec:classification} to provide some overview of different directions in research as well as possibilities of abstraction from applications, some of which are listed in Section \ref{sec:applications}. Sections \ref{sec:strategies} to TODO will deal with the most basic variation of the balls-into-bins problem, namely the sequential, finite and static variant (see Section \ref{sec:classification} for details). For comparison and as a starting point, Section \ref{sec:single-choice} provides the results for the single-choice balls-into-bins problem. Section \ref{sec:multiple-choice} provides an in-depth presentation and analysis of the a basic \emph{multiple-choice balls-into-bins} scheme, the \emph{Greedy} algorithm.
+
+Surprisingly, V\"ocking \cite{VOC03} showed that \emph{asymetric tie-breaking} in combination with \emph{partitioning} the $n$ bins into $d$ groups can further reduce the bound for the gap. Since the scheme is somewhat techniqual, we refer the reader to Section \ref{sec:AlwaysGoLeft} for details. TODO: more here?
+
+\begin{comment}
+In Section \ref{sec:strategies}, we will provide asymptotic bounds for the addative gap of this strategy, which we will then use to devise more complex strategies that significantly reduce these bounds. 
+\end{comment}
+
+\begin{comment}
+These result may sometimes seem surprising, which is why we will denote a significant part of this article to demonstrate proofs in detail. This proof technique may be useful for devising asymptotic bounds for the additive gap of different balls-into-bins scenarios and strategies.
+\end{comment}
+
 
 \section{Classification}
 \label{sec:classification}
@@ -81,7 +94,7 @@ Applying the two-choice paradigm in this context is somewhat more involved and b
 
 \section{Strategies}
 \label{sec:strategies}
-We will now consider the most basic variant of the balls-into-bins problem: Namely the static and sequential variant. Thus, the balls are assumed to arrived one after the other and we do not delete any balls from the bins. Additionally, all bins are empty at the start of the placement process.
+We will now consider the most basic variant of the balls-into-bins problem: Namely the static, finite and sequential variant. Thus, the balls are assumed to arrive sequentially, no strategy for deleting balls in the bins has to be considered and we are interested in a bound for the maximum load or gap only after all $m$ balls have arrived. 
 
 \subsection{Single-choice balls-into-bins}
 \label{sec:single-choice}
