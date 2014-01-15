@@ -9,6 +9,8 @@
 \usepackage{tikz}
 \usepackage{pgf}
 \usepackage{xxcolor}
+\usetikzlibrary{positioning}
+
 \usepackage{comment}
 
 \usepackage[style=numeric-comp,backend=bibtex]{biblatex}
@@ -18,6 +20,9 @@
 \let\oldfootnotesize\footnotesize
 \renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
 
+%---------------------------------------------------------------------
+%Front matter
+%---------------------------------------------------------------------
 \title{The Power of Two Random Choices}
 \subtitle{ A follow up seminar to the lecture "Parallel Algorithms"}
 \author{Martin Kalany}
@@ -28,20 +33,67 @@
 }
 \date{\today}
 
-
-%color of balls
-\tikzstyle{ballcolor} = [ball color=black!30!red]
+%---------------------------------------------------------------------
+%parameters for balls into bins graphs
+%---------------------------------------------------------------------
+%scale factor
+\newcommand\scalefac{0.5}
 %diameter of balls
 \newcommand\ballsize{5mm}
-\newcommand\ballradius{2*\ballsize}
 %number of bins
 \newcommand\nrbins{6}
-%draw bins
-\newcommand\bins{}
+%space between ball and bin
+\newcommand\padding{0.1*\ballsize}
+%height of a bin
+\newcommand\binheight{6*\balldiameter}
+%width of a bin
+\newcommand\binwidth{\balldiameter}
+%gap from bin to bin
+\newcommand\bingap{1.6*\balldiameter}
+%color of balls
+
+\tikzstyle{ballstyle} = [ball color=black!30!red]
+
+%---------------------------------------------------------------------
+%tikz styles and commands
+%---------------------------------------------------------------------
+\newcommand\balldiameter{2*\ballsize}
+
+%bin style
+\tikzstyle{topflat} = [
+	minimum width=(\binwidth+2*\padding)*\scalefac, 
+	minimum height=(\binheight+3*\padding)*\scalefac,
+	append after command={
+    		\pgfextra
+        		\fill[fill=blue!30] 
+        			(\tikzlastnode.north east) [rounded corners] |-
+        			(\tikzlastnode.south)  -| 
+        			(\tikzlastnode.west) [sharp corners] |- 
+        			(\tikzlastnode.north) -- cycle;
+	         \draw[rounded corners] 
+	         	(\tikzlastnode.north east) |- 
+	         	(\tikzlastnode.south) -| 
+	         	(\tikzlastnode.north west);
+    		\endpgfextra
+    }
+]    
+
+%draw i'th bin
+\newcommand\bin[1]{
+	\path node[topflat, xshift=#1*\bingap*\scalefac, above, yshift=-\padding*\scalefac]  {};
+}
+
+%draw all bins
+\newcommand\bins{
+	\foreach \ibin in {1,...,\nrbins}
+		\bin{\ibin};
+}
+
 %paint a ball in bin #1, position #2 
 \newcommand\ball[2]{
-	\shade[ballcolor] (1.6*#1*\ballradius,#2*\ballradius) circle (\ballsize)
+	\shade[ballstyle] (#1*\bingap,#2*\balldiameter-\ballsize) circle (\ballsize)
 }
+
 %put #2 balls into bin 1 <= #1 <= 6
 \newcommand\putinbin[2]{
 	\ifnum #2 > 0
@@ -49,28 +101,42 @@
  			\ball{#1}{\nrballs};
  	\fi
 }
+
 %put balls into bins. #i: number of balls to put in i'th bin
 \newcounter{index}
 \newcommand\balls[1]{%
-  \getargs{#1}%
-  \setcounter{index}{0}%
-  \whiledo{\theindex < \narg}{%
-    \stepcounter{index}%
-    \putinbin{\theindex}{\csname arg\romannumeral\theindex\endcsname}%
-  }%
+	\getargs{#1}%
+  	\setcounter{index}{0}%
+  	\whiledo{\theindex < \narg}{%
+    		\stepcounter{index}%
+    		\putinbin{\theindex}{\csname arg\romannumeral\theindex\endcsname}%
+  	}%
 }
 
+%draw balls and bins. #i: number of balls to put in i'th bin
+\newcommand\bab[1]{%
+	\bins
+	\balls{#1}
+}
+
+%---------------------------------------------------------------------
+%document
+%---------------------------------------------------------------------
 \begin{document}
 \frame{\titlepage}
 
 \begin{frame}
-\begin{tikzpicture}
-  
-  \balls{2 1 3 4}
+\begin{tikzpicture}[scale=\scalefac]
+
+	\bab{1 2 3 4 5 6}
 
 \end{tikzpicture}
 \end{frame}
 
+
+%---------------------------------------------------------------------
+%bibliography
+%---------------------------------------------------------------------
 \begin{frame}[allowframebreaks]
 \frametitle<presentation>{Literature}    
 \printbibliography
