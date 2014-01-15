@@ -1,3 +1,10 @@
+http://cmurandomized.wordpress.com/2011/02/02/lecture-8-balls-and-bins/
 
-
-Overview of techniques or in-depth presentation of important result?
+Presentation:
+- balls into bins model (pic)
+- motivation, applications
+- bins and balls, mean, gap (pic)
+- random allocation (pic)
+- 2-choice greedy (pic)
+- always go left (pic)
+- Analysis
