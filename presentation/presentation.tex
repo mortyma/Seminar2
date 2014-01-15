@@ -62,10 +62,10 @@
 %bin style
 \tikzstyle{topflat} = [
 	minimum width=(\binwidth+2*\padding)*\scalefac, 
-	minimum height=(\binheight+3*\padding)*\scalefac,
+	minimum height=(\binheight+5*\padding)*\scalefac,
 	append after command={
     		\pgfextra
-        		\fill[fill=blue!30] 
+        		\fill[fill=blue!40] 
         			(\tikzlastnode.north east) [rounded corners] |-
         			(\tikzlastnode.south)  -| 
         			(\tikzlastnode.west) [sharp corners] |- 
