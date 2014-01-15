@@ -2,12 +2,19 @@
 \let\Tiny=\tiny %to avoid warnings related to font size and beamer 
 \usetheme{Amsterdam}
 \usecolortheme{dolphin}
+
+\usepackage{stringstrings}
+
+%graphs, pictures
 \usepackage{tikz}
 \usepackage{pgf}
+\usepackage{xxcolor}
 \usepackage{comment}
+
 \usepackage[style=numeric-comp,backend=bibtex]{biblatex}
 \addbibresource{../sources}
 
+%reduce font size of footnotes
 \let\oldfootnotesize\footnotesize
 \renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
 
@@ -20,12 +27,48 @@
   Vienna University of Technology\\
 }
 \date{\today}
- 
+
+
+%color of balls
+\tikzstyle{ballcolor} = [ball color=black!30!red]
+%diameter of balls
+\newcommand\ballsize{5mm}
+\newcommand\ballradius{2*\ballsize}
+%number of bins
+\newcommand\nrbins{6}
+%draw bins
+\newcommand\bins{}
+%paint a ball in bin #1, position #2 
+\newcommand\ball[2]{
+	\shade[ballcolor] (1.6*#1*\ballradius,#2*\ballradius) circle (\ballsize)
+}
+%put #2 balls into bin 1 <= #1 <= 6
+\newcommand\putinbin[2]{
+	\ifnum #2 > 0
+		\foreach \nrballs in {1,...,#2}
+ 			\ball{#1}{\nrballs};
+ 	\fi
+}
+%put balls into bins. #i: number of balls to put in i'th bin
+\newcounter{index}
+\newcommand\balls[1]{%
+  \getargs{#1}%
+  \setcounter{index}{0}%
+  \whiledo{\theindex < \narg}{%
+    \stepcounter{index}%
+    \putinbin{\theindex}{\csname arg\romannumeral\theindex\endcsname}%
+  }%
+}
+
 \begin{document}
 \frame{\titlepage}
 
 \begin{frame}
+\begin{tikzpicture}
+  
+  \balls{2 1 3 4}
 
+\end{tikzpicture}
 \end{frame}
 
 \begin{frame}[allowframebreaks]
