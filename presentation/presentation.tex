@@ -3,7 +3,7 @@
 \usetheme{Amsterdam}
 \usecolortheme{dolphin}
 
-\usepackage{stringstrings}
+\usepackage{readarray}
 
 %graphs, pictures
 \usepackage{tikz}
@@ -105,7 +105,7 @@
 %put balls into bins. #i: number of balls to put in i'th bin
 \newcounter{index}
 \newcommand\balls[1]{%
-	\getargs{#1}%
+	\getargsC{#1}%
   	\setcounter{index}{0}%
   	\whiledo{\theindex < \narg}{%
     		\stepcounter{index}%
