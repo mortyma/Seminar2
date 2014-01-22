@@ -20,6 +20,8 @@
 \usepackage{booktabs}
 \usepackage[margin=10pt, font=small, labelfont=bf]{caption}
 
+\usepackage{color}
+\newcommand\todo[1]{\textcolor{red}{(#1)}}
 
 \begin{document}
 
@@ -43,7 +45,7 @@ Consider a variation of the above \emph{single-choice balls-into-bins} strategy:
 
 The paper is organized as follows: We will first introduce different variations of the \emph{balls-into-bins problem} in Section \ref{sec:classification} to provide some overview of different directions in research as well as possibilities of abstraction from applications, some of which are listed in Section \ref{sec:applications}. Sections \ref{sec:single-choice} to \ref{sec:multiple-choice} will deal with the most basic variation of the balls-into-bins problem, namely the sequential, finite and static variant (see Section \ref{sec:classification} for details). For comparison and as a starting point, Section \ref{sec:single-choice} provides the results for the single-choice balls-into-bins problem. Section \ref{sec:multiple-choice} provides an in-depth presentation and analysis of the a basic \emph{multiple-choice balls-into-bins} scheme, the \emph{Greedy} algorithm.
 
-Surprisingly, V\"ocking \cite{VOC03} showed that \emph{asymetric tie-breaking} in combination with \emph{partitioning} the $n$ bins into $d$ groups can further reduce the bound for the gap. Since the scheme is somewhat techniqual, we refer the reader to Section \ref{sec:AlwaysGoLeft} for details. TODO: more here?
+Surprisingly, V\"ocking \cite{VOC03} showed that \emph{asymetric tie-breaking} in combination with \emph{partitioning} the $n$ bins into $d$ groups can further reduce the bound for the gap. Since the scheme is somewhat techniqual, we refer the reader to Section \ref{sec:AlwaysGoLeft} for details. \todo{more here?}
 
 \begin{comment}
 In Section \ref{sec:strategies}, we will provide asymptotic bounds for the addative gap of this strategy, which we will then use to devise more complex strategies that significantly reduce these bounds. 
@@ -64,7 +66,7 @@ Several different variations of this problem exist, which may be classified by t
 \end{compactitem}
 
 
-We will distinguish two cases with respect to the number of balls $m$. In the \emph{lightly loaded case}, $m$ is in the order of $n$, whereas in the \emph{heavily loaded case}, $m$ is aribtrarily large. For clarity, we will assume that $m = n$ in the slightly loaded case and that $m \ll n$\footnote{Let $f$, $g$ be arbitrary functions. Then, $f \ll g$ means $f = o(g)$ and $ f \gg g$ means $f = \omega(g)$} in the heavily loaded case. 
+We will distinguish two cases with respect to the number of balls $m$. In the \emph{lightly loaded case}, $m$ is in the order of $n$, whereas in the \emph{heavily loaded case}, $m$ is aribtrarily large. For clarity, we will assume that $m = n$ in the slightly loaded case and that $m \ll n$\todo{TODO} \footnote{Let $f$, $g$ be arbitrary functions. Then, $f \ll g$ means $f = o(g)$ and $ f \gg g$ means $f = \omega(g)$} in the heavily loaded case. 
 
 \section{Applications}
 \label{sec:applications}
@@ -101,10 +103,10 @@ We will now consider the most basic variant of the balls-into-bins problem: Name
 In the \emph{single-choice balls-into-bins} strategy, each ball is placed into a bin choosen uniformly and independently at random. 
 
 The fullest bin contains $\Theta \left( \frac{\log n}{\log \log n} \right)$ for the lightly loaded case with high probability\footnote{We say that an event $\mathcal E$ occurs \emph{with high probability} (w.h.p.) if $\Pr\left[\mathcal E \right] = 1 - o(1)$, except when stated otherwise.} \cite{RS98}. Since the average load of the bins is 1, this is also a bound for the gap. 
-%More accurately, the number of balls in the bin with the most balls is $\Gamma^{-1}\left(n\right)\left(1+O\left(\frac{1}{\log \Gamma^{-1}\left(n\right)}\right)\right)$ \cite{G91}. %TODO: really include Gonnet? 
+%More accurately, the number of balls in the bin with the most balls is $\Gamma^{-1}\left(n\right)\left(1+O\left(\frac{1}{\log \Gamma^{-1}\left(n\right)}\right)\right)$ \cite{G91}. %\todo{really include Gonnet?}
 For the \emph{heavily loaded case} the maximum load is $\frac{m}{n} + \Theta\left(\sqrt{\frac{m \log n}{n}}\right)$ w.h.p.
 
-TODO: proof? Maybe just outline the $m = n$ case as in \cite{RS98}?
+\todo{proof? Maybe just outline the $m = n$ case as in \cite{RS98}?}
 
 \section{Multiple-choice balls-into-bins}
 \label{sec:multiple-choice}
@@ -126,17 +128,18 @@ The result stated above implies a gap of $\Theta\left(\log \log n \right)$ for a
 \item Each additional choice ($d > 2$) decreases the gap by only a constant factor \cite{MRS01}. 
 \item For the \emph{heavily loaded case}, the resulting gap of the \emph{multiple-choice balls-into-bins} strategy does not depend on the number of balls $m$. In contrast, the bound for the \emph{one-choice} diverges with $m$.
 \begin{comment}
-TODO: this is not true, I think
+\todo{this is not true, I think}
 \item The given bounds are \emph{tight}, meaning that no other strategy that places each ball into one of $d$ randomly selected bins achieves a gap that is asymptotically lower.
 \end{comment}
 \end{compactitem}
 
 \subsection{The Always-Go-Left scheme}
 \label{sec:AlwaysGoLeft}
-The multiple-choice balls-into-bins strategy presented in Section \ref{sec:multiple-choice} assumes that $d$ bins are chosen uniformly and independently at random. V\"ocking \cite{VOC03} was the first to study the impact of non-uniform and dependent selections of the $d$ bins. Surprisingly, a multiple-choice balls-into-bins strategy with a \emph{nonuniform and independent} selection of the $d$ bins, such as the \emph{Always-Go-Left} algorithm introduced in \cite{VOC03}, achieves better\cite{BCSV06} load balancing than the \emph{Greedy} scheme (Section \ref{sec:greedy}). Furthermore, V\"ocking proved that the \emph{Always-Go-Left} algorithm is almost optimal (TODO: be more precise).
+The multiple-choice balls-into-bins strategy presented in Section \ref{sec:multiple-choice} assumes that $d$ bins are chosen uniformly and independently at random. V\"ocking \cite{VOC03} was the first to study the impact of non-uniform and dependent selections of the $d$ bins. Surprisingly, a multiple-choice balls-into-bins strategy with a \emph{nonuniform and independent} selection of the $d$ bins, such as the \emph{Always-Go-Left} algorithm introduced in \cite{VOC03}, achieves better\cite{BCSV06} load balancing than the \emph{Greedy} scheme (Section \ref{sec:greedy}). Furthermore, V\"ocking proved that the \emph{Always-Go-Left} algorithm is almost optimal \todo{be more precise}.
 
-TODO: algorithm
-TODO: analysis
+\todo{algorithm}
+
+\todo{analysis}
 
 \section{Conclusion}
 \label{sec:conclusion}
