@@ -41,11 +41,15 @@ Suppose that $m$ balls are thrown into $n$ bins, according to some strategy. We 
 
 A simple strategy for the balls-into-bins problem is to choose one bin uniformly and independently at random for each ball, which we will call the \emph{single-choice balls-into-bins} strategy. Using this strategy, the maximum load of the fullest bin will be $\frac{m}{n} + \Theta\left(\sqrt{\frac{m \log n}{n}}\right)$ w.h.p.~\cite{RS98}.
 
-Consider a variation of the above \emph{single-choice balls-into-bins} strategy: For each ball, chose $d \geq 2$ bins independently and uniformly at random and place the ball into the \emph{least full bin}\footnote{If there are multiple bins with the same minimal load, chose one among them arbitrarily.}. This simple \emph{multiple-choice balls-into-bins} scheme, which we will call the \emph{Greedy} algorithm, achieves a maximum load of $\frac{m}{n} + \Theta\left(\frac{\log \log n}{\log d}\right)$ w.h.p.~\cite{ABKU99}~\cite{BCSV06}. This apperantly minor change introduces a small amount of choice which, compared to the single-choice scheme, leads to a significant reduction in the maximum load. Curiously, the exponential decrease in the gap is already achieved having just two choices (that is, $d=2$). Each additional choice decreases the bound for the maximum gap by just a constant factor~\cite{MRS01}. Extensive research following the influental paper by Azar et. al \cite{ABKU99}, who were the first to explicitly prove this phenomenon, suggests that this \emph{two-choice paradigm} is not just an artificat of the simple balls-into-bins model, but a general principle applicable to a variety of problems. 
+Consider a variation of the above \emph{single-choice balls-into-bins} strategy: For each ball, chose $d \geq 2$ bins independently and uniformly at random and place the ball into the \emph{least full bin}\footnote{If there are multiple bins with the same minimal load, chose one among them arbitrarily.}. This simple \emph{multiple-choice balls-into-bins} scheme, which we will call the \emph{Greedy} algorithm, achieves a maximum load of $\frac{m}{n} + \Theta\left(\frac{\log \log n}{\log d}\right)$ w.h.p.~\cite{ABKU99}~\cite{BCSV06}. This apperantly minor change introduces a small amount of choice which, compared to the single-choice scheme, leads to a significant reduction in the maximum load. 
+\begin{comment}
+Curiously, the exponential decrease in the gap is already achieved having just two choices (that is, $d=2$). Each additional choice decreases the bound for the maximum gap by just a constant factor~\cite{MRS01}. 
+\end{comment}
+Extensive research following the influental paper by Azar et. al \cite{ABKU99}, who were the first to explicitly prove this phenomenon, suggests that this \emph{two-choice paradigm} is not just an artificat of the simple balls-into-bins model, but a general principle applicable to a variety of problems. 
 
-The paper is organized as follows: We will first introduce different variations of the \emph{balls-into-bins problem} in Section \ref{sec:classification} to provide some overview of different directions in research as well as possibilities of abstraction from applications, some of which are listed in Section \ref{sec:applications}. Sections \ref{sec:single-choice} to \ref{sec:multiple-choice} will deal with the most basic variation of the balls-into-bins problem, namely the sequential, finite and static variant (see Section \ref{sec:classification} for details). For comparison and as a starting point, Section \ref{sec:single-choice} provides the results for the single-choice balls-into-bins problem. Section \ref{sec:multiple-choice} provides an in-depth presentation and analysis of the a basic \emph{multiple-choice balls-into-bins} scheme, the \emph{Greedy} algorithm.
+Condsider a slightly more involved strategy, which we will call the \emph{Always-go-left} scheme: Suppose that the $n$ bins are partitioned evenly into $d$ groups, each of size $\lfloor \frac{n}{d}\rfloor$ or $\lceil\frac{n}{d}\rceil$ \todo{simplify to n/d?}. We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. In case a tie occurs, put the ball into the \emph{left-most} bin. That is, assuming a fixed ordering of bins $b_i$ for $1 \leq i \leq n$, from among the $d' \leq d$ bins with same minimal load, we put the ball into the bin with smallest index $i$. Somewhat surprisingly, V\"ocking \cite{VOC03} showed that such a strategy employing \emph{asymetric tie-breaking} in combination with \emph{partitioning}\todo{check} reduces the bound for the gap to $\Theta \left( \frac{\log\log n}{d \log \Phi_d}\right)$ \todo{$\Phi_d$ is undefined}.
 
-Surprisingly, V\"ocking \cite{VOC03} showed that \emph{asymetric tie-breaking} in combination with \emph{partitioning} the $n$ bins into $d$ groups can further reduce the bound for the gap. Since the scheme is somewhat techniqual, we refer the reader to Section \ref{sec:AlwaysGoLeft} for details. \todo{more here?}
+The paper is organized as follows: We will first introduce different variations of the \emph{balls-into-bins problem} in Section \ref{sec:classification} to provide some overview of different directions in research as well as possibilities of abstraction from applications, some of which are listed in Section \ref{sec:applications}. Sections \ref{sec:single-choice} to \ref{sec:multiple-choice} will deal with the most basic variation of the balls-into-bins problem, namely the sequential, finite and static variant (see Section \ref{sec:classification} for details). For comparison and as a starting point, Section \ref{sec:single-choice} provides the results for the single-choice balls-into-bins problem. \todo{TODO: multiple-choice, analysis, mention that witness tree method very helpful} 
 
 \begin{comment}
 In Section \ref{sec:strategies}, we will provide asymptotic bounds for the addative gap of this strategy, which we will then use to devise more complex strategies that significantly reduce these bounds. 
@@ -100,7 +104,7 @@ Applying the two-choice paradigm in this context is somewhat more involved and b
 \label{sec:single-choice}
 We will now consider the most basic variant of the balls-into-bins problem: Namely the static, finite and sequential variant. Thus, the balls are assumed to arrive sequentially, no strategy for deleting balls in the bins has to be considered and we are interested in a bound for the maximum load or gap only after all $m$ balls have arrived. 
 
-In the \emph{single-choice balls-into-bins} strategy, each ball is placed into a bin choosen uniformly and independently at random. 
+In the \emph{single-choice balls-into-bins} strategy, each ball is placed into a bin choosen uniformly and independently at random. \todo{more specific?}
 
 The fullest bin contains $\Theta \left( \frac{\log n}{\log \log n} \right)$ for the lightly loaded case with high probability\footnote{We say that an event $\mathcal E$ occurs \emph{with high probability} (w.h.p.) if $\Pr\left[\mathcal E \right] = 1 - o(1)$, except when stated otherwise.} \cite{RS98}. Since the average load of the bins is 1, this is also a bound for the gap. 
 %More accurately, the number of balls in the bin with the most balls is $\Gamma^{-1}\left(n\right)\left(1+O\left(\frac{1}{\log \Gamma^{-1}\left(n\right)}\right)\right)$ \cite{G91}. %\todo{really include Gonnet?}
@@ -110,7 +114,11 @@ For the \emph{heavily loaded case} the maximum load is $\frac{m}{n} + \Theta\lef
 
 \section{Multiple-choice balls-into-bins}
 \label{sec:multiple-choice}
-The \emph{single-choice balls-into-bins strategy} (Section \ref{sec:single-choice}) chooses one bin for each ball. A \emph{multiple-choice balls-into-bins strategy} generalizes this idea by choosing $d$ bins and placing the ball into the least full bin. We will discuss two different multiple-choice schemes: The \emph{Greedy$[d]$} scheme (Section \ref{sec:greedy}) places the ball into the least full bin among $d$ bins chosen uniformly and independently at random whereas the \emph{Always-Go-Left} scheme (Section \ref{sec:AlwaysGoLeft}) uses a nonuniform selection of $d$ bins.
+The \emph{single-choice balls-into-bins strategy} (Section \ref{sec:single-choice}) chooses one bin for each ball. A \emph{multiple-choice balls-into-bins strategy} generalizes this idea by choosing $d$ bins and placing the ball into the least full bin. 
+
+\todo{discuss the 3 classes}
+
+We will discuss two different multiple-choice schemes: The \emph{Greedy$[d]$} scheme (Section \ref{sec:greedy}) places the ball into the least full bin among $d$ bins chosen uniformly and independently at random whereas the \emph{Always-Go-Left} scheme (Section \ref{sec:AlwaysGoLeft}) uses a nonuniform selection of $d$ bins.
 
 \subsection{The Greedy$[d]$ scheme}
 \label{sec:greedy}
@@ -139,7 +147,8 @@ The multiple-choice balls-into-bins strategy presented in Section \ref{sec:multi
 
 \todo{algorithm}
 
-\todo{analysis}
+
+
 
 \section{Conclusion}
 \label{sec:conclusion}
