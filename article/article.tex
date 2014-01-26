@@ -147,8 +147,30 @@ The multiple-choice balls-into-bins strategy presented in Section \ref{sec:multi
 
 \todo{algorithm}
 
+\subsection{Analysis}
+\label{sec:analysis}
 
+\subsubsection{Preliminaries}
+\label{sec:preliminaries}
+\todo{where to put this? required for  bound of always-go-left in intro}
+We define $d$-ary Fibonacci numbers as follows. For $k \leq0$, $F_d(k) = 0$, $F_d(1) = 1$ and for $k \geq 1$,
 
+\[
+F_d(k) = \sum_{i=1}^{d}F_d(k-i)
+\]
+Furthermore, define 
+\[
+\Phi_d = \lim_{k \rightarrow \infty} \sqrt[k]{F_d(k)}
+\]
+Notice that $F_2$ corresponds to the usual Fibonacci numbers, while $\Phi_2$ corresponds to the golden ratio \cite{Knuth73}, which is generalized to $\Phi_d$, for which 
+\[
+i, j \in \mathbb{N}, i < j \Rightarrow \Phi_i < \Phi_j
+\]
+and 
+\[
+\lim_{d\rightarrow \infty} \Phi_d = 2
+\]
+hold.
 
 \section{Conclusion}
 \label{sec:conclusion}
