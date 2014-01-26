@@ -114,9 +114,26 @@ For the \emph{heavily loaded case} the maximum load is $\frac{m}{n} + \Theta\lef
 
 \section{Multiple-choice balls-into-bins}
 \label{sec:multiple-choice}
-The \emph{single-choice balls-into-bins strategy} (Section \ref{sec:single-choice}) chooses one bin for each ball. A \emph{multiple-choice balls-into-bins strategy} generalizes this idea by choosing $d$ bins and placing the ball into the least full bin. 
+The \emph{single-choice balls-into-bins strategy} (Section \ref{sec:single-choice}) chooses one bin uniformly and independently at random for each ball. A \emph{multiple-choice balls-into-bins strategy} generalizes this idea by  choosing $d \geq 2$ bins and placing the ball into the least full bin. Depending on how the $d$ locations are sampled, we distinguish three classes of placement algorithms \cite{VOC03}. 
 
-\todo{discuss the 3 classes}
+Thus, let $B$ be the set of bins $\{1,2...n\}$, $\Omega = B^{d}$ be the sample space and $\mathcal{F} = 2^{\Omega}$ be the set of measurable events. We are only interested in events that represent a set of bins of size $d$. Thus, let $\mathcal{F}_d = \{\mathcal{E} \in \mathcal{F}: \left\vert \mathcal{E} \right\vert = d\}$ and set $\Pr\left(\mathcal{E}  \right) = 0$  $\forall \mathcal{E} \in \mathcal{F} \setminus \mathcal{F}_d $. The three classes of algorithms are distinguished by the probability function $\Pr\left(\mathcal{E}\right)$ for events $\mathcal{E}_d \in \mathcal{F}_d$:
+\begin{itemize}
+\item \emph{Uniform and independent.} Choose each of the $d$ bins for a ball uniformly and independently at random from the set of bins $B$. This implies 
+\[
+\forall \mathcal{E} \in \mathcal{F}_d: \Pr\left(\mathcal{E}\right) = \frac{1}{n ^{d}}
+\]
+\item \emph{Non-uniform and independent.} Choose the $i$th bin from $B$ independently at random according to some probability function
+\[
+\Pr: B \rightarrow \left[0,1\right]
+\]
+
+\item \emph{Non-uniform and dependent.} Choose the $d$ bins for a ball from $\Omega$ at random:
+\[
+\Pr: B^{d} \rightarrow \left[0,1\right]
+\]
+
+\end{itemize} 
+ 
 
 We will discuss two different multiple-choice schemes: The \emph{Greedy$[d]$} scheme (Section \ref{sec:greedy}) places the ball into the least full bin among $d$ bins chosen uniformly and independently at random whereas the \emph{Always-Go-Left} scheme (Section \ref{sec:AlwaysGoLeft}) uses a nonuniform selection of $d$ bins.
 
@@ -162,7 +179,7 @@ Furthermore, define
 \[
 \Phi_d = \lim_{k \rightarrow \infty} \sqrt[k]{F_d(k)}
 \]
-Notice that $F_2$ corresponds to the usual Fibonacci numbers, while $\Phi_2$ corresponds to the golden ratio \cite{Knuth73}, which is generalized to $\Phi_d$, for which 
+Notice that $F_2$ corresponds to the usual Fibonacci numbers, while $\Phi_2 $ corresponds to the golden ratio \cite{Knuth73}, which is generalized to $\Phi_d$, for which 
 \[
 i, j \in \mathbb{N}, i < j \Rightarrow \Phi_i < \Phi_j
 \]
