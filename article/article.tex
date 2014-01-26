@@ -137,26 +137,34 @@ Thus, let $B$ be the set of bins $\{1,2...n\}$, $\Omega = B^{d}$ be the sample s
 
 We will discuss two different multiple-choice placement strategies: The \emph{Greedy} algorithm (Section \ref{sec:greedy}) belongs to class 1, whereas the \emph{Always-Go-Left} scheme (Section \ref{sec:AlwaysGoLeft}) uses a non-uniform and independent selection of $d$ bins and thus belongs to class 2.
 
-\subsection{The Greedy$[d]$ scheme}
+\subsection{The Greedy scheme}
 \label{sec:greedy}
 
-Consider a variation of the above \emph{one-choice balls-into-bins} strategy, which we will call the \emph{Greedy$[d]$ scheme}: For each ball, chose $d \geq 2$ bins independently and uniformly at random and place the ball into the \emph{least full bin}. If there are multiple bins with the same minimal load, chose one among them arbitrarily. Note that the $d$ selected bins are not necessarily distinct. 
+Consider a variation of the above \emph{one-choice balls-into-bins} strategy, which we will call the \emph{Greedy scheme}: For each ball, choose $d \geq 2$ bins independently and uniformly at random and place the ball into the \emph{least full bin}. If there are multiple bins with the same minimal load, chose one among them arbitrarily. Note that the $d$ selected bins are not necessarily distinct. 
 
-The \emph{Greedy$[d]$ scheme} achieves a maximum load of $\frac{m}{n} + \frac{\log \log n}{\log d} \left( 1 + O\left(1\right)\right)$ for all $m$ w.h.p. (see \cite{ABKU99}, \cite{BCSV06}).
+The \emph{Greedy scheme} achieves a maximum load of 
+\[
+\frac{m}{n} + \Theta\left(\frac{\log \log n}{\log d} \right)
+\]
+for all $m$ w.h.p. \cite{ABKU99} \cite{BCSV06}.
 
-
-This was first proven by Azar et al. \cite{ABKU99} for the case $m = n$. (However, the case $d = 2$ was implicitly proven by Karp et al. \cite{KLM92}). See also \cite{MRS01} for a simplified proof and an overview of proof techniques for the given problem.  Unfortunately, the analysis breaks down for the heavily loaded case, where $m = \omega\left(n\right)$. Berenbrink at. all \cite{BFZR08} were the first to proof that the same bound holds for the heavily loaded case\footnote{However, they say that an event $\mathcal E$ occurs with high probability if $\Pr\left[\mathcal E \right]  \geq 1- n^{-\alpha}$, for an arbitrarily chosen constant $\alpha \geq 1$.}. A simplified proof may be found in \cite{TW13}. 
-
-The result stated above implies a gap of $\Theta\left(\log \log n \right)$ for arbitrarily large $m$. This is remarkable in several ways:
+This implies a gap of $\Theta\left(\log \log n \right)$ for arbitrarily large $m$, which is remarkable in several ways:
 \begin{compactitem}
-\item The apparently small change made for the \emph{multiple-choice balls-into-bins} strategy results in an exponential decrease of the gap between the fullest box and the average load, even for $d=2$. 
+\item The apparently small change made for the \emph{Greedy} algorithm compared to the \emph{single-choice balls-into-bins} scheme results in an exponential decrease of the gap, even for $d=2$. 
 \item Each additional choice ($d > 2$) decreases the gap by only a constant factor \cite{MRS01}. 
-\item For the \emph{heavily loaded case}, the resulting gap of the \emph{multiple-choice balls-into-bins} strategy does not depend on the number of balls $m$. In contrast, the bound for the \emph{one-choice} diverges with $m$.
+\item For the \emph{heavily loaded case}, the resulting gap of the \emph{multiple-choice balls-into-bins} strategy does not depend on the number of balls $m$. In contrast, the bound for the \emph{one-choice balls-into-bins} scheme diverges with $m$.
 \begin{comment}
-\todo{this is not true, I think}
+\todo{the following is only true for class 1 algorithms}
 \item The given bounds are \emph{tight}, meaning that no other strategy that places each ball into one of $d$ randomly selected bins achieves a gap that is asymptotically lower.
 \end{comment}
 \end{compactitem}
+
+We will provide a detailed proof of this property in Section \ref{sec:analysis}.
+
+\subsubsection{History}
+\label{sec:historyOfGreedy}
+This was first proven by Azar et al. \cite{ABKU99} for the case $m = n$. However, the case $d = 2$ was implicitly proven by Karp et al. \cite{KLM92}. See also \cite{MRS01} for a simplified proof and an overview of proof techniques for the given problem.  Unfortunately, the analysis breaks down for the heavily loaded case, where $m = \omega\left(n\right)$. Berenbrink at. all \cite{BFZR08} were the first to proof that the same bound holds for the heavily loaded case\footnote{However, they say that an event $\mathcal E$ occurs with high probability if $\Pr\left[\mathcal E \right]  \geq 1- n^{-\alpha}$, for an arbitrarily chosen constant $\alpha \geq 1$.}. A simplified proof may be found in \cite{TW13}. 
+
 
 \subsection{The Always-Go-Left scheme}
 \label{sec:AlwaysGoLeft}
