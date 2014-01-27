@@ -157,6 +157,7 @@ Consider a variation of the above \emph{one-choice balls-into-bins} strategy, wh
 \todo{use theorem from V\"ocking?}
 
 \begin{theorem}
+\label{theorem:greedy}
 Consider any sequence of insertions and deletions s.t.~at most $hn$ balls are in the bins at any time. If the balls are placed into bins by the Greedy algorithm, at any time $t$ the maximum load is at most 
 \[
 \frac{m}{n} + \Theta\left(\frac{\log \log n}{\log d} \right)
@@ -190,6 +191,7 @@ The \emph{Greedy} strategy presented in Section \ref{sec:multiple-choice} assume
 The \emph{Always-go-left} algorithm works as follows. Partition the $n$ bins into $d$ groups, each of size $\lfloor \frac{n}{d}\rfloor$ or $\lceil\frac{n}{d}\rceil$ . We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. In case a tie occurs, put the ball into the \emph{left-most} bin. That is, assuming a fixed ordering of bins $b_i$ for $1 \leq i \leq n$, from among the $d' \leq d$ bins with the same minimal load, put the ball into the bin with smallest index $i$.
 
 \begin{theorem}
+\label{theorem:agln}
 If $n$ balls are placed into $n$ bins using the Always-go-left scheme, the number of balls in the fullest bin will be 
 \[
 \frac{\ln\ln n}{d \ln \Phi_d} \pm \Theta(1)
@@ -198,6 +200,7 @@ w.h.p.
 \end{theorem}
 
 \begin{theorem}
+\label{theorem:algm}
 Consider any sequence of insertions and deletions s.t.~at most $hn$ balls are in the bins at any time. If the balls are placed into bins by the Greedy algorithm, at any time $t$ the maximum load is at most 
 \[
 \frac{\ln\ln n}{d \ln \Phi_d} + O(h)
@@ -207,6 +210,7 @@ w.h.p.
 
 \section{Analysis}
 \label{sec:analysis}
+In this section, we will prove Theorems \ref{theorem:greedy}, \ref{theorem:agln} and \ref{theorem:algm} in detail, using \emph{witness trees} to provide an upper bound for the event that a bin contains too many balls. We will prove the bounds for $m=n$ for both the Greedy and the Always-go-left scheme in Sections \ref{sec:witnessGreedy} and \ref{sec:AlwaysGoLeft} respectively. However, we use some simplifying assumptions in those two sections to provide a more clear presentation of the proof techniuqe. Section \ref{sec:nondistinctBalls} will extend these proofs to remove the simplifying assumptions we made initially. Section \ref{sec:moreBalls} will extend the proof to cover the heavily loaded case where $m > n$ as well.
 
 \subsection{Preliminaries}
 \label{sec:preliminaries}
@@ -229,6 +233,18 @@ and
 \lim_{d\rightarrow \infty} \Phi_d = 2
 \]
 hold.
+
+\subsection{Witness tree for Greedy}
+\label{sec:witnessGreedy}
+
+\subsection{Witness tree for Always-go-left}
+\label{sec:witnessAlg}
+
+\subsection{Nondistinct balls}
+\label{sec:nondistinctBalls}
+
+\subsection{More balls than bins}
+\label{sec:moreBalls}
 
 \section{Conclusion}
 \label{sec:conclusion}
