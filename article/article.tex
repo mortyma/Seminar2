@@ -23,6 +23,10 @@
 \usepackage{color}
 \newcommand\todo[1]{\textcolor{red}{(#1)}}
 
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}[lemma]{Corollary}
+\newtheorem{theorem}[lemma]{Theorem}
+
 \begin{document}
 
 \title{The Power of Two Random Choices\\ 
@@ -148,11 +152,18 @@ We will discuss two different multiple-choice placement strategies: The \emph{Gr
 
 Consider a variation of the above \emph{one-choice balls-into-bins} strategy, which we will call the \emph{Greedy} scheme: For each ball, choose $d \geq 2$ bins independently and uniformly at random and place the ball into the \emph{least full bin}. If there are multiple bins with the same minimal load, chose one among them arbitrarily. Note that the $d$ selected bins are not necessarily distinct. 
 
-The \emph{Greedy} scheme achieves a maximum load of 
+\todo{specify deletions; fix intro text since we now do use deletions}
+
+\todo{use theorem from V\"ocking?}
+
+\begin{theorem}
+Consider any sequence of insertions and deletions s.t.~at most $hn$ balls are in the bins at any time. If the balls are placed into bins by the Greedy algorithm, at any time $t$ the maximum load is at most 
 \[
 \frac{m}{n} + \Theta\left(\frac{\log \log n}{\log d} \right)
 \]
-for all $m$ w.h.p. \cite{ABKU99} \cite{BCSV06}.
+w.h.p.~at any time $t$ \cite{ABKU99} \cite{BCSV06}.
+
+\end{theorem}
 
 This implies a gap of $\Theta\left(\log \log n \right)$ for arbitrarily large $m$, which is remarkable in several ways:
 \begin{compactitem}
@@ -177,6 +188,22 @@ The history of proving this remarkable property of the two-choice paradigm is in
 The \emph{Greedy} strategy presented in Section \ref{sec:multiple-choice} assumes that $d$ bins are chosen uniformly and independently at random. V\"ocking \cite{VOC03} was the first to study the impact of non-uniform and dependent selections of the $d$ bins. Surprisingly, a multiple-choice balls-into-bins strategy with a \emph{non-uniform} and independent selection of the $d$ bins, such as the \emph{Always-go-left} algorithm introduced in \cite{VOC03}, achieves better\cite{BCSV06} load balancing than the \emph{Greedy} scheme (Section \ref{sec:greedy}). Furthermore, V\"ocking proved that the \emph{Always-go-left} algorithm is optimal up to additive constants.
 
 The \emph{Always-go-left} algorithm works as follows. Partition the $n$ bins into $d$ groups, each of size $\lfloor \frac{n}{d}\rfloor$ or $\lceil\frac{n}{d}\rceil$ . We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. In case a tie occurs, put the ball into the \emph{left-most} bin. That is, assuming a fixed ordering of bins $b_i$ for $1 \leq i \leq n$, from among the $d' \leq d$ bins with the same minimal load, put the ball into the bin with smallest index $i$.
+
+\begin{theorem}
+If $n$ balls are placed into $n$ bins using the Always-go-left scheme, the number of balls in the fullest bin will be 
+\[
+\frac{\ln\ln n}{d \ln \Phi_d} \pm \Theta(1)
+\]
+w.h.p.
+\end{theorem}
+
+\begin{theorem}
+Consider any sequence of insertions and deletions s.t.~at most $hn$ balls are in the bins at any time. If the balls are placed into bins by the Greedy algorithm, at any time $t$ the maximum load is at most 
+\[
+\frac{\ln\ln n}{d \ln \Phi_d} + O(h)
+\]
+w.h.p.
+\end{theorem}
 
 \section{Analysis}
 \label{sec:analysis}
