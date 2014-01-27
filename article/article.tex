@@ -210,7 +210,11 @@ w.h.p.
 
 \section{Analysis}
 \label{sec:analysis}
-In this section, we will prove Theorems \ref{theorem:greedy}, \ref{theorem:agln} and \ref{theorem:algm} in detail, using \emph{witness trees} to provide an upper bound for the event that a bin contains too many balls. We will prove the bounds for $m=n$ for both the Greedy and the Always-go-left scheme in Sections \ref{sec:witnessGreedy} and \ref{sec:AlwaysGoLeft} respectively. However, we use some simplifying assumptions in those two sections to provide a more clear presentation of the proof techniuqe. Section \ref{sec:nondistinctBalls} will extend these proofs to remove the simplifying assumptions we made initially. Section \ref{sec:moreBalls} will extend the proof to cover the heavily loaded case where $m > n$ as well.
+In this section, we will prove Theorems \ref{theorem:greedy}, \ref{theorem:agln} and \ref{theorem:algm} in detail, using \emph{witness trees} to provide an upper bound for the event that a bin contains too many balls. 
+
+When the maximum load exceeds some given threshold value we say that a \emph{bad event} occurs and construct an \emph{activated witness tree}, i.e., the activation of a witness tree is implied by a bad event. The probability for the existance of an activated witness tree upper-bounds the probability that a bad event occurs.
+
+We will prove the bounds for $m=n$ for both the Greedy and the Always-go-left scheme in Sections \ref{sec:witnessGreedy} and \ref{sec:AlwaysGoLeft} respectively. However, we use some simplifying assumptions in those two sections to provide a more clear presentation of the proof techniuqe. Section \ref{sec:nondistinctBalls} will extend these proofs to remove the simplifying assumptions we made initially. Section \ref{sec:moreBalls} will extend the proof to cover the heavily loaded case where $m > n$ as well.
 
 \subsection{Preliminaries}
 \label{sec:preliminaries}
