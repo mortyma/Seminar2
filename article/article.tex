@@ -178,10 +178,10 @@ The \emph{Greedy} strategy presented in Section \ref{sec:multiple-choice} assume
 
 The \emph{Always-go-left} algorithm works as follows. Partition the $n$ bins into $d$ groups, each of size $\lfloor \frac{n}{d}\rfloor$ or $\lceil\frac{n}{d}\rceil$ . We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. In case a tie occurs, put the ball into the \emph{left-most} bin. That is, assuming a fixed ordering of bins $b_i$ for $1 \leq i \leq n$, from among the $d' \leq d$ bins with the same minimal load, put the ball into the bin with smallest index $i$.
 
-\subsection{Analysis}
+\section{Analysis}
 \label{sec:analysis}
 
-\subsubsection{Preliminaries}
+\subsection{Preliminaries}
 \label{sec:preliminaries}
 \todo{where to put this? required for  bound of always-go-left in intro}
 We define $d$-ary Fibonacci numbers as follows. For $k \leq0$, $F_d(k) = 0$, $F_d(1) = 1$ and for $k \geq 1$,
