@@ -24,9 +24,9 @@
 \newcommand\todo[1]{\textcolor{red}{(#1)}}
 
 \newtheorem{lemma}{Lemma}
-\newtheorem{corollary}[lemma]{Corollary}
-\newtheorem{theorem}[lemma]{Theorem}
-
+\newtheorem{corollary}{Corollary}
+\newtheorem{theorem}{Theorem}
+\newtheorem{assumption}{Assumption}
 \begin{document}
 
 \title{The Power of Two Random Choices\\ 
@@ -127,7 +127,7 @@ w.h.p.~\cite{RS98}.
 The \emph{single-choice balls-into-bins strategy} (Section \ref{sec:single-choice}) chooses one bin uniformly and independently at random for each ball. A \emph{multiple-choice balls-into-bins strategy} generalizes this idea by  choosing $d \geq 2$ bins and placing the ball into the least full bin. Depending on how the $d$ locations are sampled, we distinguish three classes of placement algorithms \cite{VOC03}. 
 
 Thus, let $B$ be the set of bins $\{1,2...n\}$, $\Omega = B^{d}$ be the sample space and $\mathcal{F} = 2^{\Omega}$ be the set of measurable events. We are only interested in events that represent a set of bins of size $d$. Thus, let $\mathcal{F}_d = \{\mathcal{E} \in \mathcal{F}: \left\vert \mathcal{E} \right\vert = d\}$ and set $\Pr\left(\mathcal{E}  \right) = 0$  $\forall \mathcal{E} \in \mathcal{F} \setminus \mathcal{F}_d $. The three classes of algorithms are distinguished by the probability function $\Pr\left(\mathcal{E}\right)$ for events $\mathcal{E} \in \mathcal{F}_d$:
-\begin{itemize}
+\begin{compactitem}
 \item  \emph{Uniform and independent.} Choose each of the $d$ bins for a ball uniformly and independently at random from the set of bins $B$. This implies 
 \[
 \forall \mathcal{E} \in \mathcal{F}_d: \Pr\left(\mathcal{E}\right) = \frac{1}{n ^{d}}
@@ -141,10 +141,8 @@ Thus, let $B$ be the set of bins $\{1,2...n\}$, $\Omega = B^{d}$ be the sample s
 \[
 \Pr: B^{d} \rightarrow \left[0,1\right]
 \]
-
-\end{itemize} 
+\end{compactitem} 
  
-
 We will discuss two different multiple-choice placement strategies: The \emph{Greedy} algorithm (Section \ref{sec:greedy}) belongs to class 1, whereas the \emph{Always-go-left} scheme (Section \ref{sec:AlwaysGoLeft}) uses a non-uniform and independent selection of $d$ bins and thus belongs to class 2.
 
 \subsection{The Greedy scheme}
@@ -210,11 +208,12 @@ w.h.p.
 
 \section{Analysis}
 \label{sec:analysis}
-In this section, we will prove Theorems \ref{theorem:greedy}, \ref{theorem:agln} and \ref{theorem:algm} in detail, using \emph{witness trees} to provide an upper bound for the event that a bin contains too many balls. 
+In this section, we will prove Theorems \ref{theorem:greedy}, \ref{theorem:agln} and \ref{theorem:algm} in detail, using \emph{witness trees} to provide an upper bound for the event that a bin contains too many balls. Our analysis closely follows the proofs in \cite{VOC03}. \todo{is it enough to cite this once for the whole section?}
 
-When the maximum load exceeds some given threshold value we say that a \emph{bad event} occurs and construct an \emph{activated witness tree}, i.e., the activation of a witness tree is implied by a bad event. The probability for the existance of an activated witness tree upper-bounds the probability that a bad event occurs.
+When the maximum load exceeds some given threshold value we say that a \emph{bad event} occurs and construct an \emph{activated witness tree}. In other words, the activation of a witness tree is implied by a bad event. The probability for the existance of such an activated witness tree is an upper-bound for the probability that a bad event occurs.
 
-We will prove the bounds for $m=n$ for both the Greedy and the Always-go-left scheme in Sections \ref{sec:witnessGreedy} and \ref{sec:AlwaysGoLeft} respectively. However, we use some simplifying assumptions in those two sections to provide a more clear presentation of the proof techniuqe. Section \ref{sec:nondistinctBalls} will extend these proofs to remove the simplifying assumptions we made initially. Section \ref{sec:moreBalls} will extend the proof to cover the heavily loaded case where $m > n$ as well.
+We will prove the bounds for $m=n$ for both the Greedy and the Always-go-left scheme in Sections \ref{sec:analysis:greedy} and \ref{sec:AlwaysGoLeft}, respectively. However, we use a simplifying assumption \ref{assumption:independence} in those two sections to provide a more clear presentation of the proof technique. Section \ref{sec:analysis:nondistinctBalls} will extend these proofs to remove the simplifying assumption we make initially. Section \ref{sec:analysis:moreBalls} will extend the proof to cover the heavily loaded case where $m > n$ as well.
+
 
 \subsection{Preliminaries}
 \label{sec:preliminaries}
@@ -238,17 +237,97 @@ and
 \]
 hold.
 
-\subsection{Witness tree for Greedy}
-\label{sec:witnessGreedy}
+\subsection{Analysis of the Greedy-scheme}
+\label{sec:analysis:greedy}
+A \emph{symmetric witness tree} of order $L$ is a complete $d$-ary tree with $d^{L}$ leaves. Each node $v$ represents a ball $b_v = \mathrm{ball}(v)$ . The same ball may be represented by several nodes. The nodes and edges of the witness tree represent events that may occur or not. For simplicity, we assume that all events represented by a witness tree are stochastically independent.  
 
-\subsection{Witness tree for Always-go-left}
-\label{sec:witnessAlg}
+In the following, we donate the $d$ bins that are selected for a ball as the \emph{locations} of a ball. That is, before inserting a ball $d$ locations are generated and the ball is then inserted into one of those. We define edge and leaf events:
+\begin{compactitem}
+\item \emph{Edge event:} Consider some edge $e = (u,v)$ of the witness tree, s.t.~$v$ is the $i$th child of $u$. Then $e$ represents the event that the $i$'th location of the ball $b_u = \mathrm{ball}(u)$ points to the same bin as one of the locations of the ball $b_v = \mathrm{ball}(v)$. 
+\todo{illustrate}
+\item \emph{Leaf event:} A leaf node $v$ of the witness tree represents the event that each of the $d$ locations of the ball $b_v = \mathrm{ball}(v)$ points to a bin that contains at least three additional balls (i.e., balls that are not represented by a node of the tree) at the time of the insertion of the ball $b_v$.
+\todo{illustrate}
+\end{compactitem}
+
+The following constraints have to be fullfilled by an assignment. The ball $b_r$ that is represented by the root node $r$ has to exist at timestep\footnote{As defined in Theorem \ref{theorem:greedy}} $t$ and each ball $b_v$ represented by a node $v \neq r$ and parent node $u$ has to exist when the ball $b_u = \mathrm{ball}(u)$ is inserted.
+
+The definition for leaf events refers to bins containing some number of balls at some specified time. To avoid dependencies, the crucial trick is that edge events are defined in terms of the alternative locations of balls, not by their finally assigned bin. 
+
+\subsubsection{Symmetric witness tree: construction}
+\label{sec:constructionSymWT}
+Assume the bad event that some bin contains more than $L+3$ balls at time $t$ occurs. We will use an activated symmetric witness tree of order $L$ to witness this event and provide an upper-bound for the occurance of the event. Thus, we have to show that the existance of a bin $x$ containing at least $L+4$ balls implies the existance of an activated witness tree of order $L$. We construct the witness tree as follows:
+\begin{compactenum}
+\item The topmost ball $b_1$ in bin $x$ is assigned to the root node $v_r$. Note that $b_1$ is the last ball that was inserted into the bin $x$.
+\item Since the Greedy-scheme puts ball $b_1$ into bin $x$ only if each of the $d$ sampled locations contain at least the same number of balls at bin $x$, we can conclude that each of the $d$ locations contain at least $L+3$ balls at the time ball $b_1$ was inserted. Thus, the $d$ children of the root node are assigned the topmost balls of these $d$ bins.
+\item Consider these child nodes and continue the assignment of the previous step recursively until the leaf nodes are reached.  
+\end{compactenum}
+
+By construction, all edge events of the witness tree are activated. Note that the ball assigned to the root node is on top of at least $L+3$ balls. The balls assigned to the root's child node are each on top of $L+2$ or more balls and so on. It follows that each ball assigned to a leaf node is on top of at least 3 other balls, implying that the $d$ locations of each leaf node point to bins with at least 3 balls in each. This implies the activation of all leaf nodes of the witness tree.
+
+\subsubsection{Symmetric witness tree: probability of activation}
+\label{sec:probabilitySymWT}
+In this section, we derive the probability that some witness tree of order $L$ is activated, which gives an upper bound for the probability that the maximum load is $L+3$ at some time $t$. The probability $p_a$ that some witness tree of order $L$ is activated is bounded by the number of witness trees $w$ times the upper bound on the probability $p_1$ that a specific witness tree is activated.
+
+We will make use of Assumption \ref{assumption:independence} in the analysis. 
+\begin{assumption}
+\label{assumption:independence}
+All events represented by the nodes and edges of a witness tree are stochastically independent. 
+\end{assumption}
+In other words, we assume that no ball is referenced by more than one node of a witness tree. Obviously, a correct analysis will have to consider balls assigned to more than one node, but this simplifying assumption is useful to highlight the differences between the symmetric and asymmetric allocation schemes. Section \ref{sec:analysis:nondistinctBalls} will extend the analysis to witness trees with reduntant balls.
+
+The number of different witness trees $w$ is given by the number of ways to assign balls to its nodes. The ball assigned to the root node can be chosen from at most $n$ balls, since by definition (Theorem \ref{theorem:greedy}), at most $n$ balls are in the bins at any time $t$ and a ball assigned to a node has to be in some bin at time $t$. Each child node of the root is assigned one out of at most $n$ balls too by the same argument. Applying this argument for each level of the witness tree, there are at most $w = n^k$ possibilities to assign balls to a witness tree, with $k = d^{L+1}-1$ being the number of nodes in a $d$-ary witness tree of order $L$.
+ 
+An edge\footnote{where $v$ is the $i$'th child of $u$} $(u, v)$ is activated with probability at most $d/n$, which is the probability that the $i$'th location of the ball $b_u = \mathrm{ball}(u)$ points to a particular location of the ball $b_v = \mathrm{ball}(v)$ times the number of locations $d$. This implies a probability of at most
+\[
+p_e = \left(\frac{d}{n}\right)^{k-1}
+\] 
+or the event that all $k-1$ edges of a witness tree are activated. Note that  the assumption that all balls are distinct (Assumption \ref{assumption:independence}) implies that all edge events are independent.
+
+The probability that a leaf event is activated is bounded above by $3^{-d}$. Recall that by the definition of leaf events, each of the $d$ locations of the ball $b_{vl} = \mathrm{ball}(v_l)$ has to point to a bin with at least 3 additional balls in it. The number of those bins is bounded by $\lfloor n/3 \rfloor$ at all time steps $t$, implying a probability of at most 
+\[
+\frac{n/3}{n} = \frac{1}{3}
+\end{align}
+that one such bin is chosen. This implies a probability of at most $3^{-d}$ that all $d$ bins are chosen among those with at least 3 additional bins in them. Thus, the probability that all leaf events are activated is at most $p_l = 3^{-d\cdot l}$, where $l = d^{L}$ is the number of leaves in a witness tree.
+
+Thus, the probability that an activated symmetric witness tree exists at time $t$ is at most 
+\begin{align}
+p_{swt} &= n^{k} \cdot \left(\frac{d}{n}\right)^{k-1} \cdot 3^{-d \cdot l} \\
+		&= n \cdot d^{k-1} \cdot 3^{-d \cdot l}
+\end{align}
+
+Using $k \leq 2l$ we get
+\begin{align}
+p_{swt} &\leq n \cdot d^{2\cdot l} \cdot 3^{-d \cdot l} \\
+		&= n \cdot \left(d^2\right)^l \cdot \left( 3^{-d} \right)^l
+\end{align}
+which we simplify by using $2d^2 \leq 3^d$
+\begin{align}
+p_{swt} &\leq n \cdot \left(\frac{3^d}{2}\right)^l \cdot \left( 3^{-d}\right)^l \\
+		&= n \cdot 2^{-l} \cdot 3^{d\cdot l} \cdot 3^{-d \cdot l} \\
+		&= n\cdot 2^{-d^L}		
+\end{align}
+
+Finally, we can show that the activation of a symmetric witness tree with distinct balls is unlikely, if the order of the tree $L$ is large enough. For any constant $\alpha > 0 $, let
+\begin{align}
+L \geq \log_d\log_2 n + \log_d\left(1+\alpha\right)
+\end{align}
+Then, 
+\begin{align}
+p_{swt} &\leq n \cdot 2^{{-d}^{\log_d\log_2 n + \log_d\left(1+\alpha\right)}} \\
+		&= n \cdot 2^{-{d}^{\log_d\log_2 n}\cdot d^{\log_d \cdot\left(1+\alpha\right)}} \\
+		&= n \cdot \left( 2^{-\log_2 n \cdot \left(1+ \alpha \right)} \right) \\
+		&= n \cdot n^{-\left(1+\alpha\right)} \\
+		&= n^{-\alpha}
+\end{align}
+
+\subsection{Analysis of the Always-go-left scheme}
+\label{sec:analysis:alg}
 
 \subsection{Nondistinct balls}
-\label{sec:nondistinctBalls}
+\label{sec:analysis:nondistinctBalls}
 
-\subsection{More balls than bins}
-\label{sec:moreBalls}
+\subsection{The heavily loaded case}
+\label{sec:analysis:moreBalls}
 
 \section{Conclusion}
 \label{sec:conclusion}
