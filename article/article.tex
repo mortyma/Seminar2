@@ -27,6 +27,7 @@
 \newtheorem{corollary}{Corollary}
 \newtheorem{theorem}{Theorem}
 \newtheorem{assumption}{Assumption}
+\newtheorem{invariant}{Invariant}
 \begin{document}
 
 \title{The Power of Two Random Choices\\ 
@@ -54,7 +55,7 @@ Curiously, the exponential decrease in the gap is already achieved having just t
 \end{comment}
 Extensive research following the influental paper by Azar et. al \cite{ABKU99}, who were the first to explicitly prove this phenomenon, suggests that this \emph{two-choice paradigm} is not just an artificat of the simple balls-into-bins model, but a general principle applicable to a variety of problems. 
 
-Condsider a slightly more involved strategy, which we will call the \emph{Always-go-left} scheme: Suppose that the $n$ bins are partitioned evenly into $d$ groups, each of size $\lfloor \frac{n}{d}\rfloor$ or $\lceil\frac{n}{d}\rceil$ \todo{simplify to n/d?}. We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. In case a tie occurs, put the ball into the \emph{left-most} bin. That is, assuming a fixed ordering of bins $b_i$ for $1 \leq i \leq n$, from among the $d' \leq d$ bins with same minimal load, we put the ball into the bin with smallest index $i$. Somewhat surprisingly, V\"ocking \cite{VOC03} showed that such a strategy employing \emph{asymetric tie-breaking} in combination with \emph{partitioning}\todo{check} reduces the bound for the gap to $\Theta \left( \frac{\log\log n}{d  \cdot \log \Phi_d}\right)$ \todo{$\Phi_d$ is undefined}.
+Condsider a slightly more involved strategy, which we will call the \emph{Always-go-left} scheme: Suppose that the $n$ bins are partitioned evenly into $d$ groups, each of size $\lfloor \frac{n}{d}\rfloor$ or $\left\lceil\frac{n}{d}\right\rceil$ \todo{simplify to n/d?}. We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. In case a tie occurs, put the ball into the \emph{left-most} bin. That is, assuming a fixed ordering of bins $b_i$ for $1 \leq i \leq n$, from among the $d' \leq d$ bins with same minimal load, we put the ball into the bin with smallest index $i$. Somewhat surprisingly, V\"ocking \cite{VOC03} showed that such a strategy employing \emph{asymetric tie-breaking} in combination with \emph{partitioning}\todo{check} reduces the bound for the gap to $\Theta \left( \frac{\log\log n}{d  \cdot \log \Phi_d}\right)$ \todo{$\Phi_d$ is undefined}.
 
 The paper is organized as follows: We will first introduce different variations of the \emph{balls-into-bins problem} in Section \ref{sec:classification} to provide some overview of different directions in research as well as possibilities of abstraction from applications, some of which are listed in Section \ref{sec:applications}. Sections \ref{sec:single-choice} to \ref{sec:multiple-choice} will deal with the most basic variation of the balls-into-bins problem, namely the sequential, finite and static variant (see Section \ref{sec:classification} for details). For comparison and as a starting point, Section \ref{sec:single-choice} provides the results for the single-choice balls-into-bins problem. \todo{TODO: multiple-choice, analysis, mention that witness tree method very helpful}  See also \cite{MRS01} an overview of proof techniques for the given problem.  
 
@@ -189,7 +190,7 @@ The history of proving this remarkable property of the two-choice paradigm is in
 \label{sec:AlwaysGoLeft}
 The \emph{Greedy} strategy presented in Section \ref{sec:multiple-choice} assumes that $d$ bins are chosen uniformly and independently at random. V\"ocking \cite{VOC03} was the first to study the impact of non-uniform and dependent selections of the $d$ bins. Surprisingly, a multiple-choice balls-into-bins strategy with a \emph{non-uniform} and independent selection of the $d$ bins, such as the \emph{Always-go-left} algorithm introduced in \cite{VOC03}, achieves better\cite{BCSV06} load balancing than the \emph{Greedy} scheme (Section \ref{sec:greedy}). Furthermore, V\"ocking proved that the \emph{Always-go-left} algorithm is optimal up to additive constants.
 
-The \emph{Always-go-left} algorithm works as follows. Partition the $n$ bins into $d$ groups, each of size $\lfloor \frac{n}{d}\rfloor$ or $\lceil\frac{n}{d}\rceil$ . We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. In case a tie occurs, put the ball into the \emph{left-most} bin. That is, assuming a fixed ordering of bins $b_i$ for $1 \leq i \leq n$, from among the $d' \leq d$ bins with the same minimal load, put the ball into the bin with smallest index $i$.
+The \emph{Always-go-left} algorithm works as follows. Partition the $n$ bins into $d$ groups, each of size $\left\lfloor \frac{n}{d}\right\rfloor$ or $\left\lceil\frac{n}{d}\right\rceil$ . We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. In case a tie occurs, put the ball into the \emph{left-most} bin. That is, assuming a fixed ordering of bins $b_i$ for $1 \leq i \leq n$, from among the $d' \leq d$ bins with the same minimal load, put the ball into the bin with smallest index $i$.
 
 \begin{theorem}
 \label{theorem:agln}
@@ -214,6 +215,8 @@ w.h.p.
 In this section, we will prove Theorems \ref{theorem:greedy}, \ref{theorem:agln} and \ref{theorem:algm} in detail, using \emph{witness trees} to provide an upper bound for the event that a bin contains too many balls. Our analysis closely follows the proofs in \cite{VOC03}. \todo{is it enough to cite this once for the whole section?}
 
 When the maximum load exceeds some given threshold value we say that a \emph{bad event} occurs and construct an \emph{activated witness tree}. In other words, the activation of a witness tree is implied by a bad event. The probability for the existance of such an activated witness tree is an upper-bound for the probability that a bad event occurs.
+
+Throughout this section, we donate the $d$ bins that are selected for a ball as the \emph{locations} of a ball. That is, before inserting a ball $d$ locations are generated and the ball is then inserted into one of those.
 
 We will prove the bounds for $m=n$ for both the Greedy and the Always-go-left scheme in Sections \ref{sec:analysis:greedy} and \ref{sec:analysis:alg}, respectively. However, we use a simplifying assumption \ref{assumption:independence} in those two sections to provide a more clear presentation of the proof technique. Section \ref{sec:analysis:nondistinctBalls} will extend these proofs to remove the simplifying assumption we make initially. Section \ref{sec:analysis:moreBalls} will extend the proof to cover the heavily loaded case where $m > n$ as well.
 
@@ -242,9 +245,11 @@ hold.
 
 \subsection{Greedy}
 \label{sec:analysis:greedy}
+\subsubsection{Symmetric witness trees}
+\label{sec:analysis:definitionSymWT}
 A \emph{symmetric witness tree} of order $L$ is a complete $d$-ary tree with $d^{L}$ leaves. Each node $v$ represents a ball $b_v = \mathrm{ball}(v)$ . The same ball may be represented by several nodes. The nodes and edges of the witness tree represent events that may occur or not. For simplicity, we assume that all events represented by a witness tree are stochastically independent.  
 
-In the following, we donate the $d$ bins that are selected for a ball as the \emph{locations} of a ball. That is, before inserting a ball $d$ locations are generated and the ball is then inserted into one of those. We define edge and leaf events:
+We define edge and leaf events:
 \begin{compactitem}
 \item \emph{Edge event:} Consider some edge $e = (u,v)$ of the witness tree, s.t.~$v$ is the $i$th child of $u$. Then $e$ represents the event that the $i$'th location of the ball $b_u = \mathrm{ball}(u)$ points to the same bin as one of the locations of the ball $b_v = \mathrm{ball}(v)$. 
 \todo{illustrate}
@@ -258,8 +263,8 @@ The definition for leaf events refers to bins containing some number of balls at
 
 Assume the bad event that some bin contains more than $L+3$ balls at time $t$ occurs. We will use an activated symmetric witness tree of order $L$ to witness this event and provide an upper-bound for the occurrence of the event. Thus, we have to show that the existence of a bin $x$ containing at least $L+4$ balls implies the existence of an activated witness tree of order $L$. 
 
-\subsubsection{Witness tree construction}
-\label{sec:constructionSymWT}
+\subsubsection{Construction}
+\label{sec:analysis:constructionSymWT}
 We construct a witness tree for the event that some bin contains $L+4$ balls as follows:
 \begin{compactenum}
 \item The topmost ball $b_1$ in bin $x$ is assigned to the root node $v_r$. Note that $b_1$ is the last ball that was inserted into the bin $x$.
@@ -270,7 +275,7 @@ We construct a witness tree for the event that some bin contains $L+4$ balls as 
 By construction, all edge events of the witness tree are activated. Note that the ball assigned to the root node is on top of at least $L+3$ balls. The balls assigned to the root's child node are each on top of $L+2$ or more balls and so on. It follows that each ball assigned to a leaf node is on top of at least 3 other balls, implying that the $d$ locations of each leaf node point to bins with at least 3 balls in each. This implies the activation of all leaf nodes of the witness tree.
 
 \subsubsection{Probability of activation}
-\label{sec:probabilitySymWT}
+\label{sec:analysis:probabilitySymWT}
 In this section, we derive the probability that some witness tree of order $L$ is activated, which gives an upper bound for the probability that the maximum load is $L+3$ at some time $t$. The probability $p_a$ that some witness tree of order $L$ is activated is bounded by the number of witness trees $w$ times the upper bound on the probability $p_1$ that a specific witness tree is activated.
 
 We will make use of Assumption \ref{assumption:independence} in the analysis. 
@@ -296,7 +301,8 @@ that one such bin is chosen. This implies a probability of at most $3^{-d}$ that
 
 Thus, the probability that an activated symmetric witness tree exists at time $t$ is at most 
 \begin{align}
-p_{swt} &= n^{k} \cdot \left(\frac{d}{n}\right)^{k-1} \cdot 3^{-d \cdot l} \\
+p_{swt} &= w \cdot p_e \cdot p_l \\
+		&= n^{k} \cdot \left(\frac{d}{n}\right)^{k-1} \cdot 3^{-d \cdot l} \\
 		&= n \cdot d^{k-1} \cdot 3^{-d \cdot l}
 \end{align}
 
@@ -309,12 +315,17 @@ which we simplify by using $2d^2 \leq 3^d$
 \begin{align}
 p_{swt} &\leq n \cdot \left(\frac{3^d}{2}\right)^l \cdot \left( 3^{-d}\right)^l \\
 		&= n \cdot 2^{-l} \cdot 3^{d\cdot l} \cdot 3^{-d \cdot l} \\
+		&= n\cdot 2^{-l}		\\
 		&= n\cdot 2^{-d^L}		
 \end{align}
 
-Finally, we can show that the activation of a symmetric witness tree with distinct balls is unlikely, if the order of the tree $L$ is large enough. For any constant $\alpha > 0 $, let
+For any constant $\alpha > 0 $, let
 \begin{align}
 L \geq \log_d\log_2 n + \log_d\left(1+\alpha\right)
+\end{align}
+and $n$ be large enough such that 
+\begin{align}
+L \in \Theta \left(\ln \ln n \right)
 \end{align}
 Then, 
 \begin{align}
@@ -325,14 +336,18 @@ p_{swt} &\leq n \cdot 2^{{-d}^{\log_d\log_2 n + \log_d\left(1+\alpha\right)}} \\
 		&= n^{-\alpha}
 \end{align}
 
+\todo{add the asymptotic bound}
+
 \subsection{Always-go-left}
 \label{sec:analysis:alg}
-Similarly to Section \ref{sec:analysis:greedy}, where we used symmetric witness trees to upper-bound the probability that a bin contains too many balls when using the \emph{Greedy} scheme, we will use asymmetric witness trees to get an analogous upper bound for the \emph{Always-go-left} scheme. 
+Similarly to Section \ref{sec:analysis:greedy}, where we used symmetric witness trees to upper-bound the probability that a bin contains too many balls when using the \emph{Greedy} scheme, we will use asymmetric witness trees to get an analogous upper bound for the \emph{Always-go-left} scheme. We will make the same simplification as stated in Assumption \ref{assumption:independence}, namely that all the events represented by the edges and nodes of a witness tree are stochastically independent.
 
-With one exception, the definition of an \emph{asymmetric witness tree} is the same as the definition of a symmetric witness tree, including the definition of activation. Only its structure differs from that of a symmetric tree. An asymmetric witness tree has the same structure as a $d$-ary Fibonacci tree $T_d\left(k \right)$, which is defined as follows.
+\subsubsection{Asymmetric witness trees}
+\label{sec:analysis:definitionAsymWT}
+With one exception, the definition of an \emph{asymmetric witness tree} is the same as the definition of a symmetric witness tree, including the definition of activation. Only its structure differs from that of a symmetric tree. An asymmetric witness tree has the structure of a $d$-ary Fibonacci tree $T_d\left(k \right)$, which is defined as follows.
 \begin{compactitem}
-\item $T_d(1)$ is a single node
-\item $T_d(2) = T_d(1)$  
+\item $T_d(1)$ is a single node.
+\item $T_d(2) = T_d(1)$.
 \item For $3\leq k \leq d$, $T_d(k)$ is a tree with $k-1$ children, which are the roots of the trees $T_d(k-1),\ldots,T_d(1)$.
 \item For $k>d$, $T_d(k)$ is a tree with $d$ children, which are the roots of the trees $T_d(k-1),\ldots,T_d(k-d)$.
 \end{compactitem}
@@ -340,12 +355,73 @@ With one exception, the definition of an \emph{asymmetric witness tree} is the s
 
 A $d$-ary asymmetric witness tree of order $L$ has the structure of the Fibonacci tree $T_d(d \cdot L+1)$ and thus has $F_d(d\cdot L + 1) \geq \Phi_d^{d\cdot L-1}$ \todo{How to get this inequality?} leaves. 
 
-\subsubsection{Witness tree construction}
+For each node we define a label $(h, i)$, where $h, i \in \mathbb{N}$, $0 \leq h \leq L$ and  $1\leq i \leq d$. 
+\begin{compactitem}
+\item A node that is the root of a Fibonacci tree $T_d(1)$ is assigned the label $(0,1)$.
+\item Analogously, a node that is the root of a Fibonacci tree $T_d(2)$ is assigned the label $(0,2)$. Thus, nodes labelled $(0,1)$ or $(0,2)$ do not have children.
+\item A node with label $(0, i)$, where $i>2$, has $i-1$ children with labels $(0,i-1)\dots (0,1)$
+\item A node with label $(h,i)$ , where $h>0$, has $d$ children with the labels $(h,i-1)\dots(h,1)$,$(h-1,d)\dots(h-1, i)$.
+\item The root of a Fibonacci tree $T_d(d\cdot h+i)$ has the label $(h, i)$. 
+\end{compactitem}
+Thus, our the root node of our witness tree will be labelled $(L, 1)$. Note that the labels are unique within the set of children of a node $v$, but not for all nodes of the tree.
+
+\subsubsection{Construction}
 \label{sec:analysis:constructionAsymWT}
+The labels defined in the previous section are useful to state the following invariant, which will be maintained while assigning balls to the nodes of the witness tree.
+
+\begin{invariant}
+Ball $b_v$ referenced by a node $v$ with label $(h,i)$ was placed in a bin belonging to group $i$. The bin contained at least $h+3$ other balls at the time of insertion of the ball $b_v$.
+\end{invariant}
+
+Let $x$ be the bin that contains $L+4$ balls. The root node gets assigned the topmost ball in bin $x$. Each of the $d$ locations of this ball points to a bin with at least $L+3$ balls in it, at the time of its insertion. These are the $d$ bins that were sampled by the Always-go-left scheme and thus bin $i$ belongs to the $i$'th group of bins, where each group consists of $n/d$ bins\footnote{For the sake of simplicity, we assume that $d$ divides $n$ evenly, i.e., that all groups have the exact same size. It can be shown that the analysis still holds if each group is of size $\lfloor\frac{n}{d}\rfloor$ or $\left\lceil\frac{n}{d}\right\rceil$.}. The child node of the root with label $(L-1, i)$ is assigned the topmost ball of the bin the $i$' location points to. The assignment of balls to nodes than proceeds recursively. Given a node $v$ with label $(h, i)$ whose ball $b_v$ was put into some bin belonging to group $i$ and containing at least $l+3$ other balls, we can conclude the following.
+\begin{compactitem}
+\item For $1\leq j < i$, the $j$'th location of the ball $b_v$ points to a bin containing at least $l+4$ balls at the insertion time of the ball $b_v$. If the $j$'th location contained less balls than the $i$'th location, the Always-go-left scheme would have put the ball $b_v$ into the bin pointed to by location $j$. The topmost ball in location $j$ is assigned to the  child $u$ of $v$ with label $(l,j)$. 
+\item For $i < j \leq d$, the $j$'th location contains at least $l+3$ balls. If location $j$ contained less, the Always-go-left scheme would have put the ball $b_v$ into the bin it points to. The topmost ball in the bin that location $j$ points to is assigned to the child node $u$ of $v$ labelled with $(l-1, j)$. \todo{the paper claims that the locations $j$ point to bins with $l+2$ balls. This can not be true, since the topmost, i.e., the $l+2$ ball - call it $b_t$ - gets assigned to a node with label $(l'=l-1, j)$. Since there are $l+1=l'+2$ balls below it, at the time of the placement of ball $b_t$, the bin $j$ it gets put into has only $l'+2$ balls in it, violating the invariant. Same with the case $j<i$.} 
+\end{compactitem}
 
 \subsubsection{Probability of activation}
 \label{sec:analysis:probabilityAsymWT}
+Analogously to the symmetric witness tree, the possible number of asymmetric witness trees is upper-bounded by $w=n^k$ and the probability that all edge events occur is\footnote{As in Section \ref{sec:analysis:greedy}, $k$ denotes the number of nodes of the witness tree and $l$ the number of leaves.} 
+\begin{align}
+p_e = \left(\frac{d}{n}\right)^{k-1}
+\end{align}
 
+The probability that all leaf events occur too is the same as for the symmetric witness tree, but its derivation differs. Again, at any time at most $b'=n/3$ bins contain 3 or more balls, but we do not know how those bins are distributed among the groups. Let $b_i$ be the number of bins in group $i$ that contain 3 or more balls. Then $\beta_i = b_i\cdot d/ n$ is the fraction of the bins $b_i$ in group $i$. Since no more than $n/3$ bins can contain 3 or more balls, the values $b_i$ are subject to the constraint
+\begin{align}
+\frac{n}{d}\sum_{i=1}^d \beta_i \leq \frac{n}{3}
+\end{align}
+and thus 
+\begin{align}
+\sum_{i=1}^d \beta_i \leq \frac{d}{3}
+\end{align}
+
+The probability that all $d$ locations of a ball point to a bin containing 3 or more balls is then 
+\begin{align}
+p_{l_1} = \prod_{i=1}^{d} \beta_i
+\end{align}
+In other words, a leaf event occurs with probability $p_{l_1}$, which is maximized when all $b_i$ are equal. We thus set $b_i \leq 1/3$ for all $i$ and get as upper bound for the probability that all leaf events occur 
+\begin{align}
+p_l \leq 3^{-d}
+\end{align}
+
+The above results imply the same probability for the activation of an asymmetric witness tree as we derived in Section \ref{sec:analysis:probabilitySymWT} for the activation of a symmetric witness tree, that is
+\begin{align}
+p_{awt} &\leq n 2^{-l}
+\end{align}
+However, the number of leaves is larger, since 
+\begin{align}
+l \geq \Phi_d^{d\cdot L -1}
+\end{align}
+holds\footnote{see Section \ref{sec:analysis:definitionAsymWT} for details}.
+
+For any constant $\alpha > 0$, let 
+\begin{align}
+L = \left\lceil{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d\cdot \ln \Phi_d}}\right  \rceil +1
+\end{align}
+and $n$ be large enough such that
+\begin{align}
+L \in \Theta\left(\frac{\ln\ln n}{d\cdot \ln \Phi_d}\right)
+\end{align}
 
 \subsection{Non-distinct balls}
 \label{sec:analysis:nondistinctBalls}
