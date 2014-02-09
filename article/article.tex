@@ -322,6 +322,19 @@ p_{swt} &\leq n \cdot 2^{{-d}^{\log_d\log_2 n + \log_d\left(1+\alpha\right)}} \\
 
 \subsection{Analysis of the Always-go-left scheme}
 \label{sec:analysis:alg}
+Similarly to Section \ref{sec:analysis:greedy}, where we used symmetric witness trees to upper-bound the probability that a bin contains too many balls when using the \emph{Greedy} scheme, we will use asymmetric witness trees to get an analogous upper bound for the \emph{Always-go-left} scheme. 
+
+With one exception, the definition of an \emph{asymmetric witness tree} is the same as the definition of a symmetric witness tree, including the definition of activation. Only its structure differs from that of a symmetric tree. An asymmetric witness tree has the same structure as a $d$-ary Fibonacci tree $T_d\left(k \right)$, which is defined as follows.
+\begin{compactitem}
+\item $T_d(1)$ is a single node
+\item $T_d(2) = T_d(1)$  
+\item For $3\leq k \leq d$, $T_d(k)$ is a tree with $k-1$ children, which are the roots of the trees $T_d(k-1),\ldots,T_d(1)$.
+\item For $k>d$, $T_d(k)$ is a tree with $d$ children, which are the roots of the trees $T_d(k-1),\ldots,T_d(k-d)$.
+\end{compactitem}
+\todo{illustrate}
+
+A $d$-ary asymmetric witness tree of order $L$ has the structure of the Fibonacci tree $T_d(d \cdot L+1)$ and thus has $F_d(d\cdot L + 1) \geq \Phi_d^{d\cdot L-1}$ \todo{How to get this inequality?} leaves. 
+
 
 \subsection{Nondistinct balls}
 \label{sec:analysis:nondistinctBalls}
