@@ -111,15 +111,15 @@ We will now consider the most basic variant of the balls-into-bins problem: Name
 In the \emph{single-choice balls-into-bins} strategy, each ball is placed into a bin chosen uniformly and independently at random. In other words, a ball gets placed into a certain bin with probability $\frac{1}{n}$.
 
 The fullest bin contains
-\[
+\begin{align}
 \Theta \left( \frac{\log n}{\log \log n} \right)
-\] 
+\end{align} 
 balls in the lightly loaded case w.h.p. Since the average load of the bins is 1, this is also a bound for the gap. 
 %More accurately, the number of balls in the bin with the most balls is $\Gamma^{-1}\left(n\right)\left(1+O\left(\frac{1}{\log \Gamma^{-1}\left(n\right)}\right)\right)$ \cite{G91}. %\todo{really include Gonnet?}
 In the \emph{heavily loaded case} the maximum load is 
-\[
+\begin{align}
 \frac{m}{n} + \Theta\left(\sqrt{\frac{m \log n}{n}}\right)
-\] 
+\end{align} 
 w.h.p.~\cite{RS98}.
 
 \section{Multiple-choice balls-into-bins}
@@ -129,18 +129,18 @@ The \emph{single-choice balls-into-bins strategy} (Section \ref{sec:single-choic
 Thus, let $B$ be the set of bins $\{1,2...n\}$, $\Omega = B^{d}$ be the sample space and $\mathcal{F} = 2^{\Omega}$ be the set of measurable events. We are only interested in events that represent a set of bins of size $d$. Thus, let $\mathcal{F}_d = \{\mathcal{E} \in \mathcal{F}: \left\vert \mathcal{E} \right\vert = d\}$ and set $\Pr\left(\mathcal{E}  \right) = 0$  $\forall \mathcal{E} \in \mathcal{F} \setminus \mathcal{F}_d $. The three classes of algorithms are distinguished by the probability function $\Pr\left(\mathcal{E}\right)$ for events $\mathcal{E} \in \mathcal{F}_d$:
 \begin{compactitem}
 \item  \emph{Uniform and independent.} Choose each of the $d$ bins for a ball uniformly and independently at random from the set of bins $B$. This implies 
-\[
+\begin{align}
 \forall \mathcal{E} \in \mathcal{F}_d: \Pr\left(\mathcal{E}\right) = \frac{1}{n ^{d}}
-\]
+\end{align}
 \item Class 2: \emph{Non-uniform and independent.} Choose the $i$th bin from $B$ independently at random according to some probability function
-\[
+\begin{align}
 \Pr: B \rightarrow \left[0,1\right]
-\]
+\end{align}
 
 \item Class 3: \emph{Non-uniform and dependent.} Choose the $d$ bins for a ball from $\Omega$ at random:
-\[
+\begin{align}
 \Pr: B^{d} \rightarrow \left[0,1\right]
-\]
+\end{align}
 \end{compactitem} 
  
 We will discuss two different multiple-choice placement strategies: The \emph{Greedy} algorithm (Section \ref{sec:greedy}) belongs to class 1, whereas the \emph{Always-go-left} scheme (Section \ref{sec:AlwaysGoLeft}) uses a non-uniform and independent selection of $d$ bins and thus belongs to class 2.
@@ -157,9 +157,9 @@ Consider a variation of the above \emph{one-choice balls-into-bins} strategy, wh
 \begin{theorem}
 \label{theorem:greedy}
 Consider any sequence of insertions and deletions s.t.~at most $hn$ balls are in the bins at any time. If the balls are placed into bins by the Greedy algorithm, at any time $t$ the maximum load is at most 
-\[
+\begin{align}
 \frac{m}{n} + \Theta\left(\frac{\log \log n}{\log d} \right)
-\]
+\end{align}
 w.h.p.~at any time $t$ \cite{ABKU99} \cite{BCSV06}.
 
 \end{theorem}
@@ -191,18 +191,18 @@ The \emph{Always-go-left} algorithm works as follows. Partition the $n$ bins int
 \begin{theorem}
 \label{theorem:agln}
 If $n$ balls are placed into $n$ bins using the Always-go-left scheme, the number of balls in the fullest bin will be 
-\[
+\begin{align}
 \frac{\ln\ln n}{d \ln \Phi_d} \pm \Theta(1)
-\]
+\end{align}
 w.h.p.
 \end{theorem}
 
 \begin{theorem}
 \label{theorem:algm}
 Consider any sequence of insertions and deletions s.t.~at most $hn$ balls are in the bins at any time. If the balls are placed into bins by the Greedy algorithm, at any time $t$ the maximum load is at most 
-\[
+\begin{align}
 \frac{\ln\ln n}{d \ln \Phi_d} + O(h)
-\]
+\end{align}
 w.h.p.
 \end{theorem}
 
@@ -220,21 +220,21 @@ We will prove the bounds for $m=n$ for both the Greedy and the Always-go-left sc
 \todo{where to put this? required for  bound of always-go-left in intro}
 We define $d$-ary Fibonacci numbers as follows. For $k \leq0$, $F_d(k) = 0$, $F_d(1) = 1$ and for $k \geq 1$,
 
-\[
+\begin{align}
 F_d(k) = \sum_{i=1}^{d}F_d(k-i)
-\]
+\end{align}
 Furthermore, define 
-\[
+\begin{align}
 \Phi_d = \lim_{k \rightarrow \infty} \sqrt[k]{F_d(k)}
-\]
+\end{align}
 Notice that $F_2$ corresponds to the usual Fibonacci numbers, while $\Phi_2 $ corresponds to the golden ratio \cite{Knuth73}, which is generalized to $\Phi_d$, for which 
-\[
+\begin{align}
 i, j \in \mathbb{N}, i < j \Rightarrow \Phi_i < \Phi_j
-\]
+\end{align}
 and 
-\[
+\begin{align}
 \lim_{d\rightarrow \infty} \Phi_d = 2
-\]
+\end{align}
 hold.
 
 \subsection{Analysis of the Greedy-scheme}
@@ -278,13 +278,13 @@ In other words, we assume that no ball is referenced by more than one node of a 
 The number of different witness trees $w$ is given by the number of ways to assign balls to its nodes. The ball assigned to the root node can be chosen from at most $n$ balls, since by definition (Theorem \ref{theorem:greedy}), at most $n$ balls are in the bins at any time $t$ and a ball assigned to a node has to be in some bin at time $t$. Each child node of the root is assigned one out of at most $n$ balls too by the same argument. Applying this argument for each level of the witness tree, there are at most $w = n^k$ possibilities to assign balls to a witness tree, with $k = d^{L+1}-1$ being the number of nodes in a $d$-ary witness tree of order $L$.
  
 An edge\footnote{where $v$ is the $i$'th child of $u$} $(u, v)$ is activated with probability at most $d/n$, which is the probability that the $i$'th location of the ball $b_u = \mathrm{ball}(u)$ points to a particular location of the ball $b_v = \mathrm{ball}(v)$ times the number of locations $d$. This implies a probability of at most
-\[
+\begin{align}
 p_e = \left(\frac{d}{n}\right)^{k-1}
-\] 
+\end{align} 
 or the event that all $k-1$ edges of a witness tree are activated. Note that  the assumption that all balls are distinct (Assumption \ref{assumption:independence}) implies that all edge events are independent.
 
 The probability that a leaf event is activated is bounded above by $3^{-d}$. Recall that by the definition of leaf events, each of the $d$ locations of the ball $b_{vl} = \mathrm{ball}(v_l)$ has to point to a bin with at least 3 additional balls in it. The number of those bins is bounded by $\lfloor n/3 \rfloor$ at all time steps $t$, implying a probability of at most 
-\[
+\begin{align}
 \frac{n/3}{n} = \frac{1}{3}
 \end{align}
 that one such bin is chosen. This implies a probability of at most $3^{-d}$ that all $d$ bins are chosen among those with at least 3 additional bins in them. Thus, the probability that all leaf events are activated is at most $p_l = 3^{-d\cdot l}$, where $l = d^{L}$ is the number of leaves in a witness tree.
