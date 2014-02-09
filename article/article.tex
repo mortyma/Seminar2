@@ -43,7 +43,7 @@
 \label{sec:intro}
 Suppose that $m$ balls are thrown into $n$ bins, according to some strategy. We are interested in the \emph{number of balls in the fullest bin}, also called the \emph{maximum load}. Equivalently, one can look at the \emph{addative gap} of the allocation, that is the difference of the number of balls in the fullest bin and the average amount of balls in the bins. These \emph{balls-into-bins games} or \emph{allocation problems} have been studied extensively in the probability literature (see e.g., \cite{JK77}). In the context of Computer Science, the balls-into-bins model is useful to study e.g., strategies for distributing \emph{tasks} (balls) to \emph{processors} (bins) as evenly as possible without having to query all processors for the number of tasks currently assigned to them.
 
-A simple strategy for the balls-into-bins problem is to choose one bin uniformly and independently at random for each ball, which we will call the \emph{single-choice balls-into-bins} strategy. Using this strategy, the maximum load of the fullest bin will be $\frac{m}{n} + \Theta\left(\sqrt{\frac{m \log n}{n}}\right)$ with high probability\footnote{We say that an event $\mathcal E$ occurs \emph{with high probability} (w.h.p.) if $\Pr\left[\mathcal E \right] = 1 - o(1)$, except when stated otherwise.}~\cite{RS98}.
+A simple strategy for the balls-into-bins problem is to choose one bin uniformly and independently at random for each ball, which we will call the \emph{single-choice balls-into-bins} strategy. Using this strategy, the maximum load of the fullest bin will be $\frac{m}{n} + \Theta\left(\sqrt{\frac{m \cdot \log n}{n}}\right)$ with high probability\footnote{We say that an event $\mathcal E$ occurs \emph{with high probability} (w.h.p.) if $\Pr\left[\mathcal E \right] = 1 - o(1)$, except when stated otherwise.}~\cite{RS98}.
 
 Consider a variation of the above \emph{single-choice balls-into-bins} strategy: For each ball, chose $d \geq 2$ bins independently and uniformly at random and place the ball into the \emph{least full bin}\footnote{If there are multiple bins with the same minimal load, chose one among them arbitrarily.}. This simple \emph{multiple-choice balls-into-bins} scheme, which we will call the \emph{Greedy} algorithm, achieves a maximum load of $\frac{m}{n} + \Theta\left(\frac{\log \log n}{\log d}\right)$ w.h.p.~\cite{ABKU99}~\cite{BCSV06}. This apparently minor change introduces a small amount of choice which, compared to the single-choice scheme, leads to a significant reduction in the maximum load. 
 \begin{comment}
@@ -51,7 +51,7 @@ Curiously, the exponential decrease in the gap is already achieved having just t
 \end{comment}
 Extensive research following the influental paper by Azar et. al \cite{ABKU99}, who were the first to explicitly prove this phenomenon, suggests that this \emph{two-choice paradigm} is not just an artificat of the simple balls-into-bins model, but a general principle applicable to a variety of problems. 
 
-Condsider a slightly more involved strategy, which we will call the \emph{Always-go-left} scheme: Suppose that the $n$ bins are partitioned evenly into $d$ groups, each of size $\lfloor \frac{n}{d}\rfloor$ or $\lceil\frac{n}{d}\rceil$ \todo{simplify to n/d?}. We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. In case a tie occurs, put the ball into the \emph{left-most} bin. That is, assuming a fixed ordering of bins $b_i$ for $1 \leq i \leq n$, from among the $d' \leq d$ bins with same minimal load, we put the ball into the bin with smallest index $i$. Somewhat surprisingly, V\"ocking \cite{VOC03} showed that such a strategy employing \emph{asymetric tie-breaking} in combination with \emph{partitioning}\todo{check} reduces the bound for the gap to $\Theta \left( \frac{\log\log n}{d \log \Phi_d}\right)$ \todo{$\Phi_d$ is undefined}.
+Condsider a slightly more involved strategy, which we will call the \emph{Always-go-left} scheme: Suppose that the $n$ bins are partitioned evenly into $d$ groups, each of size $\lfloor \frac{n}{d}\rfloor$ or $\lceil\frac{n}{d}\rceil$ \todo{simplify to n/d?}. We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. In case a tie occurs, put the ball into the \emph{left-most} bin. That is, assuming a fixed ordering of bins $b_i$ for $1 \leq i \leq n$, from among the $d' \leq d$ bins with same minimal load, we put the ball into the bin with smallest index $i$. Somewhat surprisingly, V\"ocking \cite{VOC03} showed that such a strategy employing \emph{asymetric tie-breaking} in combination with \emph{partitioning}\todo{check} reduces the bound for the gap to $\Theta \left( \frac{\log\log n}{d  \cdot \log \Phi_d}\right)$ \todo{$\Phi_d$ is undefined}.
 
 The paper is organized as follows: We will first introduce different variations of the \emph{balls-into-bins problem} in Section \ref{sec:classification} to provide some overview of different directions in research as well as possibilities of abstraction from applications, some of which are listed in Section \ref{sec:applications}. Sections \ref{sec:single-choice} to \ref{sec:multiple-choice} will deal with the most basic variation of the balls-into-bins problem, namely the sequential, finite and static variant (see Section \ref{sec:classification} for details). For comparison and as a starting point, Section \ref{sec:single-choice} provides the results for the single-choice balls-into-bins problem. \todo{TODO: multiple-choice, analysis, mention that witness tree method very helpful}  See also \cite{MRS01} an overview of proof techniques for the given problem.  
 
@@ -118,7 +118,7 @@ balls in the lightly loaded case w.h.p. Since the average load of the bins is 1,
 %More accurately, the number of balls in the bin with the most balls is $\Gamma^{-1}\left(n\right)\left(1+O\left(\frac{1}{\log \Gamma^{-1}\left(n\right)}\right)\right)$ \cite{G91}. %\todo{really include Gonnet?}
 In the \emph{heavily loaded case} the maximum load is 
 \begin{align}
-\frac{m}{n} + \Theta\left(\sqrt{\frac{m \log n}{n}}\right)
+\frac{m}{n} + \Theta\left(\sqrt{\frac{m \cdot \log n}{n}}\right)
 \end{align} 
 w.h.p.~\cite{RS98}.
 
@@ -192,7 +192,7 @@ The \emph{Always-go-left} algorithm works as follows. Partition the $n$ bins int
 \label{theorem:agln}
 If $n$ balls are placed into $n$ bins using the Always-go-left scheme, the number of balls in the fullest bin will be 
 \begin{align}
-\frac{\ln\ln n}{d \ln \Phi_d} \pm \Theta(1)
+\frac{\ln\ln n}{d \cdot \ln \Phi_d} \pm \Theta(1)
 \end{align}
 w.h.p.
 \end{theorem}
@@ -201,7 +201,7 @@ w.h.p.
 \label{theorem:algm}
 Consider any sequence of insertions and deletions s.t.~at most $hn$ balls are in the bins at any time. If the balls are placed into bins by the Greedy algorithm, at any time $t$ the maximum load is at most 
 \begin{align}
-\frac{\ln\ln n}{d \ln \Phi_d} + O(h)
+\frac{\ln\ln n}{d \cdot \ln \Phi_d} + O(h)
 \end{align}
 w.h.p.
 \end{theorem}
