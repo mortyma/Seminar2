@@ -34,10 +34,13 @@
 \author{Martin Kalany, 0825673}
 
 \maketitle
+
+
 \begin{abstract}
 
 \end{abstract}
 
+%\tableofcontents
 
 \section{Introduction}
 \label{sec:intro}
@@ -212,7 +215,7 @@ In this section, we will prove Theorems \ref{theorem:greedy}, \ref{theorem:agln}
 
 When the maximum load exceeds some given threshold value we say that a \emph{bad event} occurs and construct an \emph{activated witness tree}. In other words, the activation of a witness tree is implied by a bad event. The probability for the existance of such an activated witness tree is an upper-bound for the probability that a bad event occurs.
 
-We will prove the bounds for $m=n$ for both the Greedy and the Always-go-left scheme in Sections \ref{sec:analysis:greedy} and \ref{sec:AlwaysGoLeft}, respectively. However, we use a simplifying assumption \ref{assumption:independence} in those two sections to provide a more clear presentation of the proof technique. Section \ref{sec:analysis:nondistinctBalls} will extend these proofs to remove the simplifying assumption we make initially. Section \ref{sec:analysis:moreBalls} will extend the proof to cover the heavily loaded case where $m > n$ as well.
+We will prove the bounds for $m=n$ for both the Greedy and the Always-go-left scheme in Sections \ref{sec:analysis:greedy} and \ref{sec:analysis:alg}, respectively. However, we use a simplifying assumption \ref{assumption:independence} in those two sections to provide a more clear presentation of the proof technique. Section \ref{sec:analysis:nondistinctBalls} will extend these proofs to remove the simplifying assumption we make initially. Section \ref{sec:analysis:moreBalls} will extend the proof to cover the heavily loaded case where $m > n$ as well.
 
 
 \subsection{Preliminaries}
@@ -237,7 +240,7 @@ and
 \end{align}
 hold.
 
-\subsection{Analysis of the Greedy-scheme}
+\subsection{Greedy}
 \label{sec:analysis:greedy}
 A \emph{symmetric witness tree} of order $L$ is a complete $d$-ary tree with $d^{L}$ leaves. Each node $v$ represents a ball $b_v = \mathrm{ball}(v)$ . The same ball may be represented by several nodes. The nodes and edges of the witness tree represent events that may occur or not. For simplicity, we assume that all events represented by a witness tree are stochastically independent.  
 
@@ -253,9 +256,11 @@ The following constraints have to be fullfilled by an assignment. The ball $b_r$
 
 The definition for leaf events refers to bins containing some number of balls at some specified time. To avoid dependencies, the crucial trick is that edge events are defined in terms of the alternative locations of balls, not by their finally assigned bin. 
 
-\subsubsection{Symmetric witness tree: construction}
+Assume the bad event that some bin contains more than $L+3$ balls at time $t$ occurs. We will use an activated symmetric witness tree of order $L$ to witness this event and provide an upper-bound for the occurrence of the event. Thus, we have to show that the existence of a bin $x$ containing at least $L+4$ balls implies the existence of an activated witness tree of order $L$. 
+
+\subsubsection{Witness tree construction}
 \label{sec:constructionSymWT}
-Assume the bad event that some bin contains more than $L+3$ balls at time $t$ occurs. We will use an activated symmetric witness tree of order $L$ to witness this event and provide an upper-bound for the occurance of the event. Thus, we have to show that the existance of a bin $x$ containing at least $L+4$ balls implies the existance of an activated witness tree of order $L$. We construct the witness tree as follows:
+We construct a witness tree for the event that some bin contains $L+4$ balls as follows:
 \begin{compactenum}
 \item The topmost ball $b_1$ in bin $x$ is assigned to the root node $v_r$. Note that $b_1$ is the last ball that was inserted into the bin $x$.
 \item Since the Greedy-scheme puts ball $b_1$ into bin $x$ only if each of the $d$ sampled locations contain at least the same number of balls at bin $x$, we can conclude that each of the $d$ locations contain at least $L+3$ balls at the time ball $b_1$ was inserted. Thus, the $d$ children of the root node are assigned the topmost balls of these $d$ bins.
@@ -264,7 +269,7 @@ Assume the bad event that some bin contains more than $L+3$ balls at time $t$ oc
 
 By construction, all edge events of the witness tree are activated. Note that the ball assigned to the root node is on top of at least $L+3$ balls. The balls assigned to the root's child node are each on top of $L+2$ or more balls and so on. It follows that each ball assigned to a leaf node is on top of at least 3 other balls, implying that the $d$ locations of each leaf node point to bins with at least 3 balls in each. This implies the activation of all leaf nodes of the witness tree.
 
-\subsubsection{Symmetric witness tree: probability of activation}
+\subsubsection{Probability of activation}
 \label{sec:probabilitySymWT}
 In this section, we derive the probability that some witness tree of order $L$ is activated, which gives an upper bound for the probability that the maximum load is $L+3$ at some time $t$. The probability $p_a$ that some witness tree of order $L$ is activated is bounded by the number of witness trees $w$ times the upper bound on the probability $p_1$ that a specific witness tree is activated.
 
@@ -320,7 +325,7 @@ p_{swt} &\leq n \cdot 2^{{-d}^{\log_d\log_2 n + \log_d\left(1+\alpha\right)}} \\
 		&= n^{-\alpha}
 \end{align}
 
-\subsection{Analysis of the Always-go-left scheme}
+\subsection{Always-go-left}
 \label{sec:analysis:alg}
 Similarly to Section \ref{sec:analysis:greedy}, where we used symmetric witness trees to upper-bound the probability that a bin contains too many balls when using the \emph{Greedy} scheme, we will use asymmetric witness trees to get an analogous upper bound for the \emph{Always-go-left} scheme. 
 
@@ -335,12 +340,20 @@ With one exception, the definition of an \emph{asymmetric witness tree} is the s
 
 A $d$-ary asymmetric witness tree of order $L$ has the structure of the Fibonacci tree $T_d(d \cdot L+1)$ and thus has $F_d(d\cdot L + 1) \geq \Phi_d^{d\cdot L-1}$ \todo{How to get this inequality?} leaves. 
 
+\subsubsection{Witness tree construction}
+\label{sec:analysis:constructionAsymWT}
 
-\subsection{Nondistinct balls}
+\subsubsection{Probability of activation}
+\label{sec:analysis:probabilityAsymWT}
+
+
+\subsection{Non-distinct balls}
 \label{sec:analysis:nondistinctBalls}
 
 \subsection{The heavily loaded case}
 \label{sec:analysis:moreBalls}
+
+
 
 \section{Conclusion}
 \label{sec:conclusion}
