@@ -401,7 +401,7 @@ p_{l_1} = \prod_{i=1}^{d} \beta_i
 \end{align}
 In other words, a leaf event occurs with probability $p_{l_1}$, which is maximized when all $b_i$ are equal. We thus set $b_i \leq 1/3$ for all $i$ and get as upper bound for the probability that all leaf events occur 
 \begin{align}
-p_l \leq 3^{-d}
+p_l \leq 3^{-d\cdot l}
 \end{align}
 
 The above results imply the same probability for the activation of an asymmetric witness tree as we derived in Section \ref{sec:analysis:probabilitySymWT} for the activation of a symmetric witness tree, that is
@@ -438,12 +438,65 @@ p_{awt} &\leq n \cdot 2^{-\Phi_d^{d\cdot L -1}} \\
 
 \subsection{Non-distinct balls}
 \label{sec:analysis:nondistinctBalls}
+So far, we have assumed that all balls represented by nodes in a witness tree are stochastically independent (Assumption \ref{assumption:independence}). Obviously, to get a valid upper bound on the probability for the activation of a witness tree, the possibility of non-distinct balls has to be accounted for. In other words, the edge and leaf events of the witness tree are not independent anymore. Will start with a witness tree referencing non-distinct balls and prune it such that dependencies between edge and leaf events are removed. Note that pruning will reduce the size of the witness tree and thus increase the probability of its activation. To compensate for this loss in size, we start with a larger witness tree, which we call a \emph{full witness tree} and will show that, speaking informaly, the pruning of many events is unlikely. Note that the technique presented in this section is applicable to both symmetric and asymmetric witness trees. 
 
-\subsection{The heavily loaded case}
-\label{sec:analysis:moreBalls}
+\subsubsection{Full witness trees}
+\label{sec:analysis:FullWT}
+Let $gamma \geq 2$ be a suitable constant. The root node of a \emph{full witness tree} has $\gamma$ children, denoted by $v_{c_i}$ with $1\leq i \leq \gamma$. The nodes $v_{c_i}$ have exactly one child each and the balls assigned to them are pairwise distinct. The root thus has $\gamma$ grandchildren, each of which is the root of a witness tree of order $L$. The time constraints activation of a full witness tree is defined analogously to the previous variants.
 
+\subsubsection{Construction}
+\label{sec:analysis:constructionFullWT}
+Assume a bin $x$ contains at least $L+3+\gamma$ balls at time $t$. We construct a witness tree as follows.
+\begin{compactitem}
+\item The root is not assigned any ball.
+\item Each child of the root is assigned one of the topmost $\gamma$ balls in bin $x$, which are neccessarily distinct.
+\item For the assignment of nodes to the grandchildren of the root, consider a ball $b_c$ that is assigned to a child node $v_c$. Let the child node of $v_c$ be denoted by $v_g$. Since the ball $b$ was placed into bin $x$, at least one of its locations points to this bin $x$, which we call location $i$. Let $j = i+1 mod d$ be the ball's $j$'th location. Then, at the time of insertion of ball $b_c$, its $j$'th location points to a bin $y$ with at least $L+3$ other balls in it. We assign the topmost ball in bin $y$ to node $v_g$.
+\end{compactitem}
+Notice that the $\gamma$ additional balls in bin $x$ are assigned to the child nodes of the root only. 
 
+\subsubsection{Pruning}
+\label{sec:analysis:pruningFullWT}
+To remove all dependencies in the witness tree, we have to find nodes that represent the same ball and prune the tree such that each ball is referenced only once. Thus, traverse the witness tree in breadth-frist order. When we reach a node $v$ that represents a ball $b$ already encountered before, let $e = (v,u)$ be the edge connecting $v$ and its parent node $u$. We call $e$ a \emph{cutoff edge} and use it as a witness that one of the $d$ locations of the ball $b_u$ is the same as one of the locations of some other ball $b_{u'}$, represented by a node $u'$, which was already traversed. Futhermore, we remove the whole tree rooted at node $v$ from our witness tree. We continue this pruning until either the breath-first traversal terminates or until we have obtained $\gamma$ cut-off edges. Note that more than $\gamma$ cut-off edges cannot exist, \todo{why?}. When finished, the \emph{pruned witness tree} does not contain any ball twice and thus all its events are independent. 
 
+\subsubsection{Probability of activation}
+\label{sec:analysis:probabilityFullWT}
+If there are less than $\gamma$ cut-off edges, in at least one of the $\gamma$ symmetric or asymmetric witness trees contained in the full witness tree the referenced balls are distinct. Let this symmetric or asymmetric witness tree be denoted by $T$. Then, the probability for the activation of the full witness tree is upper-bounded by the probability for the activiation of $T$, implying a probability for activation of this witnees tree of $p = n^{- \alpha}$, as shown in Sections \ref{sec:analysis:probabilitySymWT} and \ref{sec:analysis:probabilityAsymWT}, respectively.
+
+Thus, it remains to find an upper-bound for the activiation of a full witness tree with $\gamma$ cut-off edges. Let $q$ be the number of references to balls by the full witness tree\footnote{Since no ball was assigned to the root node, the full witness tree consists of $q+1$ nodes} and assume that $q  \leq 2\cdot \gamma\left(\alpha+1\right)\cdot \log_2 n$, for a suitable value of $\gamma$. Then, there are at most $w_p=q^\gamma$ possibilities to transform a full witness tree with $q+1$ nodes to a pruned witness tree with $\gamma$ cut-off edges. Fix the shape of the tree to be one of those. Let $k$ be the number of balls referenced by the pruned witness tree and $l$ be the number of its leaf nodes. 
+
+To bound the probability for the activation of all edge events, we need to specify which event is represented by an edge $e_i = (v_r, v_i)$, where $v_i$ with $1 \leq i \leq \gamma$ is a child of the root node $v_r$. Assume that the root node $v_r$ represents an arbitrary bin. Then the edge $e_i$ represents the event that one of the locations of the ball represented by node $v_i$ points to this bin. This implies that the probability of activation for an each $e_i$ is $p_{e_i} = 1/n \leq d/n$. 
+
+By the same arguments as in Sections \ref{sec:analysis:probabilitySymWT} and \ref{sec:analysis:probabilityAsymWT}, we can conclude that there are at most $w=n^k$ assignments of balls to the nodes of the witness tree. Furthermore, the probability for the activation of all edge events is bounded from above by 
+\begin{align}
+p_e = \left(\frac{d}{n}\right)^{k}
+\end{align}
+while the probability for the activation of all leaf events is bounded by 
+\begin{align}
+p_l \leq 3^{-d\cdot l}
+\end{align} 
+
+The number of edges $k$ and the number of leaves $l$ in a pruned witness tree may be small compared to a symmetric or asymmetric witness tree, but we will use the cut-off edges to compensate. By definition (Section \ref{sec:analysis:pruningFullWT}), a cut-off edge $e=(v, u)$ represents the event that the ball $b_u$ represented by node $u$ shares a common location $i$ with another ball $b_{u'}$, represented by node $u'$. Since $u'$ has already been visited by the time the breadth-first traversal reaches node $v$, it is part of the pruned witness tree and was assigned one of $k\leq q$ balls. The probability that location $i$ of ball $b_u$ points to one of the $d$ locations of ball $b_{u'}$ is at most $d/n$. The probability that there are $\gamma$ cut-off edges is thus at most 
+\begin{align}
+p_c &= \left(k\cdot \frac{d}{n}\right)^\gamma \\
+    & \leq \left(q\cdot \frac{d}{n}\right)^\gamma
+\end{align}
+
+Putting it all together, we get 
+\begin{align}
+p_{pwt} &= w_p\cdot w \cdot p_e \cdot p_l \cdot p_c \\
+		&= q\gamma\cdot n^{k+1}\cdot \left(\frac{d}{n}\right)^k\cdot3^{-d\cdot l} \cdot \left(q \frac{d}{n}\right)^\gamma\\
+		&= n \cdot d^k\cdot 3^{-d\cdot l} \cdot \left(q^2 \frac{d}{n} \right)^\gamma 
+\end{align}
+
+Using $k \leq 2l$, $d^2 \leq 3^d$ and $q \leq 2\gamma \cdot \left( \alpha +1 \right) \cdot \log_2 n$ this becomes
+\begin{align}
+p_{pwt} &\leq n\cdot \left(\frac{\left(2\gamma \cdot \left(\alpha +1 \right) \cdot \log_2 n\right)^2\cdot d}{n}\right)^\gamma \\
+        &= n^{\gamma +1 1} \cdot n ^{\log_n\left( \left(2\gamma\cdot \left(\alpha+1\right)\cdot \log_2n \right)^{2\gamma} \cdot d^\gamma \right)}\\
+        &= n^{-\gamma+1+o\left(1\right)}
+\end{align}
+
+%^{\log_n \left(2\gamma \cdot \left( \alpha +1 \right) \cdot \log_2 n\right)^{2\gamma}\cdot d^\gamma \right)}
+ 
 \section{Conclusion}
 \label{sec:conclusion}
 
