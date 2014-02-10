@@ -321,12 +321,15 @@ p_{swt} &\leq n \cdot \left(\frac{3^d}{2}\right)^l \cdot \left( 3^{-d}\right)^l 
 
 For any constant $\alpha > 0 $, let
 \begin{align}
-L \geq \log_d\log_2 n + \log_d\left(1+\alpha\right)
+L &\geq \log_d\log_2 n + \log_d\left(1+\alpha\right)
 \end{align}
-and $n$ be large enough such that 
+and note that
 \begin{align}
-L \in \Theta \left(\ln \ln n \right)
+L &\geq  \frac{\ln\log_2 n}{\ln d} + \frac{\ln(1+\alpha)}{\ln d} \\
+   &= \frac{\ln \log_2 n}{\ln d} \cdot \left(1 + \frac{\ln\left(1+\alpha\right)}{\ln \log_2 n}\right) \\
+  &\geq  \frac{\ln \ln n}{\ln d} \cdot \left( 1+ o\left( 1\right)\right)
 \end{align}
+
 Then, 
 \begin{align}
 p_{swt} &\leq n \cdot 2^{{-d}^{\log_d\log_2 n + \log_d\left(1+\alpha\right)}} \\
@@ -335,8 +338,6 @@ p_{swt} &\leq n \cdot 2^{{-d}^{\log_d\log_2 n + \log_d\left(1+\alpha\right)}} \\
 		&= n \cdot n^{-\left(1+\alpha\right)} \\
 		&= n^{-\alpha}
 \end{align}
-
-\todo{add the asymptotic bound}
 
 \subsection{Always-go-left}
 \label{sec:analysis:alg}
@@ -416,11 +417,11 @@ holds\footnote{see Section \ref{sec:analysis:definitionAsymWT} for details}.
 
 For any constant $\alpha > 0$, let 
 \begin{align}
-L = \left\lceil{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d\cdot \ln \Phi_d}}\right  \rceil +1
+L &\geq \left\lceil{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d\cdot \ln \Phi_d}}\right  \rceil +1 
 \end{align}
-and $n$ be large enough such that
+and note that 
 \begin{align}
-L \in \Theta\left(\frac{\ln\ln n}{d\cdot \ln \Phi_d}\right)
+L \geq \frac{\ln\ln n}{d\cdot \ln \Phi_d} + O\left(1\right)
 \end{align}
 
 \subsection{Non-distinct balls}
