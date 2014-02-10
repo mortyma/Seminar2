@@ -230,7 +230,7 @@ We define $d$-ary Fibonacci numbers as follows. For $k \leq0$, $F_d(k) = 0$, $F_
 F_d(k) = \sum_{i=1}^{d}F_d(k-i)
 \end{align}
 Furthermore, define 
-\begin{align}
+\begin{align}\label{eqn:goldenFib}
 \Phi_d = \lim_{k \rightarrow \infty} \sqrt[k]{F_d(k)}
 \end{align}
 Notice that $F_2$ corresponds to the usual Fibonacci numbers, while $\Phi_2 $ corresponds to the golden ratio \cite{Knuth73}, which is generalized to $\Phi_d$, for which 
@@ -335,8 +335,7 @@ Then,
 p_{swt} &\leq n \cdot 2^{{-d}^{\log_d\log_2 n + \log_d\left(1+\alpha\right)}} \\
 		&= n \cdot 2^{-{d}^{\log_d\log_2 n}\cdot d^{\log_d \cdot\left(1+\alpha\right)}} \\
 		&= n \cdot \left( 2^{-\log_2 n \cdot \left(1+ \alpha \right)} \right) \\
-		&= n \cdot n^{-\left(1+\alpha\right)} \\
-		&= n^{-\alpha}
+		&= n \cdot n^{-\left(1+\alpha\right)} = n^{-\alpha}
 \end{align}
 
 \subsection{Always-go-left}
@@ -354,7 +353,7 @@ With one exception, the definition of an \emph{asymmetric witness tree} is the s
 \end{compactitem}
 \todo{illustrate}
 
-A $d$-ary asymmetric witness tree of order $L$ has the structure of the Fibonacci tree $T_d(d \cdot L+1)$ and thus has $F_d(d\cdot L + 1) \geq \Phi_d^{d\cdot L-1}$ \todo{How to get this inequality?} leaves. 
+A $d$-ary asymmetric witness tree of order $L$ has the structure of the Fibonacci tree $T_d(d \cdot L+1)$ and by Equation \ref{eqn:goldenFib} has $F_d(d\cdot L + 1) \geq \Phi_d^{d\cdot L-1}$ leaves. 
 
 For each node we define a label $(h, i)$, where $h, i \in \mathbb{N}$, $0 \leq h \leq L$ and  $1\leq i \leq d$. 
 \begin{compactitem}
@@ -407,7 +406,7 @@ p_l \leq 3^{-d}
 
 The above results imply the same probability for the activation of an asymmetric witness tree as we derived in Section \ref{sec:analysis:probabilitySymWT} for the activation of a symmetric witness tree, that is
 \begin{align}
-p_{awt} &\leq n 2^{-l}
+p_{awt} &\leq n \cdot 2^{-l}
 \end{align}
 However, the number of leaves is larger, since 
 \begin{align}
@@ -417,11 +416,24 @@ holds\footnote{see Section \ref{sec:analysis:definitionAsymWT} for details}.
 
 For any constant $\alpha > 0$, let 
 \begin{align}
-L &\geq \left\lceil{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d\cdot \ln \Phi_d}}\right  \rceil +1 
+L &\geq \left\lceil{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d\cdot \ln \Phi_d}}\right\rceil+\frac{1}{d}
 \end{align}
-and note that 
+\todo{the paper uses $+1$, instead of $+1/d$, but I can't make workout the below result then} and note that 
 \begin{align}
-L \geq \frac{\ln\ln n}{d\cdot \ln \Phi_d} + O\left(1\right)
+L &\geq \frac{\ln\log_2 n}{d\cdot \ln \Phi_d} + \frac{\ln\left(1+\alpha\right)}{d\cdot \ln \Phi_d} + \frac{1}{d}\\
+  &\geq \frac{\ln\ln n}{d\cdot \ln \Phi_d} + O\left(1\right)
+\end{align}
+
+Then, 
+\begin{align}
+p_{awt} &\leq n \cdot 2^{-\Phi_d^{d\cdot L -1}} \\
+        &= n \cdot 2^{-\Phi_d^{d\cdot \left(\left\lceil{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d\cdot \ln \Phi_d}}\right\rceil+\frac{1}{d}\right) -1}} \\
+        &\leq n \cdot 2^{-\Phi_d^{d\cdot \left({\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d\cdot \ln \Phi_d}}+\frac{1}{d}\right) -1}} \\
+        &= n \cdot 2^{-\Phi_d^{{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d\cdot \ln \Phi_d}}}} \\
+        &= n \cdot 2^{-\Phi_d^{\log_{\Phi_d}\log_2 n + \log_{\Phi_d}\left(1+\alpha\right)}} \\
+         &= n \cdot 2^{-\Phi_d^{\log_{\Phi_d}\log_2 n}\cdot \Phi_d^{ \log_{\Phi_d}\left(1+\alpha\right)}} \\
+         &= n \cdot 2^{-\log_2 n \cdot\left(1+\alpha\right)} \\
+         &= n \cdot n ^{-(1+\alpha)} = n^{-\alpha}
 \end{align}
 
 \subsection{Non-distinct balls}
