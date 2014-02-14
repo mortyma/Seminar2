@@ -69,7 +69,7 @@ for the case $m=n$, with high probability\footnote{We say that an event $\mathca
 \end{align*}
 Note that since the average load is 1, $\delta = L_{max}$ in this case. For the heavily loaded case, w.h.p.~the maximum gap is at most~\cite{RS98}.
 \begin{align*}
-\delta = \Theta\left(\sqrt{\frac{m \cdot \log n}{n}}\right).
+\delta = \Theta\left(\sqrt{\frac{m \cdot \ln n}{n}}\right).
 \end{align*}
 
 \subsection{Multiple-choice balls-into-bins}
@@ -510,6 +510,21 @@ p_{pwt} &\leq n\cdot \left(\frac{\left(2\gamma \cdot \left(\alpha +1 \right) \cd
  
 \section{Conclusion}
 \label{sec:conclusion}
+Balls-into-bins games have many applications in Computer Science and have been studied extensively. The single-choice balls-into-bins strategy chooses a bin uniformly and independently at random for each ball. The classical result for this scheme upper-bounds the maximum load with 
+\begin{align*}
+\load = \frac{m}{n} + \Theta\left(\sqrt{\frac{m \cdot \log n}{n}}\right).
+\end{align*}
+w.h.p.
+In this paper we have presented two different miltiple-choice balls-into-bins placement algorithms: The Greedy-scheme due to Azar et al.\cite{ABKU99}, which achieves a maximum load of 
+\begin{align*}
+\load = \frac{m}{n} + \frac{\ln\ln n}{\ln d} + O(1)
+\end{align*}
+w.h.p.~and the Always-go-left scheme due to V\"ocking \cite{VOC03}, which achieves a slightly better maximum load of
+\begin{align*}
+\load = \frac{m}{n} + \frac{\ln \ln n}{d\cdot \ln \Phi_d} + O(1)
+\end{align*}
+w.h.p.~for all $m$. We used \emph{witness trees}, a very useful technique in the balls-into-bins context, to prove these upper-bounds in detail.
+
 
 \appendix
 \section{Generalized Fibonacci numbers}
