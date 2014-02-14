@@ -40,21 +40,21 @@
 
 \maketitle
 \begin{abstract}
-Balls-into-bins is a classical allocation problem, where $m$ balls have to be distributed among $n$ bins as evenly as possible. Using ranomized allocations schemes, the placement algorithm does not need to know the current load of all bins when the next ball has to be allocated. A classical and well studied approach is to select a bin uniformly and independently at random for each ball. Another strategy is to select $d\geq 2$ bins for each ball and put the ball into the bin with the least load. Somewhat surprisingly, the maximum load achieved by such a multiple-choice scheme is significantly smaller, even for $d=2$. In this paper, we will present two different multiple-choice allocation strategies for the balls-into-bins problem and provide a detailed analysis for the upper bounds on the maximum load that they achieve. We will use a technique called witness trees that has proven useful in a wide variaty of balls-into-bins problems.
+Balls-into-bins is a classical allocation problem, where $m$ balls have to be distributed among $n$ bins as evenly as possible. A well studied approach is to select a bin uniformly and independently at random for each ball. Another strategy is to select $d\geq 2$ bins for each ball and put the ball into the bin with the least load. Somewhat surprisingly, the maximum load achieved by such a multiple-choice scheme is significantly smaller, even for $d=2$. In this paper, we will present two different multiple-choice allocation strategies for the balls-into-bins problem and provide a detailed analysis of the upper bounds on the maximum load that they achieve. We will use a technique called witness trees, which has proven useful in a wide variety of balls-into-bins problems.
 \end{abstract}
 
 \section{Introduction}
 \label{sec:intro}
-Suppose that $m$ balls are thrown into $n$ bins, according to some arbitrary placement strategy. We are interested in the \emph{number of balls in the fullest bin}, also called the \emph{maximum load}. Equivalently, one can look at the \emph{additive gap} of the allocation, that is the difference of the number of balls in the fullest bin and the average amount of balls in the bins. These \emph{balls-into-bins games} or \emph{allocation problems} have been studied extensively in the probability literature (see e.g., \cite{JK77}). In the context of Computer Science, the balls-into-bins model is useful to study, e.g., strategies for distributing \emph{tasks} (balls) to \emph{processors} (bins) as evenly as possible without having to query all processors for the number of tasks currently assigned to them.
+Suppose that $m$ balls are to be thrown into $n$ bins, according to some placement strategy. We are interested in the number of balls in the fullest bin, also called the \emph{maximum load}. Equivalently, one can look at the \emph{additive gap} of the allocation, i.e., the difference of the number of balls in the fullest bin and the average amount of balls in the bins. These balls-into-bins games (BiB) have been studied extensively (see, e.g., \cite{JK77}). In the context of Computer Science, the balls-into-bins model is useful to study, e.g., strategies for distributing tasks (balls) to processors (bins) as evenly as possible without having to query all the processors for the number of tasks currently assigned to them.
 
 \subsection{Balls-into-bins model}
 \label{sec:model}
-Although several different variants of this simple balls-into-bins game exist, we will assume a very basic model to highlight the crucial ideas in both placement strategies as well as the analysis of them. In our model, we start with $n$ bins and put balls into them, one per time step $t$. We assume that at any time step $t$ at most $m = h n$ balls are in the bins, where $h$ is some constant greater or equal to $1$. At each time step $t$, we delete one randomly chosen ball from the bins. While most of the paper and especially the analysis focuses on the lightly loaded case where $m=n$, we will give results for the case $m > n$ as well. Throughout the paper, we will denote the maximum load by $\load$ and the additive gap by $\delta$. Obviously, 
+Although several different variants of this balls-into-bins game exist, we will focus on a very basic model to highlight the crucial ideas in the placement strategies aand their analysis. In our model, we start with $n$ bins and put balls into them, one per time step $t$. We assume that at any time step $t$ at most $m = h n$ balls are in the bins, where $h$ is some constant greater or equal to $1$. At each time step $t$, we delete one ball from the bins. While most of the paper and the analyses focuses on the lightly loaded case where $m=n$, we will give results for the case $m > n$ as well. Throughout the paper, we will denote the maximum load by $\load$ and the additive gap by $\delta$:
 \begin{align*}
 \delta = \load - \frac{m}{n}.
 \end{align*}
 
-\subsection{Single-choice balls-into-bins}
+\subsection{Single-choice BiB}
 \label{sec:single-choice}
 A simple strategy for the balls-into-bins problem is to choose one bin uniformly and independently at random for each ball, which we will call the \emph{single-choice balls-into-bins} strategy. Using this strategy, the maximum load of the fullest bin will be
 \begin{comment}
@@ -72,7 +72,7 @@ Note that since the average load is 1, $\delta = L_{max}$ in this case. For the 
 \delta = \Theta\left(\sqrt{\frac{m \cdot \ln n}{n}}\right).
 \end{align*}
 
-\subsection{Multiple-choice balls-into-bins}
+\subsection{Multiple-choice BiB}
 Consider a variation of the above \emph{single-choice balls-into-bins} strategy: For each ball, chose $d \geq 2$ bins independently and uniformly at random and place the ball into the \emph{least full bin}\footnote{If there are multiple bins with the same minimal load, chose one among them arbitrarily.}. This simple \emph{multiple-choice balls-into-bins} scheme, which we will call the \emph{Greedy} algorithm\footnote{A detailed definition will follow in Section \ref{sec:greedy}}, achieves a gap
 \begin{align*}
 \delta = \frac{\log \log n}{\log d} + O(1)
@@ -241,9 +241,9 @@ In other words, we assume that no ball is referenced by more than one node of a 
 We define edge and leaf events:
 \begin{compactitem}
 \item \emph{Edge event:} Consider some edge $e = (u,v)$ of the witness tree, s.t.~$v$ is the i-th child of $u$. Then $e$ represents the event that the i-th location of the ball $b_u = \mathrm{ball}(u)$ points to the same bin as one of the locations of the ball $b_v = \mathrm{ball}(v)$. 
-\todo{illustrate}
+%$\todo{illustrate}
 \item \emph{Leaf event:} A leaf node $v$ of the witness tree represents the event that each of the $d$ locations of the ball $b_v = \mathrm{ball}(v)$ points to a bin that contains at least three additional balls (i.e., balls that are not represented by a node of the tree) at the time of the insertion of the ball $b_v$.
-\todo{illustrate}
+%\todo{illustrate}
 \end{compactitem}
 The definition for leaf events refers to bins containing some number of balls at some specified time. To avoid dependencies, the crucial trick is that edge events are defined in terms of the alternative locations of balls, not by their finally assigned bin. 
 
@@ -349,7 +349,7 @@ With one exception, the definition of an \emph{asymmetric witness tree} is the s
 \item For $3\leq k \leq d$, $T_d(k)$ is a tree with $k-1$ children, which are the roots of the trees $T_d(k-1),\ldots,T_d(1)$.
 \item For $k>d$, $T_d(k)$ is a tree with $d$ children, which are the roots of the trees $T_d(k-1),\ldots,T_d(k-d)$.
 \end{compactitem}
-\todo{illustrate and note difference to usual Fibonacci trees}
+%\todo{illustrate and note difference to usual Fibonacci trees}
 
 A $d$-ary asymmetric witness tree of order $L$ has the structure of the Fibonacci tree $T_d(d \cdot L+1)$ and by Equation \ref{eqn:goldenFib} has $F_d(d\cdot L + 1) \geq \Phi_d^{d\cdot L-1}$ leaves. 
 
@@ -373,8 +373,8 @@ Ball $b_v$ referenced by a node $v$ with label $(h,i)$ was placed in a bin belon
 
 Let $x$ be the bin that contains $L+4$ balls. The root node gets assigned the topmost ball in bin $x$. Each of the $d$ locations of this ball points to a bin with at least $L+3$ balls in it, at the time of its insertion. These are the $d$ bins that were sampled by the Always-go-left scheme and thus bin $i$ belongs to the $i$'th group of bins, where each group consists of $n/d$ bins\footnote{For the sake of simplicity, we assume that $d$ divides $n$ evenly, i.e., that all groups have the exact same size. It can be shown that the analysis still holds if each group is of size $\lfloor\frac{n}{d}\rfloor$ or $\left\lceil\frac{n}{d}\right\rceil$.}. The child node of the root with label $(L-1, i)$ is assigned the topmost ball of the bin the $i$' location points to. The assignment of balls to nodes than proceeds recursively. Given a node $v$ with label $(h, i)$ whose ball $b_v$ was put into some bin belonging to group $i$ and containing at least $l+3$ other balls, we can conclude the following.
 \begin{compactitem}
-\item For $1\leq j < i$, the $j$'th location of the ball $b_v$ points to a bin containing at least $l+4$ balls at the insertion time of the ball $b_v$. If the $j$'th location contained less balls than the $i$'th location, the Always-go-left scheme would have put the ball $b_v$ into the bin pointed to by location $j$. The topmost ball in location $j$ is assigned to the  child $u$ of $v$ with label $(l,j)$. 
-\item For $i < j \leq d$, the $j$'th location contains at least $l+3$ balls. If location $j$ contained less, the Always-go-left scheme would have put the ball $b_v$ into the bin it points to. The topmost ball in the bin that location $j$ points to is assigned to the child node $u$ of $v$ labeled with $(l-1, j)$. \todo{the paper claims that the locations $j$ point to bins with $l+2$ balls. This can not be true, since the topmost, i.e., the $l+2$ ball - call it $b_t$ - gets assigned to a node with label $(l'=l-1, j)$. Since there are $l+1=l'+2$ balls below it, at the time of the placement of ball $b_t$, the bin $j$ it gets put into has only $l'+2$ balls in it, violating the invariant. Same with the case $j<i$.} 
+\item For $1\leq j < i$, the $j$'th location of the ball $b_v$ points to a bin containing at least $l+4$ balls at the insertion time of the ball $b_v$. If the j-th location contained less balls than the i-th location, the Always-go-left scheme would have put the ball $b_v$ into the bin pointed to by location $j$. The topmost ball in location $j$ is assigned to the  child $u$ of $v$ with label $(l,j)$. 
+\item For $i < j \leq d$, the j-th location contains at least $l+3$ balls. If location $j$ contained less, the Always-go-left scheme would have put the ball $b_v$ into the bin it points to. The topmost ball in the bin that location $j$ points to is assigned to the child node $u$ of $v$ labeled with $(l-1, j)$. \todo{the paper claims that the locations $j$ point to bins with $l+2$ balls. This can not be true, since the topmost, i.e., the $l+2$ ball - call it $b_t$ - gets assigned to a node with label $(l'=l-1, j)$. Since there are $l+1=l'+2$ balls below it, at the time of the placement of ball $b_t$, the bin $j$ it gets put into has only $l'+2$ balls in it, violating the invariant. Same with the case $j<i$.} 
 \end{compactitem}
 \end{proof}
 
@@ -422,7 +422,7 @@ For any constant $\alpha > 0$, let
 \begin{align*}
 L &\geq \left\lceil{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d\cdot \ln \Phi_d}}\right\rceil+\frac{1}{d} \neqn{awt:chooseL}
 \end{align*}
-\todo{the paper uses $+1$, instead of $+1/d$, but I can't make workout the below result then} 
+\todo{the paper uses $+1$, instead of $+1/d$, but I can't workout the below result then} 
 Then, 
 \begin{align*}
 p_{awt} &\leq n \cdot 2^{-\Phi_d^{d\cdot L -1}} \\
@@ -458,13 +458,13 @@ Assume a bin $x$ contains at least $L+3+\gamma$ balls at time $t$. We construct 
 \begin{compactitem}
 \item The root is not assigned any ball.
 \item Each child of the root is assigned one of the topmost $\gamma$ balls in bin $x$, which are necessarily distinct.
-\item For the assignment of nodes to the grandchildren of the root, consider a ball $b_c$ that is assigned to a child node $v_c$. Let the child node of $v_c$ be denoted by $v_g$. Since the ball $b$ was placed into bin $x$, at least one of its locations points to this bin $x$, which we call location $i$. Let $j = i+1 mod d$ be the ball's $j$'th location. Then, at the time of insertion of ball $b_c$, its $j$'th location points to a bin $y$ with at least $L+3$ other balls in it. We assign the topmost ball in bin $y$ to node $v_g$.
+\item For the assignment of nodes to the grandchildren of the root, consider a ball $b_c$ that is assigned to a child node $v_c$. Let the child node of $v_c$ be denoted by $v_g$. Since the ball $b$ was placed into bin $x$, at least one of its locations points to this bin $x$, which we call location $i$. Let $j = i+1 mod d$ be the ball's j-th location. Then, at the time of insertion of ball $b_c$, its j-th location points to a bin $y$ with at least $L+3$ other balls in it. We assign the topmost ball in bin $y$ to node $v_g$.
 \end{compactitem}
 Notice that the $\gamma$ additional balls in bin $x$ are assigned to the child nodes of the root only. 
 
 \subsubsection{Pruning}
 \label{sec:analysis:pruningFullWT}
-To remove all dependencies in the witness tree, we have to find nodes that represent the same ball and prune the tree such that each ball is referenced only once. Thus, traverse the witness tree in breadth-first order. When we reach a node $v$ that represents a ball $b$ already encountered before, let $e = (v,u)$ be the edge connecting $v$ and its parent node $u$. We call $e$ a \emph{cutoff edge} and use it as a witness that one of the $d$ locations of the ball $b_u$ is the same as one of the locations of some other ball $b_{u'}$, represented by a node $u'$, which was already traversed. Furthermore, we remove the whole tree rooted at node $v$ from our witness tree. We continue this pruning until either the breath-first traversal terminates or until we have obtained $\gamma$ cut-off edges. Note that more than $\gamma$ cut-off edges cannot exist, \todo{why?}. When finished, the \emph{pruned witness tree} does not contain any ball twice and thus all its events are independent. 
+To remove all dependencies in the witness tree, we have to find nodes that represent the same ball and prune the tree such that each ball is referenced only once. Thus, traverse the witness tree in breadth-first order. When we reach a node $v$ that represents a ball $b$ already encountered before, let $e = (v,u)$ be the edge connecting $v$ and its parent node $u$. We call $e$ a \emph{cutoff edge} and use it as a witness that one of the $d$ locations of the ball $b_u$ is the same as one of the locations of some other ball $b_{u'}$, represented by a node $u'$, which was already traversed. Furthermore, we remove the whole tree rooted at node $v$ from our witness tree. We continue this pruning until either the breath-first traversal terminates or until we have obtained $\gamma$ cut-off edges. Note that more than $\gamma$ cut-off edges cannot exist. When finished, the \emph{pruned witness tree} does not contain any ball twice and thus all its events are independent. 
 
 \subsubsection{Probability of activation}
 \label{sec:analysis:probabilityFullWT}
@@ -587,5 +587,5 @@ As discussed in Section \ref{sec:AlwaysGoLeft}, V\"ocking \cite{VOC03} was able 
 
 %bibliography
 \bibliographystyle{acm}
-\bibliography{../sources} 
+\bibliography{sources} 
 \end{document}
