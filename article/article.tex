@@ -47,9 +47,7 @@ Balls-into-bins is a classical allocation problem, where $m$ balls have to be di
 \label{sec:intro}
 Suppose that $m$ balls are to be thrown into $n$ bins, according to some placement strategy. We are interested in the number of balls in the fullest bin, also called the \emph{maximum load}. Equivalently, one can look at the \emph{additive gap} of the allocation, i.e., the difference of the number of balls in the fullest bin and the average amount of balls in the bins. These balls-into-bins games (BiB) have been studied extensively (see, e.g., \cite{JK77}). In the context of Computer Science, the BiB model is useful to study, e.g., strategies for distributing tasks (balls) to processors (bins) as evenly as possible without having to query all the processors for the number of tasks currently assigned to them.
 
-\subsection{BiB model}
-\label{sec:model}
-Although several different variants BiB exist, we will focus on a very basic model to highlight the crucial ideas in the placement strategies and their analyses. In our model, we start with $n$ \todo{empty?}  bins and put balls into them, one per time step $t$. We assume that at any time $t$ at most $m = h n$ balls are in the bins, where $h$ is some constant greater or equal to $1$. At each time step $t$, we delete one ball from the bins. While most of the paper and the analyses focuses on the lightly loaded case where $m=n$, we will give results for the case $m > n$ as well. Throughout the paper, we will denote the maximum load by $\load$ and the additive gap by $\delta$:
+While most of the paper and the analyses focuses on the lightly loaded case where $m=n$, we will give results for the case $m > n$ as well. Throughout the paper, we will denote the maximum load by $\load$ and the additive gap by $\delta$:
 \begin{align*}
 \delta = \load - \frac{m}{n}.
 \end{align*}
@@ -75,7 +73,7 @@ Note that, since the average load is 1, $\delta = L_{max}$ in this case. For the
 \subsection{Multiple-choice BiB}
 Consider a variation of the  single-choice BiB strategy: For each ball, chose $d \geq 2$ bins independently and uniformly at random and place the ball into the least full bin. If there are multiple bins with the same minimal load, chose one among them uniformly and independently at random. This simple multiple-choice scheme, which we will call the Greedy algorithm, achieves a gap
 \begin{align*}
-\delta = \frac{\log \log n}{\log d} + O(1)
+\delta = \frac{\ln \ln n}{\ln d} + O(1)
 \end{align*}
  w.h.p.~for all $m$~\cite{ABKU99}~\cite{BCSV06}.
  
@@ -120,13 +118,13 @@ The two-choice paradigm applied to the BiB model has several useful applications
 \label{sec:hashing}
 A simple hash table implementation typically uses a single hash function to map elements to entries in a table. If more than one element is mapped to the same entry, all elements mapped to this table entry are stored in a chain, usually implemented as a linked list. The maximum time to search for an element is then proportional to the length of the longest chain in the hash table. 
 
-It is easy to see how the BiB idea can be applied: Assuming a perfect hash function\footnote{i.e., each element is mapped to one of the $n$ table entries uniformly and independently at random}, the elements are balls to be mapped to table entries or bins, implying a worst case look-up time of $\Theta\left(\frac{\log n}{\log \log n}\right)$ w.h.p. Applying the two-choice paradigm by using two hash functions and mapping elements to the least full of two table entries implies a look-up time of $\Theta\left(\log \log n\right)$ w.h.p. This approach is easy to parallelize, it does not require re-hashing of data and requires only two hash functions \cite{ABKU99} \cite{MRS01}.
+It is easy to see how the BiB idea can be applied: Assuming a perfect hash function\footnote{i.e., each element is mapped to one of the $n$ table entries uniformly and independently at random}, the elements are balls to be mapped to table entries or bins, implying a worst case look-up time of $\Theta\left(\frac{\ln n}{\log \ln n}\right)$ w.h.p. Applying the two-choice paradigm by using two hash functions and mapping elements to the least full of two table entries implies a look-up time of $\Theta\left(\ln \ln n\right)$ w.h.p. This approach is easy to parallelize, it does not require re-hashing of data and requires only two hash functions \cite{ABKU99} \cite{MRS01}.
 
 \subsection{Online load balancing}
 \label{sec:loadbalancing}
 The following scenario is a typical application of online load balancing: Consider $n$ servers (such as file-, database- or network servers) and $m$ requests. For simplicity, assume that each task can be handled by any server and that all tasks are of the same size, i.e., they require the same execution time.
 
-To maximize the throughput of the servers, a uniform distribution of tasks to servers is desirable. While a central dispatcher dispatcher can easily achieve this, it also poses a bottleneck within a distributed system since querying $m$ servers for their current load involves significant overhead (e.g., sending a message to each server and waiting for the reply). As with hashing, the BiB model can be applied easily: we need to assign tasks (the balls) to servers (the bins). Assuming tasks are assigned to servers uniformly and independently at random, the two-choice paradigm is directly applicable: If each client samples two random servers for their load and sends its request to the least loaded server, the overhead is comparatively small and the difference in load on the $n$ servers is at most$O\left(\log \log n\right)$ w.h.p. \cite{KLM92} \cite{RS98} \cite{MRS01}.  
+To maximize the throughput of the servers, a uniform distribution of tasks to servers is desirable. While a central dispatcher dispatcher can easily achieve this, it also poses a bottleneck within a distributed system since querying $m$ servers for their current load involves significant overhead (e.g., sending a message to each server and waiting for the reply). As with hashing, the BiB model can be applied easily: we need to assign tasks (the balls) to servers (the bins). Assuming tasks are assigned to servers uniformly and independently at random, the two-choice paradigm is directly applicable: If each client samples two random servers for their load and sends its request to the least loaded server, the overhead is comparatively small and the difference in load on the $n$ servers is at most$O\left(\ln \ln n\right)$ w.h.p. \cite{KLM92} \cite{RS98} \cite{MRS01}.  
 
 \subsection{Emulation of shared memory machines on distributed memory machines}
 \label{sec:DMM}
@@ -140,11 +138,15 @@ In this context, Valiant's paradigm \cite{V82} states that any such permutation 
 
 Applying the two-choice paradigm in this context is somewhat more involved. The interested reader may find more details in \cite{CMM+98}.
 
+\section{BiB model}
+\label{sec:model}
+Although several different variants of the BiB problem exist, we will focus on a very basic model to highlight the crucial ideas in the placement strategies and their analyses. We will base our analysis on a sequential, infinite and dynamic process using an oblivious adversary that provides a sequence $\sigma = \sigma_1 \sigma_2 \dots$, where $\sigma_t$ represents a request for a ball $b_d$ to be deleted and a different ball $b_a$ to be added to the bins at time step $t$. In our model, the ball $b_d$ associated with some $\sigma_t$ is deleted at the beginning of time step $t$. Next, the ball $b_a$ has to be placed into one of the $n$ bins without knowledge of the following requests $\sigma_{t+1}$, $\sigma_{t+2}\dots$. This infinite sequence of insertions and deletions is fixed in advance and is thus independent of previously allocated balls and any decisions made by the allocation algorithm. We assume that at any time $t$ at most $m = h n$ balls are in the bins, where $h$ is some constant greater or equal to $1$. 
+
 \section{Multiple-choice BiB}
 \label{sec:multiple-choice}
 The single-choice BiB strategy (Section \ref{sec:single-choice}) chooses one bin uniformly and independently at random for each ball. A multiple-choice BiB strategy generalizes this idea by  choosing $d \geq 2$ bins and placing the ball into the least full bin. Depending on how the $d$ locations are sampled, we distinguish three classes of placement algorithms \cite{VOC03}. 
 
-\section{Classes of random placement strategies}
+\subsection{Classes of random placement strategies}
 \label{sec:classesOfPlacement}
 Let $B$ be the set of bins $\{1,2...n\}$, $\Omega = B^{d}$ be the sample space and $\mathcal{F} = 2^{\Omega}$ be the set of measurable events. We are only interested in events that represent a set of bins of size $d$. Thus, let $\mathcal{F}_d = \{\mathcal{E} \in \mathcal{F}: \left\vert \mathcal{E} \right\vert = d\}$ and set $\Pr\left(\mathcal{E}  \right) = 0$  $\forall \mathcal{E} \in \mathcal{F} \setminus \mathcal{F}_d $. The three classes of algorithms are distinguished by the probability function $\Pr\left(\mathcal{E}\right)$ for events $\mathcal{E} \in \mathcal{F}_d$:
 \begin{compactitem}
@@ -174,12 +176,12 @@ Consider the Greedy scheme, a variation of the one-choice BiB strategy: For each
 \label{theorem:greedy}
 Consider any sequence of insertions and deletions s.t.~at most $hn$ balls are in the bins at any time. If the balls are placed into bins by the Greedy algorithm, the maximum load is bounded as 
 \begin{align*}
-\load \leq \frac{m}{n} + \frac{\log \log n}{\log d}+ O(h)
+\load \leq \frac{\ln \ln n}{\ln d}+ O(h)
 \end{align*}
 w.h.p.~for all $t$ \cite{ABKU99} \cite{BCSV06}.
 \end{theorem}
 
-This implies a gap of $O\left(\log \log n \right)$ for arbitrarily large $m$, which is remarkable in several ways:
+This implies a gap of $O\left(\ln \ln n \right)$ for arbitrarily large $m$, which is remarkable in several ways:
 \begin{compactitem}
 \item The apparently small change made for the Greedy algorithm compared to the single-choice BiB scheme results in an exponential decrease of the gap, even for $d=2$. 
 \item Each additional choice ($d > 2$) decreases the gap by only a constant factor \cite{MRS01}. 
