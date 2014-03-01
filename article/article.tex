@@ -140,7 +140,7 @@ Applying the two-choice paradigm in this context is somewhat more involved. The 
 
 \section{BiB model}
 \label{sec:model}
-Although several different variants of the BiB problem exist, we will focus on a very basic model to highlight the crucial ideas in the placement strategies and their analyses. We will base our analysis on a sequential, infinite and dynamic process using an oblivious adversary that provides a sequence $\sigma = \sigma_1 \sigma_2 \dots$, where $\sigma_t$ represents a request for a ball $b_d$ to be deleted and a different ball $b_a$ to be added to the bins at time step $t$. In our model, the ball $b_d$ associated with some $\sigma_t$ is deleted at the beginning of time step $t$. Next, the ball $b_a$ has to be placed into one of the $n$ bins without knowledge of the following requests $\sigma_{t+1}$, $\sigma_{t+2}\dots$. This infinite sequence of insertions and deletions is fixed in advance and is thus independent of previously allocated balls and any decisions made by the allocation algorithm. We assume that at any time $t$ at most $m = h n$ balls are in the bins, where $h$ is some constant greater or equal to $1$. 
+Although several different variants of the BiB problem exist, we will focus on a very basic model to highlight the crucial ideas in the placement strategies and their analyses. We will base our analysis on a sequential, infinite and dynamic process using an oblivious adversary that provides a sequence $\sigma = \sigma_1 \sigma_2 \dots$, where $\sigma_t$ represents a request for a ball $b_d$ to be deleted and a different ball $b_a$ to be added to the bins at time step $t$. In our model, the ball $b_d$ associated with some $\sigma_t$ is deleted at the beginning of time step $t$. Next, the ball $b_a$ has to be placed into one of the $n$ bins without knowledge of the following requests $\sigma_{t+1}$, $\sigma_{t+2}\dots$. This infinite sequence of insertions and deletions is fixed in advance and is thus independent of previously allocated balls and any decisions made by the allocation algorithm. We assume that at any time $t$ at most $m = n$ balls are in the bins.
 
 \section{Multiple-choice BiB}
 \label{sec:multiple-choice}
@@ -174,24 +174,18 @@ Consider the Greedy scheme, a variation of the one-choice BiB strategy: For each
 
 \begin{theorem}
 \label{theorem:greedy}
-Consider any sequence of insertions and deletions s.t.~at most $hn$ balls are in the bins at any time. If the balls are placed into bins by the Greedy algorithm, the maximum load is bounded as 
+Consider any sequence of insertions and deletions s.t.~at most $n$ balls are in the bins at any time. If the balls are placed into bins by the Greedy algorithm, the maximum load is 
 \begin{align*}
-\load \leq \frac{\ln \ln n}{\ln d}+ O(h)
+\load = \frac{\ln \ln n}{\ln d}+ O(1)
 \end{align*}
 w.h.p.~for all $t$ \cite{ABKU99} \cite{BCSV06}.
 \end{theorem}
 
-This implies a gap of $O\left(\ln \ln n \right)$ for arbitrarily large $m$, which is remarkable in several ways:
+This result is remarkable in several ways:
 \begin{compactitem}
 \item The apparently small change made for the Greedy algorithm compared to the single-choice BiB scheme results in an exponential decrease of the gap, even for $d=2$. 
-\item Each additional choice ($d > 2$) decreases the gap by only a constant factor \cite{MRS01}. 
-\item For the heavily loaded case, the resulting gap of the multiple-choice BiB strategy does not depend on the number of balls $m$. In contrast, the bound for the one-choice BiB scheme diverges with $m$.
-\begin{comment}
-\todo{the following is only true for class 1 algorithms}
-\item The given bounds are tight, meaning that no other strategy that places each ball into one of $d$ randomly selected bins achieves a gap that is asymptotically lower.
-\end{comment}
+\item Each additional choice ($d > 2$) decreases the gap by only a constant factor \cite{MRS01}.
 \end{compactitem}
-
 We will provide a detailed proof of this property in Section \ref{sec:analysis}.
 
 \subsection{The Always-go-left scheme}
@@ -200,6 +194,7 @@ The Greedy strategy presented in Section \ref{sec:multiple-choice} assumes that 
 
 The Always-go-left algorithm works as follows. Partition the $n$ bins into $d$ groups, each of size $\left\lfloor \frac{n}{d}\right\rfloor$ or $\left\lceil\frac{n}{d}\right\rceil$ . We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. In case a tie occurs, put the ball into the left-most bin. That is, assuming a fixed ordering of bins $b_i$ for $1 \leq i \leq n$, from among the $d' \leq d$ bins with the same minimal load, put the ball into the bin with smallest index $i$.
 
+\begin{comment}
 \begin{theorem}
 \label{theorem:agln}
 If $n$ balls are placed into $n$ bins using the Always-go-left scheme, the maximum load will be
@@ -208,25 +203,26 @@ If $n$ balls are placed into $n$ bins using the Always-go-left scheme, the maxim
 \end{align*}
 w.h.p.
 \end{theorem}
+\end{comment}
 
 \begin{theorem}
-\label{theorem:algm}
-Consider any sequence of insertions and deletions s.t.~at most $hn$ balls are in the bins at any time. If the balls are placed into bins by the Greedy algorithm, at any time $t$ the maximum load is at most 
+\label{theorem:aglm}
+Consider any sequence of insertions and deletions s.t.~at most $n$ balls are in the bins at any time. If the balls are placed into bins by the Always-go-left algorithm, the maximum load is at most 
 \begin{align*}
-\load \leq \frac{\ln\ln n}{d  \ln \Phi_d} + O(h)
+\load = \frac{\ln\ln n}{d  \ln \Phi_d} + O(1)
 \end{align*}
-w.h.p.
+w.h.p.~for all $t$ \cite{VOC03}.
 \end{theorem}
 
 \section{Analysis}
 \label{sec:analysis}
-In this section, we will prove Theorems \ref{theorem:greedy}, \ref{theorem:agln} and \ref{theorem:algm} in detail, using witness trees to provide an upper bound for the event that a bin contains too many balls. Our analysis closely follows the proofs in \cite{VOC03}.
+In this section, we will prove Theorems \ref{theorem:greedy} and \ref{theorem:aglm} in detail, using witness trees to provide an upper bound for the event that a bin contains too many balls. Our analysis closely follows the proofs in \cite{VOC03}.
 
 We say that a bad event occurs when the maximum load exceeds some given threshold value. When such a bad event occurs we construct an activated witness tree. In other words, the activation of a witness tree is implied by a bad event. The probability for the existence of such an activated witness tree is an upper-bound for the probability that the associated bad event occurs.
 
 Throughout this section, location will denote the a specific place in one of the $n$ bins. A location of a ball $b$ refers not only to a bin, but also to the number of balls already in this bin at the time of insertion of ball $b$.
 
-We will prove the bounds for $m=n$ for both the Greedy and the Always-go-left scheme in Sections \ref{sec:analysis:greedy} and \ref{sec:analysis:alg}, respectively. However, we use a simplifying Assumption \ref{assumption:independence} in those two sections to provide a more clear presentation of the proof technique. Section \ref{sec:analysis:nondistinctBalls} will extend these proofs to remove the simplifying assumption we make initially. The witness tree method can be used to show that the same bounds hold for the heavily loaded case where $m> n$ too, but we do not give such a proof in this paper. Instead, we refer the interested reader to V\"ocking \cite{VOC03}. Berenbrink et al.  ~\cite{BCSV06}, Talwar et al.~\cite{TW13} and Mitzenmacher \cite{MRS01} provide proofs the heavily loaded case using different approaches as well.
+We will prove the bounds for $m=n$ for both the Greedy and the Always-go-left scheme in Sections \ref{sec:analysis:greedy} and \ref{sec:analysis:alg}, respectively. However, we use a simplifying Assumption \ref{assumption:independence} in those two sections to provide a more clear presentation of the proof technique. Section \ref{sec:analysis:nondistinctBalls} will extend these proofs to remove the simplifying assumption we make initially. The witness tree method can be used to show that the same bounds hold for case where $m > h n$ for some constant $h > 1$ too, but we do not give such a proof in this survey. Instead, we refer the interested reader to V\"ocking \cite{VOC03}. Berenbrink et al.~\cite{BCSV06} and Talwar et al.~\cite{TW13} provide proofs the heavily loaded case using different approaches.
 
 \subsection{Greedy}
 \label{sec:analysis:greedy}
@@ -444,7 +440,7 @@ Since the probabilty for the activation of an asymmetric witness tree of order $
 L &\geq \frac{\ln\log_2 n}{d \ln \Phi_d} + \frac{\ln\left(1+\alpha\right)}{d \ln \Phi_d} + \frac{1}{d}\\
   &\geq \frac{\ln\ln n}{d \ln \Phi_d} + O\left(1\right)
 \end{align*}
-This proves Theorem \ref{theorem:agln}, under the assumption that all events are stochastically independent (Assumption \ref{assumption:independence}). \qed
+This proves Theorem \ref{theorem:aglm}, under the assumption that all events are stochastically independent (Assumption \ref{assumption:independence}). \qed
 
 \subsection{Non-distinct balls}
 \label{sec:analysis:nondistinctBalls}
