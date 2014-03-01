@@ -87,7 +87,7 @@ Consider the slightly more Always-go-left scheme: Suppose that the $n$ bins are 
 \begin{align*}
 \delta = \frac{\ln\ln n}{d  \ln \Phi_d} + O(1)
 \end{align*}
-w.h.p. Not only is this a significant reduction of the asymptotic bound, V\"ocking was able to show that the Always-go-left strategy is optimal up to additive constants \cite{VOC03}.
+w.h.p.\ for all $m$. Not only is this a significant reduction of the asymptotic bound, V\"ocking was able to show that the Always-go-left strategy is optimal up to additive constants \cite{VOC03}.
 
 This survey is organized as follows: We give a basic classification of BiB games in Section \ref{sec:classification}, to provide some overview of the different directions in research as well as possibilities of abstraction from applications, some of which are listed in Section \ref{sec:applications}. In the remaining sections of this paper we will consider the model given in Section \ref{sec:model}, which can be classified as a sequential, finite and dynamic process with random deletions. Section \ref{sec:multiple-choice} starts with a brief definition of three different classes of random placement strategies and then continues with the presentation of the two placement algorithms outlines in the introduction: The  Greedy algorithm (Section \ref{sec:greedy}) and the Always-go-left algorithm (Section \ref{sec:AlwaysGoLeft}). Section \ref{sec:analysis} is the core of this survey and will give a detailed analysis of both strategies. We will use a proof technique called witness trees, which allows for a clean analysis of both problems and is applicable to a wide variety of BiB scenarios. Other proof techniques such as layered induction and a differential equations approach have been used. See, e.g., \cite{MRS01} for an overview of different proof techniques for the BiB problem.
 
@@ -508,20 +508,20 @@ p_{pwt} &\leq n \left(\frac{\left(2\gamma  \left(\alpha +1 \right)  \log_2 n\rig
  
 \section{Conclusion}
 \label{sec:conclusion}
-BiB games have many applications in Computer Science and have been studied extensively. The single-choice BiB strategy chooses a bin uniformly and independently at random for each ball. The classical result for this scheme upper-bounds the maximum load with 
+BiB games have many applications in Computer Science and have been studied extensively. The single-choice BiB strategy chooses a bin uniformly and independently at random for each ball. The classical result for this scheme upper-bounds the gap with \cite{RS98}
 \begin{align*}
-\load = \frac{m}{n} + \Theta\left(\sqrt{\frac{m  \log n}{n}}\right).
+\delta =  \Theta\left(\sqrt{\frac{m  \log n}{n}}\right).
 \end{align*}
 w.h.p.
-In this paper we have presented two different miltiple-choice BiB placement algorithms: The Greedy-scheme due to Azar et al.\cite{ABKU99}, which achieves a maximum load of 
+In this paper we have presented two different multiple-choice BiB placement algorithms: The Greedy-scheme due to Azar et al.\cite{ABKU99}, which achieves a gap of 
 \begin{align*}
-\load = \frac{m}{n} + \frac{\ln\ln n}{\ln d} + O(1)
+\delta = \frac{\ln\ln n}{\ln d} + O(1)
 \end{align*}
-w.h.p.~and the Always-go-left scheme due to V\"ocking \cite{VOC03}, which achieves a slightly better maximum load of
+w.h.p.~and the Always-go-left scheme due to V\"ocking \cite{VOC03}, which achieves a slightly better gap of
 \begin{align*}
-\load = \frac{m}{n} + \frac{\ln \ln n}{d \ln \Phi_d} + O(1)
+\delta = \frac{\ln \ln n}{d \ln \Phi_d} + O(1)
 \end{align*}
-w.h.p.~for all $m$. We used witness trees, a very useful technique in the BiB context, to prove these upper-bounds in detail.
+w.h.p.~for all $m$. We used witness trees, a very useful technique in the BiB context, to prove these upper-bounds for the case $m=n$ in detail.
 
 
 \appendix
