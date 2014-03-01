@@ -548,13 +548,13 @@ hold.
 
 \section{Asymptotic notations}
 \label{sec:asymptotic}
-We use the following definitions for the asymptotic notations $O()$, $o()$ and $\Theta()$.
+We use the following definitions for the asymptotic notations \cite{CLRS01}, where $f(\cdot)$ and $g(\cdot)$ are positive functions with one argument $n\in \mathbb{N}$ and $n_0 \in \mathbb{N}$, $c \in \mathbb{R}_{\geq 0}$ are suitable constants.
 
 \begin{align*}
-f(n) \in o(g(n)) &\Leftrightarrow \forall \epsilon > 0 \exists n_o\forall n> n_0: |f(n)|\leq \epsilon  |g(n)|\\
-f(n) \in O(g(n)) &\Leftrightarrow \exists c > 0 \exists n_o\forall n> n_0: |f(n)|\leq c  |g(n)|\\
-f(n) \in \Omega(g(n)) &\Leftrightarrow \exists c > 0 \exists n_o\forall n> n_0: c  |g(n)| \leq |f(n)| \\
-f(n) \in \Theta(g(n)) &\Leftrightarrow f(n) \in \Omega(g(n)) \land f(n)\in O(g(n))
+f(n) \in O(g(n)) &\Leftrightarrow \exists c, n_0 \;\forall n> n_0: f(n)\leq c  g(n) \\
+f(n) \in \Omega(g(n)) &\Leftrightarrow \exists c, n_0\;\forall n> n_0: cg(n) \leq f(n) \\
+f(n) \in \Theta(g(n)) &\Leftrightarrow f(n) \in \Omega(g(n)) \land f(n)\in O(g(n)) \\
+f(n) \in o(g(n)) &\Leftrightarrow \forall c \; \exists n_0\;\forall n> n_0: f(n) < cg(n)
 \end{align*}
 
 The following theorem is useful for understanding the asymptotic bounds presented throughout the paper.
@@ -585,5 +585,5 @@ As discussed in Section \ref{sec:AlwaysGoLeft}, V\"ocking \cite{VOC03} was able 
 
 %bibliography
 \bibliographystyle{acm}
-\bibliography{sources} 
+\bibliography{../sources} 
 \end{document}
