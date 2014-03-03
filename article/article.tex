@@ -47,14 +47,14 @@ Balls-into-bins is a classical allocation problem, where $m$ balls have to be di
 \label{sec:intro}
 Suppose that $m$ balls are to be thrown into $n$ bins, according to some placement strategy. We are interested in the number of balls in the fullest bin, also called the \emph{maximum load}. Equivalently, one can look at the \emph{additive gap} of the allocation, i.e., the difference of the number of balls in the fullest bin and the average amount of balls in the bins. These balls-into-bins games (BiB) have been studied extensively (see, e.g., \cite{JK77}). In the context of Computer Science, the BiB model is useful to study, e.g., strategies for distributing tasks (balls) to processors (bins) as evenly as possible without having to query all the processors for the number of tasks currently assigned to them.
 
-While most of the paper and the analyses focuses on the lightly loaded case where $m=n$, we will give results for the case $m > n$ as well. Throughout the paper, we will denote the maximum load by $\load$ and the additive gap by $\delta$:
+While most of this survey and the analyses focuses on the lightly loaded case where $m=n$, we will give results for the case $m > n$ as well. We will denote the maximum load by $\load$ and the additive gap by $\delta$:
 \begin{align*}
 \delta = \load - \frac{m}{n}.
 \end{align*}
 
 \subsection{Single-choice BiB}
 \label{sec:single-choice}
-A simple strategy for the BiB problem is to choose one bin uniformly and independently at random for each ball, which we will call the \emph{single-choice} strategy. Using this strategy, the maximum load of the fullest bin will be
+The \emph{single-choice} strategy is a simple allocation scheme for the BiB problem and chooses one bin uniformly and independently at random for each ball. Using this strategy, the maximum load of the fullest bin will be
 \begin{comment}
 \footnote{A more accurate result exists: The maximum load is $\load = \Gamma^{-1}\left(n\right)\left(1+O\left(\frac{1}{\log \Gamma^{-1}\left(n\right)}\right)\right)$ \cite{G91}.}
 \end{comment}
@@ -71,25 +71,25 @@ Note that, since the average load is 1, $\delta = L_{max}$ in this case. For the
 \end{align*}
 
 \subsection{Multiple-choice BiB}
-Consider a variation of the  single-choice BiB strategy: For each ball, chose $d \geq 2$ bins independently and uniformly at random and place the ball into the least full bin. If there are multiple bins with the same minimal load, chose one among them uniformly and independently at random. This simple multiple-choice scheme, which we will call the Greedy algorithm, achieves a gap
+Consider a variation of the  single-choice BiB strategy: For each ball, chose $d \geq 2$ bins independently and uniformly at random and place the ball into the least full bin. If there are multiple bins with the same minimal load, chose one among them uniformly and independently at random. This simple multiple-choice scheme, called the Greedy algorithm, achieves a gap
 \begin{align*}
 \delta = \frac{\ln \ln n}{\ln d} + O(1)
 \end{align*}
  w.h.p.~for all $m$~\cite{ABKU99}~\cite{BCSV06}.
  
-This apparently minor change introduces a small amount of choice which leads to a significant reduction in the maximum load. 
+This apparently minor change introduces an additional choice which leads to a significant reduction in the maximum load. 
 \begin{comment}
 Curiously, the exponential decrease in the gap is already achieved having just two choices (that is, $d=2$). Each additional choice decreases the bound for the maximum gap by just a constant factor~\cite{MRS01}. 
 \end{comment}
 Extensive research following the influential paper by Azar et al.~\cite{ABKU99}, who were the first ones to explicitly prove this phenomenon\footnote{For a brief history of the proof, which is quite interesting by itself, refer to Appendix \ref{sec:historyOfGreedy}.}, suggests that this two-choice paradigm is not just an artifact of the simple BiB model, but a general principle applicable to a variety of problems. 
 
-Consider the slightly more Always-go-left scheme: Suppose that the $n$ bins are partitioned evenly into $d$ groups, each of size\footnote{To simplify the presentation, we will assume that $d$ divides $n$ evenly in the remainder of this paper.} $\lfloor \frac{n}{d}\rfloor$ or $\left\lceil\frac{n}{d}\right\rceil$. We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. In case a tie occurs, we put the ball into the left-most bin. That is, assuming a fixed ordering of bins $b_i$ for $1 \leq i \leq n$, from among the $d' \leq d$ bins with the same minimal load, we put the ball into the bin with smallest index $i$. Somewhat surprisingly, V\"ocking \cite{VOC03} showed that such a strategy employing asymmetric tie-breaking in combination with non-uniform bin selection reduces the bound for the gap to\footnote{The symbol $\Phi_d$ denotes a generalization of the golden ratio, based on generalized Fibonacci numbers. Refer to Appendix \ref{sec:fibonacci} for the definition.}
+Consider the slightly more involved Always-go-left scheme: Suppose that the $n$ bins are partitioned evenly into $d$ groups, each of size\footnote{To simplify the presentation, we will assume that $d$ divides $n$ evenly in the remainder of this paper.} $\lfloor \frac{n}{d}\rfloor$ or $\left\lceil\frac{n}{d}\right\rceil$. We select one from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. For tie-breaking, we assume a fixed ordering of bins $b_i$ for $1 \leq i \leq n$ and put the ball into the bin with smallest index $i$ among those with same minimal load. Somewhat surprisingly, V\"ocking \cite{VOC03} showed that such a strategy employing asymmetric tie-breaking in combination with non-uniform bin selection reduces the bound for the gap to\footnote{The symbol $\Phi_d$ denotes a generalization of the golden ratio, based on generalized Fibonacci numbers. Refer to Appendix \ref{sec:fibonacci} for the definition.}
 \begin{align*}
 \delta = \frac{\ln\ln n}{d  \ln \Phi_d} + O(1)
 \end{align*}
 w.h.p.\ for all $m$. Not only is this a significant reduction of the asymptotic bound, V\"ocking was able to show that the Always-go-left strategy is optimal up to additive constants \cite{VOC03}.
 
-This survey is organized as follows: We give a basic classification of BiB games in Section \ref{sec:classification}, to provide some overview of the different directions in research as well as possibilities of abstraction from applications, some of which are listed in Section \ref{sec:applications}. In the remaining sections of this paper we will consider the model given in Section \ref{sec:model}, which can be classified as a sequential, finite and dynamic process with random deletions. Section \ref{sec:multiple-choice} starts with a brief definition of three different classes of random placement strategies and then continues with the presentation of the two placement algorithms outlines in the introduction: The  Greedy algorithm (Section \ref{sec:greedy}) and the Always-go-left algorithm (Section \ref{sec:AlwaysGoLeft}). Section \ref{sec:analysis} is the core of this survey and will give a detailed analysis of both strategies. We will use a proof technique called witness trees, which allows for a clean analysis of both problems and is applicable to a wide variety of BiB scenarios. Other proof techniques such as layered induction and a differential equations approach have been used. See, e.g., \cite{MRS01} for an overview of different proof techniques for the BiB problem.
+This survey is organized as follows: We give a basic classification of BiB games in Section \ref{sec:classification}, to provide some overview of the different directions in research as well as possibilities of abstraction from applications, some of which are listed in Section \ref{sec:applications}. In the remaining sections of this paper we will consider the model given in Section \ref{sec:model}, which can be classified as a sequential, finite and dynamic process with random deletions. Section \ref{sec:multiple-choice} starts with a brief definition of three different classes of random placement strategies and then continues with the presentation of the two placement algorithms outlined in the introduction: The Greedy algorithm (Section \ref{sec:greedy}) and the Always-go-left algorithm (Section \ref{sec:AlwaysGoLeft}). Section \ref{sec:analysis} is the core of this survey and will give a detailed analysis of both strategies for the case $m=n$. We will use a proof technique called witness trees, which allows for a clean analysis of both problems and is applicable to a wide variety of BiB scenarios. Other proof techniques such as layered induction and a differential equations approach have been used. See, e.g., \cite{MRS01} for an overview of different proof techniques for the BiB problem. The proof for arbitrarily large $m$ is more complicated and we refer the interested reader to \cite{BFZR08} and \cite{TW13}.
 
 \begin{comment}
 In Section \ref{sec:strategies}, we will provide asymptotic bounds for the ad dative gap of this strategy, which we will then use to devise more complex strategies that significantly reduce these bounds. 
@@ -140,7 +140,7 @@ Applying the two-choice paradigm in this context is somewhat more involved. The 
 
 \section{BiB model}
 \label{sec:model}
-Although several different variants of the BiB problem exist, we will focus on a very basic model to highlight the crucial ideas in the placement strategies and their analyses. We will base our analysis on a sequential, infinite and dynamic process using an oblivious adversary that provides a sequence $\sigma = \sigma_1 \sigma_2 \dots$, where $\sigma_t$ represents a request for a ball $b_d$ to be deleted and a different ball $b_a$ to be added to the bins at time step $t$. In our model, the ball $b_d$ associated with some $\sigma_t$ is deleted at the beginning of time step $t$. Next, the ball $b_a$ has to be placed into one of the $n$ bins without knowledge of the following requests $\sigma_{t+1}$, $\sigma_{t+2}\dots$. This infinite sequence of insertions and deletions is fixed in advance and is thus independent of previously allocated balls and any decisions made by the allocation algorithm. We assume that at any time $t$ at most $m = n$ balls are in the bins.
+Although several different variants of the BiB problem exist, we will focus on a very basic model to highlight the crucial ideas in the placement strategies and their analyses. which we will base on a sequential, infinite and dynamic process using an oblivious adversary. The adversary provides a sequence $\sigma = \sigma_1 \sigma_2 \dots$, where $\sigma_t$ represents a request for a ball $b_d$ to be deleted and a different ball $b_a$ to be added to the bins at time step $t$. In our model, the ball $b_d$ associated with some request $\sigma_t$ is deleted at the beginning of time step $t$. Next, the ball $b_a$ has to be placed into one of the $n$ bins without knowledge of the following requests $\sigma_{t+1}$, $\sigma_{t+2}\dots$. This infinite sequence of insertions and deletions is fixed in advance and is thus independent of previously allocated balls and any decisions made by the allocation algorithm. We assume that at any time $t$ at most $m = n$ balls are in the bins.
 
 \section{Multiple-choice BiB}
 \label{sec:multiple-choice}
@@ -148,20 +148,20 @@ The single-choice BiB strategy (Section \ref{sec:single-choice}) chooses one bin
 
 \subsection{Classes of random placement strategies}
 \label{sec:classesOfPlacement}
-Let $B$ be the set of bins $\{1,2...n\}$, $\Omega = B^{d}$ be the sample space and $\mathcal{F} = 2^{\Omega}$ be the set of measurable events. We are only interested in events that represent a set of bins of size $d$. Thus, let $\mathcal{F}_d = \{\mathcal{E} \in \mathcal{F}: \left\vert \mathcal{E} \right\vert = d\}$ and set $\Pr\left(\mathcal{E}  \right) = 0$  $\forall \mathcal{E} \in \mathcal{F} \setminus \mathcal{F}_d $. The three classes of algorithms are distinguished by the probability function $\Pr\left(\mathcal{E}\right)$ for events $\mathcal{E} \in \mathcal{F}_d$:
+Let $B$ be the set of bins $\{1,2...n\}$ and $B^{d}$ be the sample space. The three classes of algorithms are distinguished by the way the $d$ candidate bins are chosen for each ball:
 \begin{compactitem}
-\item  Class 1: \emph{Uniform and independent.} Choose each of the $d$ bins for a ball uniformly and independently at random from the set of bins $B$. This implies 
+\item  Class 1: \emph{Uniform and independent.} Choose each of the $d$ bins for a ball uniformly and independently at random from the set of bins $B$. This implies the probability distribution for the selection of the i-th balls being
 \begin{align*}
-\forall \mathcal{E} \in \mathcal{F}_d: \Pr\left(\mathcal{E}\right) = \frac{1}{n ^{d}}
+D_i: B \rightarrow \frac{1}{n}
 \end{align*}
-\item Class 2: \emph{Non-uniform and independent.} Choose the i-th bin from $B$ independently at random according to some probability function
+\item Class 2: \emph{Non-uniform and independent.} Choose the i-th bin from $B$ independently at random according to some probability distribution: 
 \begin{align*}
-\Pr: B \rightarrow \left[0,1\right]
+D_i: B \rightarrow \left[0,1\right]
 \end{align*}
 
-\item Class 3: \emph{Non-uniform and dependent.} Choose the $d$ bins for a ball from $\Omega$ at random:
+\item Class 3: \emph{Non-uniform and dependent.} Choose the $d$ bins for a ball from $\Omega$ according to some probability probability distribution:
 \begin{align*}
-\Pr: B^{d} \rightarrow \left[0,1\right]
+D: B^{d} \rightarrow \left[0,1\right]
 \end{align*}
 \end{compactitem} 
  
@@ -169,12 +169,11 @@ We will discuss two different multiple-choice placement strategies: The Greedy a
 
 \subsection{The Greedy scheme}
 \label{sec:greedy}
-
 Consider the Greedy scheme, a variation of the one-choice BiB strategy: For each ball, choose $d \geq 2$ bins independently and uniformly at random and place the ball into the least full bin. If there are multiple bins with the same minimal load, chose one among them arbitrarily. Note that the $d$ selected bins are not necessarily distinct. 
 
 \begin{theorem}
 \label{theorem:greedy}
-Consider any sequence of insertions and deletions s.t.~at most $n$ balls are in the bins at any time. If the balls are placed into bins by the Greedy algorithm, the maximum load is 
+Consider any sequence of insertions and deletions s.t.~at most $n$ balls are in the bins at any time. If the balls are placed into bins by the Greedy algorithm, the maximum load is at most
 \begin{align*}
 \load = \frac{\ln \ln n}{\ln d}+ O(1)
 \end{align*}
@@ -186,13 +185,12 @@ This result is remarkable in several ways:
 \item The apparently small change made for the Greedy algorithm compared to the single-choice BiB scheme results in an exponential decrease of the gap, even for $d=2$. 
 \item Each additional choice ($d > 2$) decreases the gap by only a constant factor \cite{MRS01}.
 \end{compactitem}
-We will provide a detailed proof of this property in Section \ref{sec:analysis}.
 
 \subsection{The Always-go-left scheme}
 \label{sec:AlwaysGoLeft}
-The Greedy strategy presented in Section \ref{sec:multiple-choice} assumes that $d$ bins are chosen uniformly and independently at random. V\"ocking \cite{VOC03} was the first to study the impact of non-uniform and dependent selections of the $d$ bins. Surprisingly, a multiple-choice BiB strategy with a non-uniform and independent selection of the $d$ bins, such as the Always-go-left algorithm introduced in \cite{VOC03}, achieves better \cite{BCSV06} load balancing than the Greedy scheme (Section \ref{sec:greedy}). Furthermore, V\"ocking proved that the Always-go-left algorithm is optimal up to additive constants.
+The Greedy strategy presented in Section \ref{sec:greedy} assumes that $d$ bins are chosen uniformly and independently at random. V\"ocking \cite{VOC03} was the first to study the impact of non-uniform and dependent selections of the $d$ bins. Surprisingly, a multiple-choice BiB strategy with a non-uniform and independent selection of the $d$ bins, such as the Always-go-left algorithm introduced in \cite{VOC03}, achieves better \cite{BCSV06} load balancing than the Greedy scheme.
 
-The Always-go-left algorithm works as follows. Partition the $n$ bins into $d$ groups, each of size $\left\lfloor \frac{n}{d}\right\rfloor$ or $\left\lceil\frac{n}{d}\right\rceil$ . We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. In case a tie occurs, put the ball into the left-most bin. That is, assuming a fixed ordering of bins $b_i$ for $1 \leq i \leq n$, from among the $d' \leq d$ bins with the same minimal load, put the ball into the bin with smallest index $i$.
+The Always-go-left algorithm works as follows. Partition the $n$ bins into $d$ groups, each of size $\frac{n}{d}$. We select one from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. For tie-breaking, we assume a fixed ordering of bins $b_i$ for $1 \leq i \leq n$ and put the ball into the bin with smallest index $i$ among those with same minimal load.
 
 \begin{comment}
 \begin{theorem}
@@ -218,36 +216,35 @@ w.h.p.~for all $t$ \cite{VOC03}.
 \label{sec:analysis}
 In this section, we will prove Theorems \ref{theorem:greedy} and \ref{theorem:aglm} in detail, using witness trees to provide an upper bound for the event that a bin contains too many balls. Our analysis closely follows the proofs in \cite{VOC03}.
 
-We say that a bad event occurs when the maximum load exceeds some given threshold value. When such a bad event occurs we construct an activated witness tree. In other words, the activation of a witness tree is implied by a bad event. The probability for the existence of such an activated witness tree is an upper-bound for the probability that the associated bad event occurs.
+When the maximum load exceeds some given threshold value we say that a bad event occurs and construct an activated witness tree. Thus, the activation of a witness tree is implied by a bad event. The probability for the existence of such an activated witness tree upper-bounds the probability that the associated bad event occurs.
 
-Throughout this section, location will denote the a specific place in one of the $n$ bins. A location of a ball $b$ refers not only to a bin, but also to the number of balls already in this bin at the time of insertion of ball $b$.
+Throughout this section, location will denote a specific place in one of the $n$ bins. A location of a ball $b$ refers to a specific bin and to the number of balls already in it (at the time of insertion of ball $b$).
 
-We will prove the bounds for $m=n$ for both the Greedy and the Always-go-left scheme in Sections \ref{sec:analysis:greedy} and \ref{sec:analysis:alg}, respectively. However, we use a simplifying Assumption \ref{assumption:independence} in those two sections to provide a more clear presentation of the proof technique. Section \ref{sec:analysis:nondistinctBalls} will extend these proofs to remove the simplifying assumption we make initially. The witness tree method can be used to show that the same bounds hold for case where $m > h n$ for some constant $h > 1$ too, but we do not give such a proof in this survey. Instead, we refer the interested reader to V\"ocking \cite{VOC03}. Berenbrink et al.~\cite{BCSV06} and Talwar et al.~\cite{TW13} provide proofs the heavily loaded case using different approaches.
+We will prove the bounds for $m=n$ for both the Greedy and the Always-go-left scheme in Sections \ref{sec:analysis:greedy} and \ref{sec:analysis:alg}, respectively. However, we use a simplifying assumption (Assumption \ref{assumption:independence}) in those two sections to provide a more clear presentation of the proof technique. Section \ref{sec:analysis:nondistinctBalls} will extend these proofs to remove the simplifying assumption we make initially. The witness tree method can be used to show that the same bounds hold for case where $m > h n$ for some constant $h > 1$ too, but we do not give such a proof in this survey. Instead, we refer the interested reader to V\"ocking \cite{VOC03}. Berenbrink et al.~\cite{BCSV06} and Talwar et al.~\cite{TW13} provide proofs for the heavily loaded case using different approaches.
 
 \subsection{Greedy}
 \label{sec:analysis:greedy}
 
 \subsubsection{Symmetric witness trees}
 \label{sec:analysis:definitionSymWT}
-A symmetric witness tree of order $L$ is a complete $d$-ary tree with $d^{L}$ leaves. Each node $v$ represents a ball $b_v = \mathrm{ball}(v)$ . The nodes and edges of the witness tree represent events that may occur or not. The same ball may be represented by several nodes. However, initially we will make use of the following assumption in the analysis.
+A symmetric witness tree of order $L$ is a complete $d$-ary tree with $d^{L}$ leaves, where each node $v$ references a ball $b_v = \mathrm{ball}(v)$ and the nodes and edges of the witness tree represent events that may occur or not. In general, the same ball may be referenced by several nodes. However, initially we will make use of the following assumption in the analysis.
 \begin{assumption}
 \label{assumption:independence}
 All events represented by the nodes and edges of a witness tree are stochastically independent. 
 \end{assumption}
-In other words, we assume that no ball is referenced by more than one node of a witness tree. Obviously, a correct analysis will have to consider balls assigned to more than one node, but this simplifying assumption is useful to highlight the differences between the symmetric and asymmetric allocation schemes. Section \ref{sec:analysis:nondistinctBalls} will extend the analysis to witness trees with redundant balls.
+In other words, we assume that no ball is referenced by more than one node of a witness tree. A correct analysis will have to consider balls assigned to more than one node, but this simplifying assumption is useful to highlight the differences between the symmetric and asymmetric allocation schemes. Section \ref{sec:analysis:nondistinctBalls} will extend the analysis to witness trees with redundant balls.
 
 We define edge and leaf events:
 \begin{compactitem}
-\item \emph{Edge event:} Consider some edge $e = (u,v)$ of the witness tree, s.t.~$v$ is the $i$-th child of $u$. Then $e$ represents the event that the $i$-th location of the ball $b_u = \mathrm{ball}(u)$ points to the same bin as one of the locations of the ball $b_v = \mathrm{ball}(v)$. 
-%$\todo{illustrate}
-\item \emph{Leaf event:} A leaf node $v$ of the witness tree represents the event that each of the $d$ locations of the ball $b_v = \mathrm{ball}(v)$ points to a bin that contains at least three additional balls (i.e., balls that are not represented by a node of the tree) at the time of the insertion of the ball $b_v$.
-%\todo{illustrate}
+\item \emph{Edge event:} Consider some edge $e = (u,v)$ of the witness tree, s.t.~$v$ is the $i$-th child of $u$. Then $e$ represents the event that the $i$-th location of the ball $b_u$ to the same bin as one of the locations of the ball $b_v$. 
+\item \emph{Leaf event:} A leaf node $v$ of the witness tree represents the event that each of the $d$ locations of the ball $b_v$ points to a bin that contains at least three additional balls (i.e., balls that are not represented by a node of the tree), at the time of the insertion of the ball $b_v$.
+
 \end{compactitem}
-The definition for leaf events refers to bins containing some number of balls at some specified time. To avoid dependencies, the crucial trick is that edge events are defined in terms of the alternative locations of balls, not by their finally assigned bin. 
+The definition for leaf events refers to bins containing some number of balls at some specified time. To avoid dependencies, the crucial trick is to defone edge events in terms of the possible locations of balls, not by their finally assigned bin. 
+
+The following constraints have to be fulfilled by a witness tree. The ball $b_r$ that is represented by the root node $r$ has to exist at time step $t$ and each ball $b_v$ represented by a node $v \neq r$ and parent node $u$ has to exist when the ball $b_u$ is inserted.
 
 We say that an edge or leaf event is activated if the associated event occurs. A witness tree is activated when all its edge and leaf events are activated. 
-
-The following constraints have to be fulfilled by an assignment. The ball $b_r$ that is represented by the root node $r$ has to exist at time step\footnote{As defined in Theorem \ref{theorem:greedy}} $t$ and each ball $b_v$ represented by a node $v \neq r$ and parent node $u$ has to exist when the ball $b_u = \mathrm{ball}(u)$ is inserted.
 
 Assume the bad event that some bin contains more than $L+3$ balls at time $t$ occurs. We will use an activated symmetric witness tree of order $L$ to witness this event and provide an upper-bound for the occurrence of the event. Thus, we have to show that the existence of a bin $x$ containing at least $L+4$ balls implies the existence of an activated witness tree of order $L$. 
 
@@ -259,38 +256,38 @@ When using the Greedy algorithm to put balls into bins and arbitrary $L > 0$, a 
 We construct a witness tree for the event that some bin contains $L+4$ balls as follows:
 \begin{compactenum}
 \item The topmost ball $b_1$ in bin $x$ is assigned to the root node $v_r$. Note that $b_1$ is the last ball that was inserted into the bin $x$.
-\item Since the Greedy-scheme puts ball $b_1$ into bin $x$ only if each of the $d$ sampled locations contain at least the same number of balls at bin $x$, we can conclude that each of the $d$ locations contain at least $L+3$ balls at the time ball $b_1$ was inserted. Thus, the $d$ children of the root node are assigned the topmost balls of these $d$ bins.
+\item Since the Greedy-scheme puts ball $b_1$ into bin $x$ only if each of the $d$ sampled locations containd at least the same number of balls as bin $x$, we can conclude that each of the $d$ locations containd at least $L+3$ balls at the time ball $b_1$ was inserted. Thus, the $d$ children of the root node are assigned the topmost balls of these $d$ bins.
 \item Consider these child nodes and continue the assignment of the previous step recursively until the leaf nodes are reached.  
 \end{compactenum}
 
-By construction, all edge events of the witness tree are activated. Note that the ball assigned to the root node is on top of at least $L+3$ balls. The balls assigned to the root's child node are each on top of $L+2$ or more balls and so on. It follows that each ball assigned to a leaf node is on top of at least 3 other balls, implying that the $d$ locations of each leaf node point to bins with at least 3 balls in each. This implies the activation of all leaf nodes of the witness tree.
+By construction, all edge events of the witness tree are activated. Note that the ball assigned to the root node is on top of at least $L+3$ balls. The balls assigned to the root's child node are each on top of $L+2$ or more balls and so on. It follows that each ball assigned to a leaf node is on top of at least 3 other balls, implying that the $d$ locations of each leaf node point to bins with at least 3 balls in each of them. This implies the activation of all leaf nodes of the witness tree.
 \end{proof}
 
 \subsubsection{Probability of activation}
 \label{sec:analysis:probabilitySymWT}
-In this section, we derive the probability that some witness tree of order $L$ is activated, which gives an upper bound for the probability that the maximum load is $L+3$ at some time $t$. 
+In this section, we derive the probability that some witness tree of order $L$ is activated, which gives an upper bound for the probability that the maximum load is greater than $L+3$ at some time $t$. 
 
 \begin{lemma}\label{lemma:swt:activation}
 For some arbitrary $\alpha$ and large enough $L$, the activation of a symmetric witness tree of order $L$ occurs with probability at most $n^{-\alpha}$.
 \end{lemma}
-Speaking less formaly, Lemma \ref{lemma:swt:activation} states that the for large enough $L$, the activation of a symmetric witness tree is unlikely.
+Speaking less formaly, Lemma \ref{lemma:swt:activation} states that for large enough $L$, the activation of a symmetric witness tree is unlikely.
 
 \begin{proof}
 The probability $p_{swt}$ that some symmetric witness tree of order $L$ is activated is bounded by the number of witness trees $w$ times the upper bound on the probability $p_1$ that a specific witness tree is activated.
 
-The number of different witness trees $w$ is given by the number of ways to assign balls to its nodes. The ball assigned to the root node can be chosen from at most $n$ balls, since by definition (Theorem \ref{theorem:greedy}), at most $n$ balls are in the bins at any time $t$ and a ball assigned to a node has to be in some bin at time $t$. Each child node of the root is assigned one out of at most $n$ balls too by the same argument. Applying this argument for each level of the witness tree, there are at most $w = n^k$ possibilities to assign balls to a witness tree, with $k = d^{L+1}-1$ being the number of nodes in a $d$-ary witness tree of order $L$.
+The number of different witness trees $w$ is given by the number of ways to assign balls to its nodes. The ball assigned to the root node can be chosen from at most $n$ balls, since by definition (Theorem \ref{theorem:greedy}), at most $n$ balls are in the bins at any time $t$ and a ball assigned to a node has to be in some bin at time $t$. By the same argument, each child node of the root is assigned one out of at most $n$ balls too. Applying this argument for each level of the witness tree, there are at most $w = n^k$ possibilities to assign balls to a witness tree, with $k = d^{L+1}-1$ being the number of nodes in a $d$-ary witness tree of order $L$.
  
-An edge\footnote{where $v$ is the $i$-th child of $u$} $(u, v)$ is activated with probability at most $d/n$, which is the probability that the $i$-th location of the ball $b_u = \mathrm{ball}(u)$ points to a particular location of the ball $b_v = \mathrm{ball}(v)$ times the number of locations $d$. This implies a probability of at most
+An edge\footnote{where $v$ is the $i$-th child of $u$} $(u, v)$ is activated with probability at most $d/n$, which is the probability that the $i$-th location of the ball $b_u$ points to a particular location of the ball $b_v$ times the number of locations $d$. This implies a probability of at most
 \begin{align*}
 p_e = \left(\frac{d}{n}\right)^{k-1}
 \end{align*} 
-or the event that all $k-1$ edges of a witness tree are activated. Note that  the assumption that all balls are distinct (Assumption \ref{assumption:independence}) implies that all edge events are independent.
+for the event that all $k-1$ edges of a witness tree are activated. Note that  the assumption that all balls are distinct (Assumption \ref{assumption:independence}) implies that all edge events are independent.
 
-The probability that a leaf event is activated is bounded above by $3^{-d}$. Recall that by the definition of leaf events, each of the $d$ locations of the ball $b_{vl} = \mathrm{ball}(v_l)$ has to point to a bin with at least 3 additional balls in it. The number of those bins is bounded by $\lfloor n/3 \rfloor$ at all time steps $t$, implying a probability of at most 
+The probability that a leaf event is activated is bounded above by $3^{-d}$. Recall that by the definition of leaf events, each of the $d$ locations of a ball $b_{v_l}$, where $v_l$ is a leaf node, has to point to a bin with at least 3 additional balls in it. The number of those bins is bounded by $\lfloor n/3 \rfloor$ at all time steps $t$, implying a probability of at most 
 \begin{align*}
 \frac{n/3}{n} = \frac{1}{3}
 \end{align*}
-that one such bin is chosen. This implies a probability of at most $3^{-d}$ that all $d$ bins are chosen among those with at least 3 additional bins in them. Thus, the probability that all leaf events are activated is at most $p_l = 3^{-d l}$, where $l = d^{L}$ is the number of leaves in a witness tree.
+that one such bin is chosen. This implies a probability of at most $3^{-d}$ that all $d$ bins are chosen from among those with at least 3 additional balls in them. Thus, the probability that all leaf events are activated is at most $p_l = 3^{-d l}$, where $l = d^{L}$ is the number of leaves in a witness tree.
 
 Thus, the probability that an activated symmetric witness tree exists at time $t$ is at most 
 \begin{align*}
@@ -326,12 +323,13 @@ p_{swt} &\leq n  2^{{-d}^{\log_d\log_2 n + \log_d\left(1+\alpha\right)}} \\
 Thus, for any constant $\alpha$ and large enough $L$ as specified in Equation \ref{eqn:swt:chooseL} the probability that a symmetric witness tree of order $L$ is activated is bounded above by $p_{swt }\leq n^{-\alpha}$.
 \end{proof}
 
-Since the probabilty for the activation of a symmetric witness tree of order $L$ upper-bounds the probability of the bad event that some bin contains more than $L+3$ balls, Equation \ref{eqn:swt:result} also is an upper bound for the latter. Note that Equation \ref{eqn:swt:chooseL} can be written as
+Since the probabilty for the activation of a symmetric witness tree of order $L$ upper-bounds the probability of the bad event that some bin contains more than $L+3$ balls, Equation \ref{eqn:swt:result} is also an upper bound for the latter. Note that Equation \ref{eqn:swt:chooseL} can be written as
 \begin{align*}
 L &\geq  \frac{\ln\log_2 n}{\ln d} + \frac{\ln(1+\alpha)}{\ln d} \\
    &= \frac{\ln \log_2 n}{\ln d}  \left(1 + \frac{\ln\left(1+\alpha\right)}{\ln \log_2 n}\right) \\
   &=  \frac{\ln \ln n}{\ln d}  \left( 1+ o\left( 1\right)\right) \neqn{swt:boundL}
 \end{align*}
+
 This proves Theorem \ref{theorem:greedy} for the case $m=n$, under the assumption that all events are stochastically independent (Assumption \ref{assumption:independence}). \qed
 
 \subsection{Always-go-left}
