@@ -66,7 +66,7 @@ for the case $m=n$, with high probability\footnote{We say that an event $\mathca
 \begin{align*}
 \load\in \Theta\left(\frac{\ln n}{\ln \ln n}\right).
 \end{align*}
-Note that, since the average load is 1, $\delta \in \Theta\left( L_{max} \right)$ in this case. For the heavily loaded case, w.h.p.~the maximum gap is ~\cite{RS98}
+Note that, since the average load is 1, $\delta \in \Theta\left( L_{max} \right)$ in this case. For the heavily loaded case, w.h.p., the maximum gap is ~\cite{RS98}
 \begin{align*}
 \delta = \Theta\left(\sqrt{\frac{m  \ln n}{n}}\right).
 \end{align*}
@@ -115,7 +115,7 @@ It is easy to see how the BiB model can be used: Assuming a perfect hash functio
 \label{sec:loadbalancing}
 The following scenario is a typical application of online load balancing: Consider $n$ servers (such as file-, database- or network servers) and $m$ requests. For simplicity, assume that each task can be handled by any server and that all tasks are of the same size, i.e., they require the same execution time.
 
-To maximize the throughput of the servers, a uniform distribution of tasks to servers is desirable. While a central dispatcher can easily achieve this, it also poses a bottleneck within a distributed system, since querying $m$ servers for their current load involves significant overhead (e.g., sending a message to each server and waiting for the reply). As with hashing, the BiB model can be applied easily: we need to assign tasks (the balls) to servers (the bins). Assuming tasks are assigned to servers uniformly and independently at random, the two-choice paradigm is directly applicable: If each client samples two random servers for their load and sends its request to the least loaded server, the overhead is comparatively small and the difference in load on the $n$ servers is at most $O\left(\ln \ln n\right)$, w.h.p.,~\cite{KLM92,RS98, MRS01}.  
+To maximize the throughput of the servers, a uniform distribution of tasks to servers is desirable. While a central dispatcher can easily achieve this, it also poses a bottleneck within a distributed system, since querying $m$ servers for their current load involves significant overhead (e.g., sending a message to each server and waiting for the reply). As with hashing, the BiB model can be applied easily: we need to assign tasks (the balls) to servers (the bins). Assuming tasks are assigned to servers uniformly and independently at random, the two-choice paradigm is directly applicable: If each client samples two random servers for their load and sends its request to the least loaded server, the overhead is comparatively small and the difference in load on the $n$ servers is at most $O\left(\ln \ln n\right)$, w.h.p., \cite{KLM92,RS98, MRS01}.  
 
 \subsection{Emulation of shared memory machines on distributed memory machines}
 \label{sec:DMM}
@@ -160,7 +160,7 @@ Consider any sequence of insertions and deletions s.t.~at most $n$ balls are in 
 \begin{align*}
 \load = \frac{\ln \ln n}{\ln d}+ O(1)
 \end{align*}
-w.h.p.~for all $t$~\cite{ABKU99, BCSV06}.
+w.h.p., for all $t$~\cite{ABKU99, BCSV06}.
 \end{theorem}
 
 This result is remarkable in several ways:
@@ -192,7 +192,7 @@ Consider any sequence of insertions and deletions s.t.~at most $n$ balls are in 
 \begin{align*}
 \load = \frac{\ln\ln n}{d  \ln \Phi_d} + O(1)
 \end{align*}
-w.h.p.~for all $t$~\cite{VOC03}.
+w.h.p.,~for all $t$~\cite{VOC03}.
 \end{theorem}
 
 \section{Analysis}
@@ -500,11 +500,11 @@ In this paper we have presented two different multiple-choice BiB placement algo
 \begin{align*}
 \delta = \frac{\ln\ln n}{\ln d} + O(1)
 \end{align*}
-w.h.p.~and the Always-go-left scheme due to V\"ocking~\cite{VOC03}, which achieves a slightly better gap of
+w.h.p., and the Always-go-left scheme due to V\"ocking~\cite{VOC03}, which achieves a slightly better gap of
 \begin{align*}
 \delta = \frac{\ln \ln n}{d \ln \Phi_d} + O(1)
 \end{align*}
-w.h.p.~for all $m$. We used witness trees, a very useful technique in the BiB context, to prove these upper-bounds for the case $m=n$ in detail.
+w.h.p., for all $m$. We used witness trees, a very useful technique in the BiB context, to prove these upper-bounds for the case $m=n$ in detail.
 
 
 \appendix
