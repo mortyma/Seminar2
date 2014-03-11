@@ -3,6 +3,7 @@
 
 \usepackage{comment}
 \usepackage{hyperref}
+\usepackage{cite}
 %page boarders
 \usepackage[vmargin=3cm, hmargin=3cm]{geometry}
 \usepackage{float}
@@ -54,7 +55,7 @@ While most of this survey and the analyses focuses on the lightly loaded case wh
 
 \subsection{Single-choice BiB}
 \label{sec:single-choice}
-The \emph{single-choice} strategy is a simple allocation scheme for the BiB problem and chooses one bin uniformly and independently at random for each ball. Using this strategy, the maximum load of the fullest bin will be
+The \emph{Single-choice} strategy is a simple allocation scheme for the BiB problem and chooses one bin uniformly and independently at random for each ball. Using this strategy, the maximum load of the fullest bin will be
 \begin{comment}
 \footnote{A more accurate result exists: The maximum load is $\load = \Gamma^{-1}\left(n\right)\left(1+O\left(\frac{1}{\log \Gamma^{-1}\left(n\right)}\right)\right)$ \cite{G91}.}
 \end{comment}
@@ -65,107 +66,89 @@ for the case $m=n$, with high probability\footnote{We say that an event $\mathca
 \begin{align*}
 \load\in \Theta\left(\frac{\ln n}{\ln \ln n}\right).
 \end{align*}
-Note that, since the average load is 1, $\delta = L_{max}$ in this case. For the heavily loaded case, w.h.p.~the maximum gap is ~\cite{RS98}
+Note that, since the average load is 1, $\delta \in \Theta\left( L_{max} \right)$ in this case. For the heavily loaded case, w.h.p.~the maximum gap is ~\cite{RS98}
 \begin{align*}
 \delta = \Theta\left(\sqrt{\frac{m  \ln n}{n}}\right).
 \end{align*}
 
 \subsection{Multiple-choice BiB}
-Consider a variation of the  single-choice BiB strategy: For each ball, chose $d \geq 2$ bins independently and uniformly at random and place the ball into the least full bin. If there are multiple bins with the same minimal load, chose one among them uniformly and independently at random. This simple multiple-choice scheme, called the Greedy algorithm, achieves a gap
+Consider a variation of the  single-choice BiB strategy: For each ball, chose $d \geq 2$ bins independently and uniformly at random and place the ball into the least full bin. If there are multiple bins with the same minimal load, chose one among them uniformly and independently at random. This simple multiple-choice scheme, called the \emph{Greedy} algorithm, achieves a gap
 \begin{align*}
-\delta = \frac{\ln \ln n}{\ln d} + O(1)
+\delta = \frac{\ln \ln n}{\ln d} + O(1),
 \end{align*}
- w.h.p.~for all $m$~\cite{ABKU99}~\cite{BCSV06}.
- 
-This apparently minor change introduces an additional choice which leads to a significant reduction in the maximum load. 
+w.h.p., for all $m$~\cite{ABKU99, BCSV06}, i.e., this additional choice leads to an exponential reduction in the maximum load. 
 \begin{comment}
 Curiously, the exponential decrease in the gap is already achieved having just two choices (that is, $d=2$). Each additional choice decreases the bound for the maximum gap by just a constant factor~\cite{MRS01}. 
 \end{comment}
-Extensive research following the influential paper by Azar et al.~\cite{ABKU99}, who were the first ones to explicitly prove this phenomenon\footnote{For a brief history of the proof, which is quite interesting by itself, refer to Appendix \ref{sec:historyOfGreedy}.}, suggests that this two-choice paradigm is not just an artifact of the simple BiB model, but a general principle applicable to a variety of problems. 
+Extensive research following the influential paper by Azar et al.~\cite{ABKU99}, who were the first ones to explicitly prove this phenomenon\footnote{For a brief history of the proof, which is quite interesting by itself, refer to Appendix \ref{sec:historyOfGreedy}.}, suggests that this \emph{two-choice paradigm} is not just an artifact of the simple BiB model, but a general principle applicable to a variety of problems. 
 
-Consider the slightly more involved Always-go-left scheme: Suppose that the $n$ bins are partitioned evenly into $d$ groups, each of size\footnote{To simplify the presentation, we will assume that $d$ divides $n$ evenly in the remainder of this paper.} $\lfloor \frac{n}{d}\rfloor$ or $\left\lceil\frac{n}{d}\right\rceil$. We select one from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. For tie-breaking, we assume a fixed ordering of bins $b_i$ for $1 \leq i \leq n$ and put the ball into the bin with smallest index $i$ among those with same minimal load. Somewhat surprisingly, V\"ocking \cite{VOC03} showed that such a strategy employing asymmetric tie-breaking in combination with non-uniform bin selection reduces the bound for the gap to\footnote{The symbol $\Phi_d$ denotes a generalization of the golden ratio, based on generalized Fibonacci numbers. Refer to Appendix \ref{sec:fibonacci} for the definition.}
+Consider the slightly more involved \emph{Always-go-left} scheme: Suppose that the $n$ bins are partitioned evenly into $d$ groups, each of size $\lfloor \frac{n}{d}\rfloor$ or $\left\lceil\frac{n}{d}\right\rceil$ (To simplify the presentation, we will assume that $d$ divides $n$ evenly in the remainder of this survey). We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. For tie-breaking, we assume a fixed ordering of bins $i$ for $1 \leq i \leq n$ and put the ball into the bin with smallest index $i$ among those with same minimal load. Somewhat surprisingly, V\"ocking \cite{VOC03} showed that such a strategy employing asymmetric tie-breaking in combination with non-uniform bin selection, reduces the bound for the gap to\
 \begin{align*}
-\delta = \frac{\ln\ln n}{d  \ln \Phi_d} + O(1)
+\delta = \frac{\ln\ln n}{d  \ln \Phi_d} + O(1),
 \end{align*}
-w.h.p.\ for all $m$. Not only is this a significant reduction of the asymptotic bound, V\"ocking was able to show that the Always-go-left strategy is optimal up to additive constants \cite{VOC03}.
+w.h.p., for all $m$. (The symbol $\Phi_d$ denotes a generalization of the golden ratio, based on generalized Fibonacci numbers. Refer to Appendix \ref{sec:fibonacci} for the definition.) Not only is this a significant reduction of the asymptotic bound, V\"ocking was able to show that the Always-go-left strategy is optimal up to additive constants \cite{VOC03}.
 
-This survey is organized as follows: We give a basic classification of BiB games in Section \ref{sec:classification}, to provide some overview of the different directions in research as well as possibilities of abstraction from applications, some of which are listed in Section \ref{sec:applications}. In the remaining sections of this paper we will consider the model given in Section \ref{sec:model}, which can be classified as a sequential, finite and dynamic process with random deletions. Section \ref{sec:multiple-choice} starts with a brief definition of three different classes of random placement strategies and then continues with the presentation of the two placement algorithms outlined in the introduction: The Greedy algorithm (Section \ref{sec:greedy}) and the Always-go-left algorithm (Section \ref{sec:AlwaysGoLeft}). Section \ref{sec:analysis} is the core of this survey and will give a detailed analysis of both strategies for the case $m=n$. We will use a proof technique called witness trees, which allows for a clean analysis of both problems and is applicable to a wide variety of BiB scenarios. Other proof techniques such as layered induction and a differential equations approach have been used. See, e.g., \cite{MRS01} for an overview of different proof techniques for the BiB problem. The proof for arbitrarily large $m$ is more complicated and we refer the interested reader to \cite{BFZR08} and \cite{TW13}.
-
-\begin{comment}
-In Section \ref{sec:strategies}, we will provide asymptotic bounds for the ad dative gap of this strategy, which we will then use to devise more complex strategies that significantly reduce these bounds. 
-\end{comment}
-
-\begin{comment}
-These result may sometimes seem surprising, which is why we will denote a significant part of this article to demonstrate proofs in detail. This proof technique may be useful for devising asymptotic bounds for the additive gap of different BiB scenarios and strategies.
-\end{comment}
-
+\emph{Outline:}
+In Section \ref{sec:classification}, we give a basic classification of BiB games to provide an overview of the research, followed by some applications in Section \ref{sec:applications}. Section \ref{sec:model} gives a detailed definition of the model we use, which can be classified as a sequential, finite and dynamic process with random deletions. In Section \ref{sec:multiple-choice} we provide a brief definition of three different classes of random placement strategies and present two placement algorithms outlined in the introduction: The Greedy algorithm (Section \ref{sec:greedy}) and the Always-go-left algorithm (Section \ref{sec:AlwaysGoLeft}). Section \ref{sec:analysis} contains a detailed analysis of both strategies for the case $m=n$. 
 
 \section{Classification}
 \label{sec:classification}
 Several different variations of this problem exist, which may be classified as follows:
 \begin{compactitem}
-\item In a \emph{sequential} process, the balls arrive one after another. A  ball is dealt with only after the previous ball has been placed. Conversely, in a \emph{parallel} process, balls arrive in sets and the balls in one set are dealt with simultaneously \cite{ABS98}. 
-\item In a \emph{static} problem, the balls are placed into the bins and no balls are ever removed whereas in a \emph{dynamic} problem balls can also be removed from the system. In the random deletions model, for each newly inserted ball one is chosen uniformly and independently at random and removed from the system \cite{ABKU99} \cite{MRS01}. More elaborate schemes exists: An oblivious adversary specifies the sequence of insertions and deletions of balls in advance, without any knowledge of their placement \cite{CFM+98}. Another approach was studied by Adler et al.~\cite{ABS98} in the context of the parallel BiB problem: In each bin, the balls are stored in FIFO-order and at every time step the first ball in each of the bins is deleted. 
-\item A \emph{finite} process is analyzed for a given time interval that is known beforehand, whereas for an \emph{infinite} process, a placement and a deletion process is defined over an infinite time span \cite{ABS98}.
-\item In the lightly loaded case, $m$ is in the order of $n$, whereas in the heavily loaded case, $m$ is arbitrarily large. We will assume that $m = n$ in the lightly loaded case. 
+\item In a \emph{sequential} process, the balls arrive one after another and ball is dealt with only after the previous one has been placed. Conversely, in a \emph{parallel} process, balls arrive in sets and the balls in one set are dealt with simultaneously \cite{ABS98}. 
+\item In a \emph{static} problem, the balls are placed into the bins and no balls are ever removed, whereas in a \emph{dynamic} problem balls may also be removed from the system. In the random deletions model, for each newly inserted ball another one is chosen uniformly and independently at random and removed from the system \cite{ABKU99, MRS01}. More elaborate schemes exists: An oblivious adversary might specify the sequence of insertions and deletions of balls in advance, without any knowledge of their placement \cite{CFM+98}. Adler et al.~\cite{ABS98} studied another approach in the context of the parallel BiB problem, where the balls are stored in FIFO-order and at every time step the first ball in each of the bins is deleted. 
+\item A \emph{finite} process is analyzed for a given time interval that is known beforehand, whereas for an \emph{infinite} one, placements and deletions are given for an infinite time span \cite{ABS98}.
+\item In the lightly loaded case, $m$ is in the order of $n$, whereas in the heavily loaded case, $m$ is arbitrarily large. W.l.o.g.~we will assume that $m = n$ for the lightly loaded case. 
 \end{compactitem}
 
 \section{Applications}
 \label{sec:applications}
-The two-choice paradigm applied to the BiB model has several useful applications, some of which we will outline here. Hashing (Section \ref{sec:hashing}), online load balancing (Section \ref{sec:loadbalancing}) and the emulation of shared memory machines on distributed memory machines \ref{sec:DMM}) share a close relation to load balancing. Section \ref{sec:circuitrouting} applies the BiB model and the two-choice paradigm in a different context, namely that of routing circuits in multi-stage interconnection networks with minimal congestion.
+The two-choice paradigm applied to the BiB model has several useful applications, some of which we will outline here. Hashing (Section \ref{sec:hashing}), online load balancing (Section \ref{sec:loadbalancing}) and the emulation of shared memory machines on distributed memory machines (Section \ref{sec:DMM}) share a close relation to load balancing. Section \ref{sec:circuitrouting} applies the BiB model and the two-choice paradigm to a different context, namely routing circuits in multi-stage interconnection networks with minimal congestion.
 
 \subsection{Hashing}
 \label{sec:hashing}
 A simple hash table implementation typically uses a single hash function to map elements to entries in a table. If more than one element is mapped to the same entry, all elements mapped to this table entry are stored in a chain, usually implemented as a linked list. The maximum time to search for an element is then proportional to the length of the longest chain in the hash table. 
 
-It is easy to see how the BiB idea can be applied: Assuming a perfect hash function\footnote{i.e., each element is mapped to one of the $n$ table entries uniformly and independently at random}, the elements are balls to be mapped to table entries or bins, implying a worst case look-up time of $\Theta\left(\frac{\ln n}{\log \ln n}\right)$ w.h.p. Applying the two-choice paradigm by using two hash functions and mapping elements to the least full of two table entries implies a look-up time of $\Theta\left(\ln \ln n\right)$ w.h.p. This approach is easy to parallelize, it does not require re-hashing of data and requires only two hash functions \cite{ABKU99} \cite{MRS01}.
+It is easy to see how the BiB model can be used: Assuming a perfect hash function\footnote{I.e., each element is mapped to one of the $n$ table entries uniformly and independently at random}, the elements can be seen as balls to be mapped to table entries (bins), implying a worst case look-up time of $\Theta\left(\frac{\ln n}{\log \ln n}\right)$, w.h.p., where $n$ denotes the number of elements. Applying the two-choice paradigm by using two hash functions and mapping elements to the least full of two table entries, results in a look-up time of $\Theta\left(\ln \ln n\right)$, w.h.p. This approach is easy to parallelize, it does not require re-hashing of data and requires only two hash functions \cite{ABKU99, MRS01}.
 
 \subsection{Online load balancing}
 \label{sec:loadbalancing}
 The following scenario is a typical application of online load balancing: Consider $n$ servers (such as file-, database- or network servers) and $m$ requests. For simplicity, assume that each task can be handled by any server and that all tasks are of the same size, i.e., they require the same execution time.
 
-To maximize the throughput of the servers, a uniform distribution of tasks to servers is desirable. While a central dispatcher dispatcher can easily achieve this, it also poses a bottleneck within a distributed system since querying $m$ servers for their current load involves significant overhead (e.g., sending a message to each server and waiting for the reply). As with hashing, the BiB model can be applied easily: we need to assign tasks (the balls) to servers (the bins). Assuming tasks are assigned to servers uniformly and independently at random, the two-choice paradigm is directly applicable: If each client samples two random servers for their load and sends its request to the least loaded server, the overhead is comparatively small and the difference in load on the $n$ servers is at most$O\left(\ln \ln n\right)$ w.h.p. \cite{KLM92} \cite{RS98} \cite{MRS01}.  
+To maximize the throughput of the servers, a uniform distribution of tasks to servers is desirable. While a central dispatcher can easily achieve this, it also poses a bottleneck within a distributed system, since querying $m$ servers for their current load involves significant overhead (e.g., sending a message to each server and waiting for the reply). As with hashing, the BiB model can be applied easily: we need to assign tasks (the balls) to servers (the bins). Assuming tasks are assigned to servers uniformly and independently at random, the two-choice paradigm is directly applicable: If each client samples two random servers for their load and sends its request to the least loaded server, the overhead is comparatively small and the difference in load on the $n$ servers is at most $O\left(\ln \ln n\right)$, w.h.p., \cite{KLM92,RS98, MRS01}.  
 
 \subsection{Emulation of shared memory machines on distributed memory machines}
 \label{sec:DMM}
-The Parallel Random Access Machine model (PRAM) ~\cite{P03} is a high level abstraction of a shared memory machine, in which memory access by any processor to any memory location is assumed to require constant time. It is especially useful for the study of parallel algorithms. However, a PRAM is much harder to realize in hardware than a Distributed Memory Machine (DMM). Thus, ways to emulate a PRAM on a DMM have been studied extensively. Such an emulation distributes the processors and memory cells of the PRAM to the processors and memory modules (typically one per processor) of the DMM with the goal to reduce the slowdown of the emulation, which is the time the DMM requires to simulate one step of the PRAM. Each memory module can handle only one memory access at a time step. More accesses to the same module will result in memory contention. The BiB idea is useful for managing communication between the processors and the memory modules such that memory contention is minimal. For details, see Karp et al.~\cite{KLM92} and the papers referenced there. 
+The Parallel Random Access Machine model (PRAM) ~\cite{P03} is a high level abstraction of a shared memory machine, in which memory access by any processor to any memory location is assumed to require constant time. It is extremely useful for the study of parallel algorithms. However, a PRAM is much harder to implement in hardware than a Distributed Memory Machine (DMM). Thus, ways to emulate a PRAM on a DMM have been studied extensively. Such an emulation distributes the processors and memory cells of the PRAM to the processors and memory modules (typically one per processor) of the DMM, with the goal to minimize the slowdown of the emulation, i.e., the time the DMM requires to simulate one step of the PRAM execution. Each memory module can handle only one memory access at a time step and more accesses to the same module will result in memory contention. The two-choice paradigm is useful for managing communication between the processors and the memory modules such that memory contention is minimal \cite{KLM92}.
  
 \subsection{Low congestion circuit routing}
 \label{sec:circuitrouting}
-In multi-stage interconnection networks, virtual circuit-switching is used to route communication. For simplicity, we consider the permutation routing problem, where one request originates at each of the $n$ input nodes and one request is destined for each of the $n$ output nodes and assume a butterfly network as the underlying interconnection network~\cite{CLR09}. Then, the congestion is the maximum number of paths that are routed through a network link. The goal of a circuit routing algorithm is to to allocate paths for all $n$ communication requests such that congestion is minimized.
+In multi-stage interconnection networks, virtual circuit-switching is used to route communication. For simplicity, we consider the permutation routing problem, where one request originates at each of the $n$ input nodes and one request is destined for each of the $n$ output nodes and we assume a butterfly network as the underlying interconnection network~\cite{CLR09}. The congestion is the maximum number of paths that are routed through a network link and the goal of a circuit routing algorithm is to to allocate paths for all $n$ communication requests such that link congestion is minimized.
 
-In this context, Valiant's paradigm \cite{V82} states that any such permutation routing problem can be solved by transforming it into two problems: First, find a path for each request to an intermediate destination chosen uniformly and independently at random. Next, find a path from the intermediate to the actual destination. This routing technique is analogous to the single-choice BiB problem where each communication request (or ball) chooses an intermediate destination (a bin) at random. In this analogy, the congestion achieved by Valiant's paradigm corresponds to the maximum load in the BiB model, thus implying a bound of $\Theta\left(\log \log n\right)$ on the congestion w.h.p. \cite{CMM+98} \cite{MRS01}. 
-
-Applying the two-choice paradigm in this context is somewhat more involved. The interested reader may find more details in \cite{CMM+98}.
+In this context, Valiant's paradigm \cite{V82} states that any such permutation routing problem can be solved by transforming it into two problems: First, find a path for each request to an intermediate destination chosen uniformly and independently at random. Next, find a path from the intermediate to the actual destination. This routing technique is analogous to the single-choice BiB problem where each communication request (or ball) chooses an intermediate destination (a bin) at random.
+Extensive research \cite{CMM+98,MRS01} shows that by applying the two-choice paradigm, the link congestion can be bounded by $\Theta\left(\log \log n\right)$ , w.h.p.
 
 \section{BiB model}
 \label{sec:model}
-Although several different variants of the BiB problem exist, we will focus on a very basic model to highlight the crucial ideas in the placement strategies and their analyses. which we will base on a sequential, infinite and dynamic process using an oblivious adversary. The adversary provides a sequence $\sigma = \sigma_1 \sigma_2 \dots$, where $\sigma_t$ represents a request for a ball $b_d$ to be deleted and a different ball $b_a$ to be added to the bins at time step $t$. In our model, the ball $b_d$ associated with some request $\sigma_t$ is deleted at the beginning of time step $t$. Next, the ball $b_a$ has to be placed into one of the $n$ bins without knowledge of the following requests $\sigma_{t+1}$, $\sigma_{t+2}\dots$. This infinite sequence of insertions and deletions is fixed in advance and is thus independent of previously allocated balls and any decisions made by the allocation algorithm. We assume that at any time $t$ at most $m = n$ balls are in the bins.
+Although several different variants of the BiB problem exist, we will focus on a basic model to highlight the crucial ideas in the placement strategies and their analyses. They are based on a sequential, infinite and dynamic process that uses an oblivious adversary, which provides a sequence $\sigma = \sigma_1 \sigma_2 \dots$, where $\sigma_t = (d_t, a_t)$ represents a request for a ball $d_t$ to be deleted and a different ball $a_t$ to be added to the bins at time step $t$. In our model, the ball $b_d$ associated with some request $\sigma_t$ is deleted at the beginning of time step $t$. Next, the ball $b_a$ has to be placed into one of the $n$ bins without knowledge of the following requests $\sigma_{t+1}$, $\sigma_{t+2}\dots$. This infinite sequence of insertions and deletions is fixed in advance and is thus independent of previously allocated balls and any decisions made by the allocation algorithm. We assume that at any time $t$ at most $m = n$ balls are in the bins.
 
 \section{Multiple-choice BiB}
 \label{sec:multiple-choice}
-The single-choice BiB strategy (Section \ref{sec:single-choice}) chooses one bin uniformly and independently at random for each ball. A multiple-choice BiB strategy generalizes this idea by  choosing $d \geq 2$ bins and placing the ball into the least full bin. Depending on how the $d$ locations are sampled, we distinguish three classes of placement algorithms \cite{VOC03}. 
+The single-choice BiB strategy (Section \ref{sec:single-choice}) chooses one bin uniformly and independently at random for each ball. A multiple-choice BiB strategy generalizes this idea by  choosing $d \geq 2$ bins and placing the ball into the least full bin. We distinguish placement algorithms depending on how the $d$ locations are sampled \cite{VOC03}. 
 
 \subsection{Classes of random placement strategies}
 \label{sec:classesOfPlacement}
-Let $B$ be the set of bins $\{1,2...n\}$ and $B^{d}$ be the sample space. The three classes of algorithms are distinguished by the way the $d$ candidate bins are chosen for each ball:
-\begin{compactitem}
-\item  Class 1: \emph{Uniform and independent.} Choose each of the $d$ bins for a ball uniformly and independently at random from the set of bins $B$. This implies the probability distribution for the selection of the i-th balls being
+Let $B$ be the set of bins $\{1,2,...,n\}$ and $B^{d}$ be the sample space. Placement algorithms are distinguished by the way the $d$ candidate bins are chosen for each ball:
+\begin{description}
+\item [Uniform and independent.] Choose each of the $d$ bins for a ball uniformly and independently at random from the set of bins $B$. Thus, the probability that any specifc bin $b$ is choosen for the $i$-th balls is
 \begin{align*}
-D_i: B \rightarrow \frac{1}{n}
+\Pr[\mathrm{bin}\;b\;\mathrm{choosen}] = \frac{1}{n}
 \end{align*}
-\item Class 2: \emph{Non-uniform and independent.} Choose the i-th bin from $B$ independently at random according to some probability distribution: 
-\begin{align*}
-D_i: B \rightarrow \left[0,1\right]
-\end{align*}
-
-\item Class 3: \emph{Non-uniform and dependent.} Choose the $d$ bins for a ball from $\Omega$ according to some probability probability distribution:
-\begin{align*}
-D: B^{d} \rightarrow \left[0,1\right]
-\end{align*}
-\end{compactitem} 
+\item [Non-uniform and independent.] Choose the $i$-th bin from $B$ independently at random according to some probability distribution: 
+\item [Non-uniform and dependent.] Choose the $d$ bins for a ball from the sample space according to some probability probability distribution:
+\end{description}
  
-We will discuss two different multiple-choice placement strategies: The Greedy algorithm (Section \ref{sec:greedy}) belongs to class 1, whereas the Always-go-left scheme (Section \ref{sec:AlwaysGoLeft}) uses a non-uniform and independent selection of $d$ bins and thus belongs to class 2.
+We will discuss two different multiple-choice placement strategies: The Greedy algorithm (Section \ref{sec:greedy}), belonging to class 1, and the Always-go-left scheme (Section \ref{sec:AlwaysGoLeft}), which uses a non-uniform and independent selection of $d$ bins and thus belongs to class 2.
 
 \subsection{The Greedy scheme}
 \label{sec:greedy}
@@ -177,7 +160,7 @@ Consider any sequence of insertions and deletions s.t.~at most $n$ balls are in 
 \begin{align*}
 \load = \frac{\ln \ln n}{\ln d}+ O(1)
 \end{align*}
-w.h.p.~for all $t$ \cite{ABKU99} \cite{BCSV06}.
+w.h.p.~for all $t$ \cite{ABKU99, BCSV06}.
 \end{theorem}
 
 This result is remarkable in several ways:
@@ -218,9 +201,11 @@ In this section, we will prove Theorems \ref{theorem:greedy} and \ref{theorem:ag
 
 When the maximum load exceeds some given threshold value we say that a bad event occurs and construct an activated witness tree. Thus, the activation of a witness tree is implied by a bad event. The probability for the existence of such an activated witness tree upper-bounds the probability that the associated bad event occurs.
 
-Throughout this section, location will denote a specific place in one of the $n$ bins. A location of a ball $b$ refers to a specific bin and to the number of balls already in it (at the time of insertion of ball $b$).
+Throughout this section, ``location'' will denote a specific place in one of the $n$ bins. A location of a ball $b$ refers to a specific bin and to the number of balls already in it (at the time of insertion of ball $b$).
 
-We will prove the bounds for $m=n$ for both the Greedy and the Always-go-left scheme in Sections \ref{sec:analysis:greedy} and \ref{sec:analysis:alg}, respectively. However, we use a simplifying assumption (Assumption \ref{assumption:independence}) in those two sections to provide a more clear presentation of the proof technique. Section \ref{sec:analysis:nondistinctBalls} will extend these proofs to remove the simplifying assumption we make initially. The witness tree method can be used to show that the same bounds hold for case where $m > h n$ for some constant $h > 1$ too, but we do not give such a proof in this survey. Instead, we refer the interested reader to V\"ocking \cite{VOC03}. Berenbrink et al.~\cite{BCSV06} and Talwar et al.~\cite{TW13} provide proofs for the heavily loaded case using different approaches.
+We will prove the bounds for $m=n$ for both the Greedy and the Always-go-left scheme in Sections \ref{sec:analysis:greedy} and \ref{sec:analysis:alg}, respectively. However, we use a simplifying assumption (Assumption \ref{assumption:independence}) in those two sections to provide a more clear presentation of the proof technique. Section \ref{sec:analysis:nondistinctBalls} will extend these proofs to remove the simplifying assumption we make initially. 
+
+We will use a proof technique called witness trees, which allows for a clean analysis of both problems and is applicable to a wide variety of BiB scenarios. Other proof techniques such as layered induction and a differential equations approach have been used. See, e.g., \cite{MRS01} for an overview of different proof techniques for the BiB problem. The proof for arbitrarily large $m$ is more complicated and we refer the interested reader to \cite{BCSV06, TW13}.
 
 \subsection{Greedy}
 \label{sec:analysis:greedy}
@@ -367,7 +352,7 @@ Thus, our the root node of our witness tree will be labeled $(L, 1)$. Note that 
 Ball $b_v$ referenced by a node $v$ with label $(h,i)$ was placed in a bin belonging to group $i$. The bin contained at least $h+3$ other balls at the time of insertion of the ball $b_v$.
 \end{invariant}
 
-Let $x$ be the bin that contains $L+4$ balls. The root node gets assigned the topmost ball in bin $x$. Each of the $d$ locations of this ball points to a bin with at least $L+3$ balls in it, at the time of its insertion. These are the $d$ bins that were sampled by the Always-go-left scheme and thus bin $i$ belongs to the $i$'th group of bins, where each group consists of $n/d$ bins\footnote{For the sake of simplicity, we assume that $d$ divides $n$ evenly, i.e., that all groups have the exact same size. It can be shown that the analysis still holds if each group is of size $\lfloor\frac{n}{d}\rfloor$ or $\left\lceil\frac{n}{d}\right\rceil$.}. The child node of the root with label $(L-1, i)$ is assigned the topmost ball of the bin the $i$' location points to. The assignment of balls to nodes than proceeds recursively. Given a node $v$ with label $(h, i)$ whose ball $b_v$ was put into some bin belonging to group $i$ and containing at least $l+3$ other balls, we can conclude the following.
+Let $x$ be the bin that contains $L+4$ balls. The root node gets assigned the topmost ball in bin $x$. Each of the $d$ locations of this ball points to a bin with at least $L+3$ balls in it, at the time of its insertion. These are the $d$ bins that were sampled by the Always-go-left scheme and thus bin $i$ belongs to the $i$'th group of bins, where each group consists of $n/d$ bins. The child node of the root with label $(L-1, i)$ is assigned the topmost ball of the bin the $i$' location points to. The assignment of balls to nodes than proceeds recursively. Given a node $v$ with label $(h, i)$ whose ball $b_v$ was put into some bin belonging to group $i$ and containing at least $l+3$ other balls, we can conclude the following.
 \begin{compactitem}
 \item For $1\leq j < i$, the $j$'th location of the ball $b_v$ points to a bin containing at least $l+4$ balls at the insertion time of the ball $b_v$. If the $j$-th location contained less balls than the $i$-th location, the Always-go-left scheme would have put the ball $b_v$ into the bin pointed to by location $j$. The topmost ball in location $j$ is assigned to the  child $u$ of $v$ with label $(l,j)$. 
 \item For $i < j \leq d$, the $j$-th location contains at least $l+3$ balls. If location $j$ contained less, the Always-go-left scheme would have put the ball $b_v$ into the bin it points to. The topmost ball in the bin that location $j$ points to is assigned to the child node $u$ of $v$ labeled with $(l-1, j)$. \todo{the paper claims that the locations $j$ point to bins with $l+2$ balls. This can not be true, since the topmost, i.e., the $l+2$ ball - call it $b_t$ - gets assigned to a node with label $(l'=l-1, j)$. Since there are $l+1=l'+2$ balls below it, at the time of the placement of ball $b_t$, the bin $j$ it gets put into has only $l'+2$ balls in it, violating the invariant. Same with the case $j<i$.} 
@@ -576,7 +561,7 @@ is not true. As a counter example, consider $f(n) = n$ and $g(n) = 2n$.
 
 \section{A bit of history}
 \label{sec:historyOfGreedy}
-The history of proving the remarkable property of the two-choice paradigm (see Theorem \ref{theorem:greedy}) is in itself quite interesting. It was first proven by Azar et al. \cite{ABKU99} for the case $m = n$. In the same paper, they claimed that the bound holds for arbitrary $m$. Unfortunately, their analysis breaks down for the heavily loaded case, where $m \in \Omega\left(n  \log n\right)$. Berenbrink at. all \cite{BFZR08} were the first to proof that the same bound indeed holds for the heavily loaded case. Their proof is fairly complex and a simpler analysis may be found in \cite{TW13}, which also provides a tight lower bound for the heavily loaded case. Curiously, the case $d = 2$ was implicitly proven by Karp et al. in the context of simulating PRAMs on distributed memory machines\cite{KLM92}.
+The history of proving the remarkable property of the two-choice paradigm (see Theorem \ref{theorem:greedy}) is in itself quite interesting. It was first proven by Azar et al. \cite{ABKU99} for the case $m = n$. In the same paper, they claimed that the bound holds for arbitrary $m$. Unfortunately, their analysis breaks down for the heavily loaded case, where $m \in \Omega\left(n  \log n\right)$. Berenbrink at. all \cite{BCSV06} were the first to proof that the same bound indeed holds for the heavily loaded case. Their proof is fairly complex and a simpler analysis may be found in \cite{TW13}, which also provides a tight lower bound for the heavily loaded case. Curiously, the case $d = 2$ was implicitly proven by Karp et al. in the context of simulating PRAMs on distributed memory machines\cite{KLM92}.
 
 As discussed in Section \ref{sec:AlwaysGoLeft}, V\"ocking \cite{VOC03} was able to slightly improve the bound as well as to show that the Always-go-left strategy that he introduces is optimal up to additive constants.
 
