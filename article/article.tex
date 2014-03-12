@@ -36,133 +36,129 @@
 \begin{document}
 
 \title{The Power of Two Random Choices\\ 
-\large A follow up seminar to the Parallel Algorithms lecture\footnote{Jesper Larsson Tr\"aff and Francesco Versaci, lecture ``Parallel Algorithms'', 2012 winter term at TU Wien.}}
+\large A follow up seminar to the Parallel Algorithms lecture\footnote{Jesper Larsson Tr\"aff and Francesco Versaci, ``Parallel Algorithms'' lecture, 2012 winter term at TU Wien.}}
 \author{Martin Kalany, 0825673}
-
 \maketitle
+
 \begin{abstract}
 Balls-into-bins is a classical allocation problem, where $m$ balls have to be distributed among $n$ bins as evenly as possible. A well studied approach is to select a bin uniformly and independently at random for each ball. Another strategy is to select $d\geq 2$ bins for each ball and put the ball into the bin with the least load. Somewhat surprisingly, the maximum load achieved by such a multiple-choice scheme is significantly smaller, even for $d=2$. In this paper, we will present two different multiple-choice allocation strategies for the balls-into-bins problem and provide a detailed analysis of the upper bounds on the maximum load that they achieve. We will use a technique called witness trees, which has proven useful in a wide variety of balls-into-bins problems.
 \end{abstract}
 
 \section{Introduction}
 \label{sec:intro}
-Suppose that $m$ balls are to be thrown into $n$ bins, according to some placement strategy. We are interested in the number of balls in the fullest bin, also called the \emph{maximum load}. Equivalently, one can look at the \emph{additive gap} of the allocation, i.e., the difference of the number of balls in the fullest bin and the average amount of balls in the bins. These balls-into-bins games (BiB) have been studied extensively (see, e.g.,~\cite{JK77}). In the context of Computer Science, the BiB model is useful to study, e.g., strategies for distributing tasks (balls) to processors (bins) as evenly as possible without having to query all the processors for the number of tasks currently assigned to them.
+Suppose that $m$ balls are to be thrown into $n$ bins, according to some placement strategy. We are interested in the number of balls in the fullest bin, also called the \emph{maximum load}. Equivalently, one can look at the \emph{additive gap} of the allocation, i.e., the difference of the number of balls in the fullest bin and the average amount of balls in the bins. These balls-into-bins games (BiB) have been studied extensively (see, e.g.,~\cite{JK77}). In the context of computer science, the BiB model is useful to study, e.g., strategies for distributing tasks (balls) to processors (bins) as evenly as possible without having to query all the processors for the number of tasks currently assigned to them.
 
 While most of this survey and the analyses focuses on the lightly loaded case where $m=n$, we will give results for the case $m > n$ as well. We will denote the maximum load by $\load$ and the additive gap by $\delta$:
 \begin{align*}
-\delta = \load - \frac{m}{n}.
+\delta = \load - \frac{m}{n} \quad .
 \end{align*}
 
 \subsection{Single-choice BiB}
 \label{sec:single-choice}
 The \emph{Single-choice} strategy is a simple allocation scheme for the BiB problem and chooses one bin uniformly and independently at random for each ball. Using this strategy, the maximum load of the fullest bin will be
-\begin{comment}
-\footnote{A more accurate result exists: The maximum load is $\load = \Gamma^{-1}\left(n\right)\left(1+O\left(\frac{1}{\log \Gamma^{-1}\left(n\right)}\right)\right)$~\cite{G91}.}
-\end{comment}
 \begin{align*}
 \load = \frac{\ln n}{\ln \ln n}  \left(1 + o\left(1\right)\right)
 \end{align*}
 for the case $m=n$, with high probability\footnote{We say that an event $\mathcal E_n$ occurs \emph{with high probability} (w.h.p.) if $\Pr\left[\mathcal E_n \right] \geq 1 - n^{-\alpha}$ for some arbitrary constant $\alpha > 0$.}~\cite{RS98}. This implies (see Theorem \ref{theorem:asymptotic} in Appendix \ref{sec:asymptotic})
 \begin{align*}
-\load\in \Theta\left(\frac{\ln n}{\ln \ln n}\right).
+\load\in \Theta\left(\frac{\ln n}{\ln \ln n}\right)\quad .
 \end{align*}
-Note that, since the average load is 1, $\delta \in \Theta\left( L_{max} \right)$ in this case. For the heavily loaded case, w.h.p., the maximum gap is ~\cite{RS98}
+Note that, since the average load is 1, $\delta \in \Theta\left( L_{max} \right)$ in this case. For the heavily loaded case~\cite{RS98}, the maximum gap is, w.h.p.,
 \begin{align*}
-\delta = \Theta\left(\sqrt{\frac{m  \ln n}{n}}\right).
+\delta = \Theta\left(\sqrt{\frac{m  \ln n}{n}}\right)\quad .
 \end{align*}
 
 \subsection{Multiple-choice BiB}
-Consider a variation of the  single-choice BiB strategy: For each ball, chose $d \geq 2$ bins independently and uniformly at random and place the ball into the least full bin. If there are multiple bins with the same minimal load, chose one among them uniformly and independently at random. This simple multiple-choice scheme, called the \emph{Greedy} algorithm, achieves a gap
+Consider a variation of the  single-choice BiB strategy: For each ball, choose $d \geq 2$ bins independently and uniformly at random and place the ball into the least full bin. If there are multiple bins with the same minimal load, choose one among them arbitrarily. This simple multiple-choice scheme, called the \emph{Greedy} algorithm, achieves a maximum load of
 \begin{align*}
-\delta = \frac{\ln \ln n}{\ln d} + O(1),
+\load = \frac{m}{n}+\frac{\ln \ln n}{\ln d} + O(1) \Rightarrow \delta = \frac{\ln \ln n}{\ln d} + O(1)
 \end{align*}
-w.h.p., for all $m$~\cite{ABKU99, BCSV06}, i.e., this additional choice leads to an exponential reduction in the maximum load. 
+w.h.p., for all $m$~\cite{ABKU99, BCSV06}, i.e., this additional choice leads to an exponential reduction of the additional gap. 
 \begin{comment}
 Curiously, the exponential decrease in the gap is already achieved having just two choices (that is, $d=2$). Each additional choice decreases the bound for the maximum gap by just a constant factor~\cite{MRS01}. 
 \end{comment}
-Extensive research following the influential paper by Azar et al.~\cite{ABKU99}, who were the first ones to explicitly prove this phenomenon\footnote{For a brief history of the proof, which is quite interesting by itself, refer to Appendix \ref{sec:historyOfGreedy}.}, suggests that this \emph{two-choice paradigm} is not just an artifact of the simple BiB model, but a general principle applicable to a variety of problems. 
+Extensive research following the influential paper by Azar et al.~\cite{ABKU99}, who were the first ones to explicitly prove this phenomenon\footnote{For a brief history of the proof, which is quite interesting by itself, refer to Appendix \ref{sec:historyOfGreedy}.}, suggests that this \emph{two-choice paradigm} is not just an artefact of the simple BiB model, but a general principle applicable to a variety of problems. 
 
-Consider the slightly more involved \emph{Always-go-left} scheme: Suppose that the $n$ bins are partitioned evenly into $d$ groups, each of size $\lfloor \frac{n}{d}\rfloor$ or $\left\lceil\frac{n}{d}\right\rceil$ (To simplify the presentation, we will assume that $d$ divides $n$ evenly in the remainder of this survey). We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. For tie-breaking, we assume a fixed ordering of bins $i$ for $1 \leq i \leq n$ and put the ball into the bin with smallest index $i$ among those with same minimal load. Somewhat surprisingly, V\"ocking~\cite{VOC03} showed that such a strategy employing asymmetric tie-breaking in combination with non-uniform bin selection, reduces the bound for the gap to\
+Consider the slightly more involved \emph{Always-go-left} scheme: Suppose that the $n$ bins are partitioned evenly into $d$ groups, each of size $\lfloor \frac{n}{d}\rfloor$ or $\left\lceil\frac{n}{d}\right\rceil$ (to simplify the presentation, we will assume that $d$ divides $n$ evenly in the remainder of this survey). We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. For tie-breaking, we assume a fixed ordering of bins $i$ for $1 \leq i \leq n$ and put the ball into the bin with smallest index $i$ among those with the same minimal load. Somewhat surprisingly, V\"ocking~\cite{VOC03} showed that such a strategy employing asymmetric tie-breaking in combination with non-uniform bin selection reduces the bound for the gap to\
 \begin{align*}
 \delta = \frac{\ln\ln n}{d  \ln \Phi_d} + O(1),
 \end{align*}
-w.h.p., for all $m$. (The symbol $\Phi_d$ denotes a generalization of the golden ratio, based on generalized Fibonacci numbers. Refer to Appendix \ref{sec:fibonacci} for the definition.) Not only is this a significant reduction of the asymptotic bound, V\"ocking was able to show that the Always-go-left strategy is optimal up to additive constants~\cite{VOC03}.
+w.h.p., for all $m$. (The symbol $\Phi_d$ denotes a generalization of the golden ratio, based on generalized Fibonacci numbers. Refer to Appendix \ref{sec:fibonacci} for the definition.) V\"ocking was also able to show that the Always-go-left strategy is optimal up to additive constants~\cite{VOC03}.
 
-\emph{Outline:}
-In Section \ref{sec:classification}, we give a basic classification of BiB games to provide an overview of the research, followed by some applications in Section \ref{sec:applications}. Section \ref{sec:model} gives a detailed definition of the model we use, which can be classified as a sequential, finite and dynamic process with random deletions. In Section \ref{sec:multiple-choice} we provide a brief definition of three different classes of random placement strategies and present two placement algorithms outlined in the introduction: The Greedy algorithm (Section \ref{sec:greedy}) and the Always-go-left algorithm (Section \ref{sec:AlwaysGoLeft}). Section \ref{sec:analysis} contains a detailed analysis of both strategies for the case $m=n$. 
+\subsubsection*{Outline}
+In Section \ref{sec:classification}, we give a basic classification of BiB games to provide an overview of the research, followed by some applications in Section \ref{sec:applications}. Section \ref{sec:model} contains a detailed definition of the model we use, which can be classified as a sequential, finite and dynamic process with random deletions. In Section \ref{sec:multiple-choice} we provide a brief definition of three different classes of random placement strategies and present two placement algorithms outlined in the introduction: Greedy (Section \ref{sec:greedy}) and Always-go-left (Section \ref{sec:AlwaysGoLeft}). Section \ref{sec:analysis} contains a detailed analysis of both strategies for the case $m=n$. 
 
-\section{Classification}
+\section{Classification of BiB games}
 \label{sec:classification}
 Several different variations of this problem exist, which may be classified as follows:
 \begin{compactitem}
-\item In a \emph{sequential} process, the balls arrive one after another and ball is dealt with only after the previous one has been placed. Conversely, in a \emph{parallel} process, balls arrive in sets and the balls in one set are dealt with simultaneously~\cite{ABS98}. 
-\item In a \emph{static} problem, the balls are placed into the bins and no balls are ever removed, whereas in a \emph{dynamic} problem balls may also be removed from the system. In the random deletions model, for each newly inserted ball another one is chosen uniformly and independently at random and removed from the system~\cite{ABKU99, MRS01}. More elaborate schemes exists: An oblivious adversary might specify the sequence of insertions and deletions of balls in advance, without any knowledge of their placement~\cite{CFM+98}. Adler et al.~\cite{ABS98} studied another approach in the context of the parallel BiB problem, where the balls are stored in FIFO-order and at every time step the first ball in each of the bins is deleted. 
-\item A \emph{finite} process is analyzed for a given time interval that is known beforehand, whereas for an \emph{infinite} one, placements and deletions are given for an infinite time span~\cite{ABS98}.
-\item In the lightly loaded case, $m$ is in the order of $n$, whereas in the heavily loaded case, $m$ is arbitrarily large. W.l.o.g.~we will assume that $m = n$ for the lightly loaded case. 
+\item In a \emph{sequential} process, the balls arrive one after another and a ball is dealt with only after the previous one has been placed. Conversely, in a \emph{parallel} process, balls arrive in sets and the balls in one set are dealt with simultaneously~\cite{ABS98}. 
+\item In a \emph{static} problem, the balls are placed into the bins and no balls are ever removed, whereas in a \emph{dynamic} problem balls may also be removed from the system. In the random deletions model, for each newly inserted ball another one is chosen uniformly and independently at random and removed from the system~\cite{ABKU99, MRS01}. More elaborate schemes exists: An oblivious adversary might specify a sequence of insertions and deletions of balls in advance, without any knowledge of their placement~\cite{CFM+98}. Adler et al.~\cite{ABS98} studied another approach in the context of the parallel BiB problem, where the balls are stored in FIFO-order and at every time step the first ball in each bin is deleted. 
+\item A \emph{finite} process is analysed for a given time interval that is known beforehand, whereas for an \emph{infinite} one, placements and deletions are given for an infinite time span~\cite{ABS98}.
+\item In the lightly loaded case, $m$ is in the order of $n$, whereas in the heavily loaded case, $m$ is arbitrarily large. W.l.o.g., we will assume that $m = n$ for the lightly loaded case. 
 \end{compactitem}
 
 \section{Applications}
 \label{sec:applications}
-The two-choice paradigm applied to the BiB model has several useful applications, some of which we will outline here. Hashing (Section \ref{sec:hashing}), online load balancing (Section \ref{sec:loadbalancing}) and the emulation of shared memory machines on distributed memory machines (Section \ref{sec:DMM}) share a close relation to load balancing. Section \ref{sec:circuitrouting} applies the BiB model and the two-choice paradigm to a different context, namely routing circuits in multi-stage interconnection networks with minimal congestion.
+The two-choice paradigm applied to the BiB model has several useful applications, e.g., hashing (Section \ref{sec:hashing}), online load balancing (Section \ref{sec:loadbalancing}), the emulation of shared memory machines on distributed memory machines (Section \ref{sec:DMM}) and routing circuits in multi-stage interconnection networks with minimal congestion (Section~\ref{sec:circuitrouting}).
 
 \subsection{Hashing}
 \label{sec:hashing}
-A simple hash table implementation typically uses a single hash function to map elements to entries in a table. If more than one element is mapped to the same entry, all elements mapped to this table entry are stored in a chain, usually implemented as a linked list. The maximum time to search for an element is then proportional to the length of the longest chain in the hash table. 
+A basic hash table implementation typically uses a single hash function to map elements to entries in a table. If several elements are mapped to the same entry, they are stored in a chain, usually implemented as a linked list. The maximum time to search for an element is then proportional to the length of the longest chain in the hash table. 
 
-It is easy to see how the BiB model can be used: Assuming a perfect hash function\footnote{I.e., each element is mapped to one of the $n$ table entries uniformly and independently at random}, the elements can be seen as balls to be mapped to table entries (bins), implying a worst case look-up time of $\Theta\left(\frac{\ln n}{\log \ln n}\right)$, w.h.p., where $n$ denotes the number of elements. Applying the two-choice paradigm by using two hash functions and mapping elements to the least full of two table entries, results in a look-up time of $\Theta\left(\ln \ln n\right)$, w.h.p. This approach is easy to parallelize, it does not require re-hashing of data and requires only two hash functions~\cite{ABKU99, MRS01}.
+It is easy to see how the BiB model can be applied: Assuming a perfect hash function\footnote{I.e., each element is mapped to one of the $n$ table entries uniformly and independently at random}, the elements can be seen as balls to be mapped to table entries (bins), thus implying a worst case look-up time of $\Theta\left(\frac{\ln n}{\ln \ln n}\right)$, w.h.p., where $n$ denotes the number of elements. Applying the two-choice paradigm by using two hash functions and mapping elements to the least full of two table entries results in a look-up time of $\Theta\left(\ln \ln n\right)$, w.h.p. This approach is easy to parallelize, it does not require re-hashing of data and uses only two hash functions~\cite{ABKU99, MRS01}.
 
 \subsection{Online load balancing}
 \label{sec:loadbalancing}
 The following scenario is a typical application of online load balancing: Consider $n$ servers (such as file-, database- or network servers) and $m$ requests. For simplicity, assume that each task can be handled by any server and that all tasks are of the same size, i.e., they require the same execution time.
 
-To maximize the throughput of the servers, a uniform distribution of tasks to servers is desirable. While a central dispatcher can easily achieve this, it also poses a bottleneck within a distributed system, since querying $m$ servers for their current load involves significant overhead (e.g., sending a message to each server and waiting for the reply). As with hashing, the BiB model can be applied easily: we need to assign tasks (the balls) to servers (the bins). Assuming tasks are assigned to servers uniformly and independently at random, the two-choice paradigm is directly applicable: If each client samples two random servers for their load and sends its request to the least loaded server, the overhead is comparatively small and the difference in load on the $n$ servers is at most $O\left(\ln \ln n\right)$, w.h.p., \cite{KLM92,RS98, MRS01}.  
+To maximize the throughput of the servers, a uniform distribution of tasks to servers is desirable. While a central dispatcher can easily achieve this, it also poses a bottleneck within a distributed system, since querying $m$ servers for their current load involves significant overhead (e.g., sending a message to each server and waiting for the reply). The BiB model can be applied easily: we need to assign tasks (the balls) to servers (the bins). Assuming tasks are assigned to servers uniformly and independently at random, the two-choice paradigm is directly applicable: If each client samples two random servers for their load and sends its request to the least loaded server, the overhead is comparatively small and the difference in load on the $n$ servers is $\Theta\left(\ln \ln n\right)$, w.h.p., \cite{KLM92,RS98, MRS01}.  
 
 \subsection{Emulation of shared memory machines on distributed memory machines}
 \label{sec:DMM}
-The Parallel Random Access Machine model (PRAM) ~\cite{P03} is a high level abstraction of a shared memory machine, in which memory access by any processor to any memory location is assumed to require constant time. It is extremely useful for the study of parallel algorithms. However, a PRAM is much harder to implement in hardware than a Distributed Memory Machine (DMM). Thus, ways to emulate a PRAM on a DMM have been studied extensively. Such an emulation distributes the processors and memory cells of the PRAM to the processors and memory modules (typically one per processor) of the DMM, with the goal to minimize the slowdown of the emulation, i.e., the time the DMM requires to simulate one step of the PRAM execution. Each memory module can handle only one memory access at a time step and more accesses to the same module will result in memory contention. The two-choice paradigm is useful for managing communication between the processors and the memory modules such that memory contention is minimal~\cite{KLM92}.
+The Parallel Random Access Machine model (PRAM) ~\cite{P03} is a high level abstraction of a shared memory machine, in which memory access by any processor to any memory location is assumed to require constant time. It is extremely useful for the study of parallel algorithms. However, a PRAM is much harder to implement in hardware than a Distributed Memory Machine (DMM). Thus, ways to emulate a PRAM on a DMM have been studied extensively. Such an emulation distributes the processors and memory cells of the PRAM to the processors and memory modules of the DMM, with the goal to minimize the slowdown of the emulation, i.e., the time the DMM requires to simulate one step of the PRAM execution. Each memory module can handle only one memory access at a time step and more accesses to the same module result in memory contention. The two-choice paradigm is useful for managing communication between the processors and the memory modules such that memory contention is minimized~\cite{KLM92}.
  
 \subsection{Low congestion circuit routing}
 \label{sec:circuitrouting}
-In multi-stage interconnection networks, virtual circuit-switching is used to route communication. For simplicity, we consider the permutation routing problem, where one request originates at each of the $n$ input nodes and one request is destined for each of the $n$ output nodes and we assume a butterfly network as the underlying interconnection network~\cite{CLR09}. The congestion is the maximum number of paths that are routed through a network link and the goal of a circuit routing algorithm is to to allocate paths for all $n$ communication requests such that link congestion is minimized.
+In multi-stage interconnection networks, virtual circuit-switching is used to route communication. For simplicity, we consider the permutation routing problem, where one request originates at each of the $n$ input nodes and one request is destined for each of the $n$ output nodes. Furthermore, we assume a butterfly network as the underlying interconnection network~\cite{CLR09}. The link congestion is the maximum number of paths that are routed through a network link and the goal of a circuit routing algorithm is to allocate paths for all $n$ communication requests such that the link congestion is minimized.
 
-In this context, Valiant's paradigm~\cite{V82} states that any such permutation routing problem can be solved by transforming it into two problems: First, find a path for each request to an intermediate destination chosen uniformly and independently at random. Next, find a path from the intermediate to the actual destination. This routing technique is analogous to the single-choice BiB problem where each communication request (or ball) chooses an intermediate destination (a bin) at random.
+In this context, Valiant's paradigm~\cite{V82} states that any such permutation routing problem can be solved by transforming it into two sub-problems: First, find a path for each request to an intermediate destination chosen uniformly and independently at random. Next, find a path from the intermediate to the actual destination. This routing technique is analogous to the single-choice BiB problem where each communication request (or ball) chooses an intermediate destination (a bin) at random.
 Extensive research~\cite{CMM+98,MRS01} shows that by applying the two-choice paradigm, the link congestion can be bounded by $\Theta\left(\log \log n\right)$ , w.h.p.
 
 \section{BiB model}
 \label{sec:model}
-Although several different variants of the BiB problem exist, we will focus on a basic model to highlight the crucial ideas in the placement strategies and their analyses. They are based on a sequential, infinite and dynamic process that uses an oblivious adversary, which provides a sequence $\sigma = \sigma_1 \sigma_2 \dots$, where $\sigma_t = (d_t, a_t)$ represents a request for a ball $d_t$ to be deleted and a different ball $a_t$ to be added to the bins at time step $t$. In our model, the ball $b_d$ associated with some request $\sigma_t$ is deleted at the beginning of time step $t$. Next, the ball $b_a$ has to be placed into one of the $n$ bins without knowledge of the following requests $\sigma_{t+1}$, $\sigma_{t+2}\dots$. This infinite sequence of insertions and deletions is fixed in advance and is thus independent of previously allocated balls and any decisions made by the allocation algorithm. We assume that at any time $t$ at most $m = n$ balls are in the bins.
+Although several different variants of the BiB problem exist, we will focus on a basic model to highlight the crucial ideas in the placement strategies and their analyses. They are based on a sequential, infinite and dynamic process that uses an oblivious adversary, which provides a sequence $\sigma = \sigma_1 \sigma_2 \dots$, where $\sigma_t = (d_t, a_t)$ represents a request for a ball $d_t$ to be deleted and a different ball $a_t$ to be added to the bins at time step $t$. In our model, the ball $d_t$ associated with some request $\sigma_t$ is deleted at the beginning of time step $t$, next, the ball $a_t$ has to be placed into one of the $n$ bins, without any knowledge of the following requests $\sigma_{t+1}$, $\sigma_{t+2},\dots$ This infinite sequence of insertions and deletions is fixed in advance and is thus independent of previously allocated balls and any decisions made by the allocation algorithm. We assume that at any time $t$ at most $m = n$ balls are in the bins.
 
 \section{Multiple-choice BiB}
 \label{sec:multiple-choice}
-The single-choice BiB strategy (Section \ref{sec:single-choice}) chooses one bin uniformly and independently at random for each ball. A multiple-choice BiB strategy generalizes this idea by  choosing $d \geq 2$ bins and placing the ball into the least full bin. We distinguish placement algorithms depending on how the $d$ locations are sampled~\cite{VOC03}. 
+The single-choice BiB strategy (Section \ref{sec:single-choice}) chooses one bin uniformly and independently at random for each ball. A multiple-choice BiB strategy generalizes this idea by  choosing $d \geq 2$ bins and placing the ball into the least full. We distinguish placement algorithms depending on how the $d$ locations (i.e, bins) are sampled~\cite{VOC03}. 
 
 \subsection{Classes of random placement strategies}
 \label{sec:classesOfPlacement}
 Let $B$ be the set of bins $\{1,2,...,n\}$ and $B^{d}$ be the sample space. Placement algorithms are distinguished by the way the $d$ candidate bins are chosen for each ball:
 \begin{description}
-\item [Uniform and independent.] Choose each of the $d$ bins for a ball uniformly and independently at random from the set of bins $B$. Thus, the probability that any specifc bin $b$ is choosen for the $i$-th balls is
+\item [Uniform and independent:] Choose each of the $d$ bins for a ball uniformly and independently at random from the set of bins $B$. Thus, the probability that any specific bin $b$ is chosen for the $i$-th balls is
 \begin{align*}
-\Pr[\mathrm{bin}\;b\;\mathrm{choosen}] = \frac{1}{n}
+\Pr[\mathrm{bin}\;b\;is\;\mathrm{chosen}] = \frac{1}{n} \quad .
 \end{align*}
-\item [Non-uniform and independent.] Choose the $i$-th bin from $B$ independently at random according to some probability distribution: 
-\item [Non-uniform and dependent.] Choose the $d$ bins for a ball from the sample space according to some probability probability distribution:
+\item [Non-uniform and independent:] Choose the $i$-th bin from $B$ independently at random, according to some probability distribution.
+\item [Non-uniform and dependent:] Choose the $d$ bins for a ball from the sample space according to some probability probability distribution.
 \end{description}
  
-We will discuss two different multiple-choice placement strategies: The Greedy algorithm (Section \ref{sec:greedy}), belonging to class 1, and the Always-go-left scheme (Section \ref{sec:AlwaysGoLeft}), which uses a non-uniform and independent selection of $d$ bins and thus belongs to class 2.
+We will discuss two different multiple-choice placement strategies: The Greedy algorithm (Section \ref{sec:greedy}), belonging to class 1, and the Always-go-left scheme (Section \ref{sec:AlwaysGoLeft}), which belongs to class 2.
 
 \subsection{The Greedy scheme}
 \label{sec:greedy}
-Consider the Greedy scheme, a variation of the one-choice BiB strategy: For each ball, choose $d \geq 2$ bins independently and uniformly at random and place the ball into the least full bin. If there are multiple bins with the same minimal load, chose one among them arbitrarily. Note that the $d$ selected bins are not necessarily distinct. 
+Consider the Greedy scheme: For each ball, choose $d \geq 2$ bins independently and uniformly at random and place the ball into the least full bin. If there are multiple bins with the same minimal load, chose one among them arbitrarily. Note that the $d$ selected bins are not necessarily distinct. 
 
 \begin{theorem}
 \label{theorem:greedy}
-Consider any sequence of insertions and deletions s.t.~at most $n$ balls are in the bins at any time. If the balls are placed into bins by the Greedy algorithm, the maximum load is at most
+Consider any sequence of insertions and deletions s.t.~at most $n$ balls are in the bins at any time. If the balls are placed into bins by the Greedy algorithm, then the maximum load is at most
 \begin{align*}
-\load = \frac{\ln \ln n}{\ln d}+ O(1)
+\load \leq \frac{\ln \ln n}{\ln d}+ O(1) \quad ,
 \end{align*}
 w.h.p., for all $t$~\cite{ABKU99, BCSV06}.
 \end{theorem}
-
 This result is remarkable in several ways:
 \begin{compactitem}
 \item The apparently small change made for the Greedy algorithm compared to the single-choice BiB scheme results in an exponential decrease of the gap, even for $d=2$. 
@@ -171,207 +167,189 @@ This result is remarkable in several ways:
 
 \subsection{The Always-go-left scheme}
 \label{sec:AlwaysGoLeft}
-The Greedy strategy presented in Section~\ref{sec:greedy} assumes that $d$ bins are chosen uniformly and independently at random. V\"ocking~\cite{VOC03} was the first to study the impact of non-uniform and dependent selections of the $d$ bins. Surprisingly, a multiple-choice BiB strategy with a non-uniform and independent selection of the $d$ bins, such as the Always-go-left algorithm introduced in~\cite{VOC03}, achieves better~\cite{BCSV06} load balancing than the Greedy scheme.
+The Greedy strategy presented in Section~\ref{sec:greedy} selects the $d$ bins uniformly and independently at random. Surprisingly, a multiple-choice BiB strategy with a non-uniform and independent selection of the bins, such as the Always-go-left algorithm introduced by V\"ocking in~\cite{VOC03}, achieves better load balancing than the Greedy scheme~\cite{BCSV06}.
 
-The Always-go-left algorithm works as follows. Partition the $n$ bins into $d$ groups, each of size $\frac{n}{d}$. We select one from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. For tie-breaking, we assume a fixed ordering of bins $b_i$ for $1 \leq i \leq n$ and put the ball into the bin with smallest index $i$ among those with same minimal load.
-
-\begin{comment}
-\begin{theorem}
-\label{theorem:agln}
-If $n$ balls are placed into $n$ bins using the Always-go-left scheme, the maximum load will be
-\begin{align*}
-\load \leq \frac{\ln\ln n}{d  \ln \Phi_d} + O(1)
-\end{align*}
-w.h.p.
-\end{theorem}
-\end{comment}
+The Always-go-left algorithm works as follows. We partition the $n$ bins into $d$ groups (each of size $n/d$), select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. For tie-breaking, we assume a fixed ordering of bins and put the ball into the bin with smallest index among those with same minimal load.
 
 \begin{theorem}
 \label{theorem:aglm}
 Consider any sequence of insertions and deletions s.t.~at most $n$ balls are in the bins at any time. If the balls are placed into bins by the Always-go-left algorithm, the maximum load is at most 
 \begin{align*}
-\load = \frac{\ln\ln n}{d  \ln \Phi_d} + O(1) \quad ,
+\load \leq \frac{\ln\ln n}{d  \ln \Phi_d} + O(1) \quad ,
 \end{align*}
 w.h.p.,~for all $t$~\cite{VOC03}.
 \end{theorem}
 
 \section{Analysis}
 \label{sec:analysis}
-In this section, we will prove Theorems \ref{theorem:greedy} and \ref{theorem:aglm} in detail, using witness trees to provide an upper bound for the event that a bin contains too many balls. Our analysis closely follows the proofs in~\cite{VOC03}.
+In this section, we will prove Theorems \ref{theorem:greedy} and \ref{theorem:aglm} in detail, using witness trees to provide an upper bound for the event that a bin contains too many balls. (Our analysis closely follows~\cite{VOC03}).
 
-When the maximum load exceeds some given threshold value we say that a bad event occurs and construct an activated witness tree. Thus, the activation of a witness tree is implied by a bad event. The probability for the existence of such an activated witness tree upper-bounds the probability that the associated bad event occurs.
+When the maximum load exceeds some given threshold we say that a bad event occurs and construct an activated witness tree. Thus, the activation of a witness tree is implied by a bad event. The probability for the existence of such an activated witness tree upper-bounds the probability that the associated bad event occurs.
 
-Throughout this section, ``location'' will denote a specific place in one of the $n$ bins. A location of a ball $b$ refers to a specific bin and to the number of balls already in it (at the time of insertion of ball $b$).
+We will prove the bounds for $m=n$ for both the Greedy and the Always-go-left scheme in Sections~\ref{sec:analysis:greedy} and~\ref{sec:analysis:alg}, respectively. However, we will adopt a simplifying assumption to provide a more clear presentation of the proof technique. Section~\ref{sec:analysis:nondistinctBalls} will extend these proofs to remove this assumption. 
 
-We will prove the bounds for $m=n$ for both the Greedy and the Always-go-left scheme in Sections~\ref{sec:analysis:greedy} and~\ref{sec:analysis:alg}, respectively. However, we use a simplifying assumption (Assumption~\ref{assumption:independence}) in those two sections to provide a more clear presentation of the proof technique. Section~\ref{sec:analysis:nondistinctBalls} will extend these proofs to remove the simplifying assumption we make initially. 
-
-We will use a proof technique called witness trees, which allows for a clean analysis of both problems and is applicable to a wide variety of BiB scenarios. Other proof techniques such as layered induction and a differential equations approach have been used. See, e.g.,~\cite{MRS01} for an overview of different proof techniques for the BiB problem. The proof for arbitrarily large $m$ is more complicated and we refer the interested reader to~\cite{BCSV06, TW13}.
+We will use a proof technique called witness trees, which allows for a clean analysis of both problems and is applicable to a wide variety of BiB scenarios. Other proof techniques such as layered induction and a differential equation approaches have been used in the literature; see, e.g.,~\cite{MRS01} for an overview of different proof techniques for the BiB problem. The proof for arbitrarily large $m$ is more involved and we refer the interested reader to~\cite{BCSV06, TW13}.
 
 \subsection{Greedy}
 \label{sec:analysis:greedy}
 
 \subsubsection{Symmetric witness trees}
 \label{sec:analysis:definitionSymWT}
-A symmetric witness tree of order $L$ is a complete $d$-ary tree with $d^{L}$ leaves, where each node $v$ references a ball $b_v = \mathrm{ball}(v)$ and the nodes and edges of the witness tree represent events that may occur or not. In general, the same ball may be referenced by several nodes. However, initially we will make use of the following assumption in the analysis.
+A symmetric witness tree (SWT) of order $L$ is a complete $d$-ary tree with $d^{L}$ leaves, where each node $v$ references a ball $b_v = \mathrm{ball}(v)$ and the nodes and edges of the SWT represent events that may occur or not. In general, the same ball may be referenced by several nodes. However, initially we will make use of the following assumption in the analysis.
 \begin{assumption}
 \label{assumption:independence}
-All events represented by the nodes and edges of a witness tree are stochastically independent. 
-\end{assumption}
-In other words, we assume that no ball is referenced by more than one node of a witness tree. A correct analysis will have to consider balls assigned to more than one node, but this simplifying assumption is useful to highlight the differences between the symmetric and asymmetric allocation schemes. Section~\ref{sec:analysis:nondistinctBalls} will extend the analysis to witness trees with redundant balls.
+All the events represented by the nodes and edges of a witness tree are stochastically independent. 
+\end{assumption} 
+\noindent
+This implies that no ball is referenced by more than one node of a witness tree. A correct analysis will have to consider balls assigned to more than one node, but this simplifying assumption is useful to highlight the differences between the symmetric and asymmetric allocation schemes. Section~\ref{sec:analysis:nondistinctBalls} will extend the analysis to witness trees with redundant balls.
 
 We define edge and leaf events:
-\begin{compactitem}
-\item \emph{Edge event:} Consider some edge $e = (u,v)$ of the witness tree, s.t.~$v$ is the $i$-th child of $u$. Then $e$ represents the event that the $i$-th location of the ball $b_u$ to the same bin as one of the locations of the ball $b_v$. 
-\item \emph{Leaf event:} A leaf node $v$ of the witness tree represents the event that each of the $d$ locations of the ball $b_v$ points to a bin that contains at least three additional balls (i.e., balls that are not represented by a node of the tree), at the time of the insertion of the ball $b_v$.
+\begin{description}
+\item [Edge event:] Consider some edge $e = (u,v)$ of the witness tree, s.t.~$v$ is the $i$-th child of $u$. The edge $e$ represents the event that the $i$-th location of the ball $b_u$ points to the same bin as one of the locations of the ball $b_v$. 
+\item [Leaf event:] A leaf node $v$ of the witness tree represents the event that each of the $d$ locations of the ball $b_v$ points to a bin that contains at least three additional balls (i.e., balls that are not represented by a node of the tree), at the time of the insertion of the ball $b_v$.
+\end{description}
+To avoid dependencies, the crucial step is to define edge events in terms of the possible locations of balls, not by their finally assigned bin. 
 
-\end{compactitem}
-The definition for leaf events refers to bins containing some number of balls at some specified time. To avoid dependencies, the crucial trick is to defone edge events in terms of the possible locations of balls, not by their finally assigned bin. 
-
-The following constraints have to be fulfilled by a witness tree. The ball $b_r$ that is represented by the root node $r$ has to exist at time step $t$ and each ball $b_v$ represented by a node $v \neq r$ and parent node $u$ has to exist when the ball $b_u$ is inserted.
-
+The following constraints have to be fulfilled by a witness tree. 
+\begin{enumerate}
+\item The ball $b_r$ that is represented by the root node $r$ has to exist at time step $t$. 
+\item Each ball $b_v$ represented by a node $v \neq r$ with parent node $u$ has to exist when the ball $b_u$ is inserted.
+\end{enumerate}
 We say that an edge or leaf event is activated if the associated event occurs. A witness tree is activated when all its edge and leaf events are activated. 
 
-Assume the bad event that some bin contains more than $L+3$ balls at time $t$ occurs. We will use an activated symmetric witness tree of order $L$ to witness this event and provide an upper-bound for the occurrence of the event. Thus, we have to show that the existence of a bin $x$ containing at least $L+4$ balls implies the existence of an activated witness tree of order $L$. 
+We say that a ``bad event'' occurs when a bin contains more than $L+3$ balls at time $t$. We will use an activated SWT of order $L$ to witness this event and provide an upper bound for its occurrence. Thus, we have to show that the existence of a bin containing at least $L+4$ balls implies the existence of an activated SWT of order $L$. 
 
 \begin{lemma}
-When using the Greedy algorithm to put balls into bins and arbitrary $L > 0$, a bin containing more than $L+3$ balls implies the activation of a symmetric witness tree of order $L$.
+When using the Greedy algorithm to put balls into bins, a bin containing more than $L+3$ balls activates an SWT of order $L$.
 \end{lemma}
 
 \begin{proof}
-We construct a witness tree for the event that some bin contains $L+4$ balls as follows:
+We construct an SWT for the event that some bin $x$ contains $L+4$ balls as follows:
 \begin{compactenum}
-\item The topmost ball $b_1$ in bin $x$ is assigned to the root node $v_r$. Note that $b_1$ is the last ball that was inserted into the bin $x$.
-\item Since the Greedy-scheme puts ball $b_1$ into bin $x$ only if each of the $d$ sampled locations containd at least the same number of balls as bin $x$, we can conclude that each of the $d$ locations containd at least $L+3$ balls at the time ball $b_1$ was inserted. Thus, the $d$ children of the root node are assigned the topmost balls of these $d$ bins.
+\item The topmost ball $b_1$ in bin $x$ is assigned to the root node $v_r$. Note that $b_1$ is the latest ball that was inserted into the bin $x$.
+\item Since the Greedy scheme puts ball $b_1$ into bin $x$ only if each of the $d$ sampled locations contains at least the same number of balls as bin $x$, we can conclude that each of the $d$ locations contains at least $L+3$ balls at the time ball $b_1$ was inserted. Thus, the $d$ children of the root node are assigned the topmost balls of these $d$ bins.
 \item Consider these child nodes and continue the assignment of the previous step recursively until the leaf nodes are reached.  
 \end{compactenum}
 
-By construction, all edge events of the witness tree are activated. Note that the ball assigned to the root node is on top of at least $L+3$ balls. The balls assigned to the root's child node are each on top of $L+2$ or more balls and so on. It follows that each ball assigned to a leaf node is on top of at least 3 other balls, implying that the $d$ locations of each leaf node point to bins with at least 3 balls in each of them. This implies the activation of all leaf nodes of the witness tree.
+By construction, all edge events of the witness tree are activated. Note that the ball assigned to the root node is on top of at least $L+3$ balls. The balls assigned to the root's child node are each on top of $L+2$ or more balls and so on. It follows that each ball assigned to a leaf node is on top of at least 3 other balls, implying that the $d$ locations of each leaf node point to bins with at least 3 balls in each of them. This implies the activation of all the leaf nodes of the witness tree.
 \end{proof}
 
 \subsubsection{Probability of activation}
 \label{sec:analysis:probabilitySymWT}
-In this section, we derive the probability that some witness tree of order $L$ is activated, which gives an upper bound for the probability that the maximum load is greater than $L+3$ at some time $t$. 
+In this section, we derive the probability that some SWT of order $L$ is activated, which gives an upper bound for the probability that the maximum load is greater than $L+3$ at some time $t$. 
 
 \begin{lemma}\label{lemma:swt:activation}
-For some arbitrary $\alpha$ and large enough $L$, the activation of a symmetric witness tree of order $L$ occurs with probability at most $n^{-\alpha}$.
+For any $\alpha>0$ and large enough $L$, the activation of an SWT of order $L$ occurs with probability at most $n^{-\alpha}$.
 \end{lemma}
-Speaking less formaly, Lemma~\ref{lemma:swt:activation} states that for large enough $L$, the activation of a symmetric witness tree is unlikely.
-
 \begin{proof}
-The probability $p_{swt}$ that some symmetric witness tree of order $L$ is activated is bounded by the number of witness trees $w$ times the upper bound on the probability $p_1$ that a specific witness tree is activated.
+The probability $P_\mathrm{S}$ that some SWT of order $L$ is activated is bounded by the number of witness trees $w$ times the upper bound on the probability that a specific witness tree is activated.
 
-The number of different witness trees $w$ is given by the number of ways to assign balls to its nodes. The ball assigned to the root node can be chosen from at most $n$ balls, since by definition (Theorem~\ref{theorem:greedy}), at most $n$ balls are in the bins at any time $t$ and a ball assigned to a node has to be in some bin at time $t$. By the same argument, each child node of the root is assigned one out of at most $n$ balls too. Applying this argument for each level of the witness tree, there are at most $w = n^k$ possibilities to assign balls to a witness tree, with $k = d^{L+1}-1$ being the number of nodes in a $d$-ary witness tree of order $L$.
- 
-An edge\footnote{where $v$ is the $i$-th child of $u$} $(u, v)$ is activated with probability at most $d/n$, which is the probability that the $i$-th location of the ball $b_u$ points to a particular location of the ball $b_v$ times the number of locations $d$. This implies a probability of at most
+The number of different witness trees $w$ is given by the number of ways to assign balls to its nodes. The ball assigned to the root node can be chosen from at most $n$ balls, since by definition, at most $n$ balls are in the bins at any time $t$ and a ball assigned to a node has to be in some bin at time $t$. By applying this argument recursively to all levels of the witness tree, we get that there are at most $w \leq n^k$ possibilities to assign balls to a witness tree, with 
 \begin{align*}
-p_e = \left(\frac{d}{n}\right)^{k-1}
-\end{align*} 
-for the event that all $k-1$ edges of a witness tree are activated. Note that  the assumption that all balls are distinct (Assumption~\ref{assumption:independence}) implies that all edge events are independent.
-
-The probability that a leaf event is activated is bounded above by $3^{-d}$. Recall that by the definition of leaf events, each of the $d$ locations of a ball $b_{v_l}$, where $v_l$ is a leaf node, has to point to a bin with at least 3 additional balls in it. The number of those bins is bounded by $\lfloor n/3 \rfloor$ at all time steps $t$, implying a probability of at most 
-\begin{align*}
-\frac{n/3}{n} = \frac{1}{3}
+k = \frac{d^{L+1}-1}{d-1}
 \end{align*}
-that one such bin is chosen. This implies a probability of at most $3^{-d}$ that all $d$ bins are chosen from among those with at least 3 additional balls in them. Thus, the probability that all leaf events are activated is at most $p_l = 3^{-d l}$, where $l = d^{L}$ is the number of leaves in a witness tree.
-
-Thus, the probability that an activated symmetric witness tree exists at time $t$ is at most 
+being the number of nodes in a $d$-ary witness tree of order $L$.
+ 
+An edge $(u, v_i)$ (where $v_i$ is the $i$-th child of $u$) is activated with probability at most $d/n$, which is the probability that the $i$-th location of the ball $b_u$ points to a particular location of the ball $b_{v_i}$ times the number of locations $d$. This implies a probability of at most
 \begin{align*}
-p_{swt} &= w  p_e  p_l \\
-		&= n^{k}  \left(\frac{d}{n}\right)^{k-1}  3^{-d  l} \\
-		&= n  d^{k-1}  3^{-d  l}\quad .
+p_\mathrm{e} = \left(\frac{d}{n}\right)^{k-1} \quad ,
+\end{align*} 
+for the event that all $k-1$ edges of a witness tree are activated. Note that since all the balls are distinct (Assumption~\ref{assumption:independence}), all the edge events are independent.
+
+The probability that a leaf event is activated is bounded from above by $3^{-d}$: Recall that by the definition of leaf events, each of the $d$ locations of a ball $b_v$, where $v$ is a leaf node, has to point to a bin with at least 3 additional balls in it. The number of those bins is bounded by $\lfloor n/3 \rfloor$ at all time steps $t$, implying a probability of at most $1/3$ that one such bin is chosen. This implies a probability of at most $3^{-d}$ that all the $d$ bins are chosen from among those with at least 3 balls in them. Thus, the probability that all leaf events are activated is at most $p_\mathrm{l} = 3^{-d l}$, where $l = d^{L}$ is the number of leaves in an SWT.
+
+Thus, the probability that an activated SWT exists at time $t$ is at most 
+\begin{align*}
+P_\mathrm{s} &\leq w  p_\mathrm{e}  p_\mathrm{l} 
+		= n^{k}  \left(\frac{d}{n}\right)^{k-1}  3^{-d  l} 
+		= n  d^{k-1}  3^{-d  l}\quad .
 \end{align*}
 Using $k \leq 2l$ we get
 \begin{align*}
-p_{swt} &\leq n  d^{2 l}  3^{-d  l} \\
-		&= n  \left(d^2\right)^l  \left( 3^{-d} \right)^l\quad ,
+P_\mathrm{s} &\leq n  d^{2 l}  3^{-d  l} 
+		= n  \left(d^2\right)^l  \left( 3^{-d} \right)^l\quad ,
 \end{align*}
-which we simplify by using $2d^2 \leq 3^d$
+which we simplify by using $2d^2 \leq 3^d$ as
 \begin{align*}
-p_{swt} &\leq n  \left(\frac{3^d}{2}\right)^l  \left( 3^{-d}\right)^l \\
-		&= n  2^{-l}  3^{d l}  3^{-d  l} \\
-		&= n 2^{-l}		\\
-		&= n 2^{-d^L} \quad .		
+P_\mathrm{s} &\leq n  \left(\frac{3^d}{2}\right)^l  \left( 3^{-d}\right)^l 
+		= n  2^{-l}  3^{d l}  3^{-d  l} 
+		= n 2^{-l}		
+		= n 2^{-d^L} \quad .		
 \end{align*}
-
 For any constant $\alpha > 0 $, let
 \begin{align*}
 L &\geq \log_d\log_2 n + \log_d\left(1+\alpha\right) \neqn{swt:chooseL} \quad .
 \end{align*}
-
 Then, 
 \begin{align*}
-p_{swt} &\leq n  2^{{-d}^{\log_d\log_2 n + \log_d\left(1+\alpha\right)}} \\
-		&= n  2^{-{d}^{\log_d\log_2 n} d^{\log_d \left(1+\alpha\right)}} \\
-		&= n  \left( 2^{-\log_2 n  \left(1+ \alpha \right)} \right) \\
-		&= n  n^{-\left(1+\alpha\right)} = n^{-\alpha} \neqn{swt:result}\quad .
+P_\mathrm{s} &\leq n  2^{{-d}^{\log_d\log_2 n + \log_d\left(1+\alpha\right)}} 
+		= n  2^{-{d}^{\log_d\log_2 n} d^{\log_d \left(1+\alpha\right)}} \\
+		&= n  \left( 2^{-\log_2 n  \left(1+ \alpha \right)} \right) 
+		= n  n^{-\left(1+\alpha\right)} = n^{-\alpha} \neqn{swt:result}\quad .
 \end{align*}
-Thus, for any constant $\alpha$ and large enough $L$ as specified in Equation~\ref{eqn:swt:chooseL} the probability that a symmetric witness tree of order $L$ is activated is bounded above by $p_{swt }\leq n^{-\alpha}$.
+Thus, for any $\alpha>0$ and large enough $L$ as specified in Eq.~\ref{eqn:swt:chooseL} the probability that an SWT of order $L$ is activated is bounded from above as $P_\mathrm{s}\leq n^{-\alpha}$.
 \end{proof}
 
-Since the probabilty for the activation of a symmetric witness tree of order $L$ upper-bounds the probability of the bad event that some bin contains more than $L+3$ balls, Equation~\ref{eqn:swt:result} is also an upper bound for the latter. Note that Equation~\ref{eqn:swt:chooseL} can be written as
+Since the probability for the activation of an SWT of order $L$ upper-bounds the probability of the bad event that some bin contains more than $L+3$ balls, Eq.~\ref{eqn:swt:result} is also an upper bound for the latter. Note that Eq.~\ref{eqn:swt:chooseL} can be rewritten as
 \begin{align*}
-L &\geq  \frac{\ln\log_2 n}{\ln d} + \frac{\ln(1+\alpha)}{\ln d} \\
-   &= \frac{\ln \log_2 n}{\ln d}  \left(1 + \frac{\ln\left(1+\alpha\right)}{\ln \log_2 n}\right) \\
-  &=  \frac{\ln \ln n}{\ln d}  \left( 1+ o\left( 1\right)\right) \neqn{swt:boundL} \quad .
+L &\geq  \frac{\ln\log_2 n}{\ln d} + \frac{\ln(1+\alpha)}{\ln d} 
+   = \frac{\ln \log_2 n}{\ln d}  \left(1 + \frac{\ln\left(1+\alpha\right)}{\ln \log_2 n}\right) \\
+  &=  \frac{\ln \ln n}{\ln d}  \left( 1+ o\left( 1\right)\right) \neqn{swt:boundL} \quad ,
 \end{align*}
-
-This proves Theorem~\ref{theorem:greedy} for the case $m=n$, under the assumption that all events are stochastically independent (Assumption~\ref{assumption:independence}). \qed
+thus proving Theorem~\ref{theorem:greedy}, under Assumption~\ref{assumption:independence} (i.e., that all events are stochastically independent). \qed
 
 \subsection{Always-go-left}
 \label{sec:analysis:alg}
-Similarly to Section~\ref{sec:analysis:greedy}, where we used symmetric witness trees to upper-bound the probability that a bin contains too many balls when using the Greedy scheme, we will use asymmetric witness trees to get an analogous upper bound for the Always-go-left scheme. We will make the same simplification as stated in Assumption~\ref{assumption:independence}, namely that all the events represented by the edges and nodes of a witness tree are stochastically independent.
+Similarly to Section~\ref{sec:analysis:greedy}, where we used symmetric witness trees to upper-bound the probability that a bin contains too many balls when using the Greedy scheme, we will use asymmetric witness trees (AWT) to get an analogous upper bound for the Always-go-left scheme. Again, we will use Assumption~\ref{assumption:independence}, i.e., we assume that all the events represented by the edges and nodes of a witness tree are stochastically independent.
 
 \subsubsection{Asymmetric witness trees}
 \label{sec:analysis:definitionAsymWT}
-With one exception, the definition of an asymmetric witness tree is the same as the definition of a symmetric witness tree, including the definition of activation. Only its structure differs from that of a symmetric tree. An asymmetric witness tree has the structure of a $d$-ary Fibonacci tree $T_d\left(k \right)$, which is defined as follows.
+An AWT is defined in the same way as an SWT  (Section~\ref{sec:analysis:definitionSymWT}), except for its structure, which is a $d$-ary Fibonacci tree $T_d\left(k \right)$:
+
 \begin{compactitem}
 \item $T_d(1)$ is a single node.
 \item $T_d(2) = T_d(1)$.
 \item For $3\leq k \leq d$, $T_d(k)$ is a tree with $k-1$ children, which are the roots of the trees $T_d(k-1),\ldots,T_d(1)$.
 \item For $k>d$, $T_d(k)$ is a tree with $d$ children, which are the roots of the trees $T_d(k-1),\ldots,T_d(k-d)$.
 \end{compactitem}
-%\todo{illustrate and note difference to usual Fibonacci trees}
-
-A $d$-ary asymmetric witness tree of order $L$ has the structure of the Fibonacci tree $T_d(d  L+1)$ and by Equation~\ref{eqn:goldenFib} has $F_d(d L + 1) \geq \Phi_d^{d L-1}$ leaves. 
+A $d$-ary AWT of order $L$ has the structure of the Fibonacci tree $T_d(d  L+1)$ and thus has $F_d(d L + 1) \geq \Phi_d^{d L-1}$ leaves (Eq.~\ref{eqn:goldenFib}). 
 
 \begin{lemma}
-When using the Always-go-left algorithm to put balls into bins and arbitrary $L > 0$, a bin containing more than $L+3$ balls implies the activation of an asymmetric witness tree of order $L$.
+When using the Always-go-left algorithm to put balls into bins, a bin containing more than $L+3$ balls implies the activation of an AWT of order $L$.
 \end{lemma}
 \begin{proof}
 For each node we define a label $(h, i)$, where $h, i \in \mathbb{N}$, $0 \leq h \leq L$ and  $1\leq i \leq d$. 
 \begin{compactitem}
 \item A node that is the root of a Fibonacci tree $T_d(1)$ is assigned the label $(0,1)$.
-\item Analogously, a node that is the root of a Fibonacci tree $T_d(2)$ is assigned the label $(0,2)$. Thus, nodes labeled $(0,1)$ or $(0,2)$ do not have children.
-\item A node with label $(0, i)$, where $i>2$, has $i-1$ children with labels $(0,i-1)\dots (0,1)$
-\item A node with label $(h,i)$ , where $h>0$, has $d$ children with the labels $(h,i-1)\dots(h,1)$,$(h-1,d)\dots(h-1, i)$.
+\item Analogously, a node that is the root of a Fibonacci tree $T_d(2)$ is assigned the label $(0,2)$. Thus, nodes labelled $(0,1)$ or $(0,2)$ do not have any children.
+\item A node with label $(0, i)$, where $i>2$, has $i-1$ children with labels $(0,i-1),\dots,(0,1)$
+\item A node with label $(h,i)$ , where $h>0$, has $d$ children with the labels $(h,i-1),\dots,(h,1)$,$(h-1,d),\dots,(h-1, i)$.
 \item The root of a Fibonacci tree $T_d(d h+i)$ has the label $(h, i)$. 
 \end{compactitem}
-Thus, our the root node of our witness tree will be labeled $(L, 1)$. Note that the labels are unique within the set of children of a node $v$, but not for all nodes of the tree. The labels are useful to state the following invariant, which will be maintained while assigning balls to the nodes of the witness tree.
+Thus, the root node of the witness tree will be labelled $(L, 1)$. Note that the labels are unique for the set of children of any node $v$, but not necessarily for all nodes of the tree. The labels are useful to state the following invariant, which will be maintained while assigning balls to the nodes of the witness tree.
 
 \begin{invariant}
 Ball $b_v$ referenced by a node $v$ with label $(h,i)$ was placed in a bin belonging to group $i$. The bin contained at least $h+3$ other balls at the time of insertion of the ball $b_v$.
 \end{invariant}
-
-Let $x$ be the bin that contains $L+4$ balls. The root node gets assigned the topmost ball in bin $x$. Each of the $d$ locations of this ball points to a bin with at least $L+3$ balls in it, at the time of its insertion. These are the $d$ bins that were sampled by the Always-go-left scheme and thus bin $i$ belongs to the $i$'th group of bins, where each group consists of $n/d$ bins. The child node of the root with label $(L-1, i)$ is assigned the topmost ball of the bin the $i$' location points to. The assignment of balls to nodes than proceeds recursively. Given a node $v$ with label $(h, i)$ whose ball $b_v$ was put into some bin belonging to group $i$ and containing at least $l+3$ other balls, we can conclude the following.
+Let $x$ be the bin that contains $L+4$ balls. The root node gets assigned the topmost ball $b_t$ in bin $x$, thus each of the $d$ locations of this ball points to a bin with at least $L+3$ balls in it, at the time of insertion of $b_t$. These are the $d$ bins that were sampled by the Always-go-left scheme and thus bin $i$ belongs to the $i$'th group of bins, where each group consists of $n/d$ bins. The child node of the root with label $(L-1, i)$ is assigned the topmost ball of the bin the $i$' location points to. The assignment of balls to nodes than proceeds recursively. Given a node $v$ with label $(h, i)$ and referencing ball $b_v$ that was put into some bin belonging to group $i$ and containing at least $l+3$ other balls, we can conclude the following:
 \begin{compactitem}
 \item For $1\leq j < i$, the $j$'th location of the ball $b_v$ points to a bin containing at least $l+4$ balls at the insertion time of the ball $b_v$. If the $j$-th location contained less balls than the $i$-th location, the Always-go-left scheme would have put the ball $b_v$ into the bin pointed to by location $j$. The topmost ball in location $j$ is assigned to the  child $u$ of $v$ with label $(l,j)$. 
-\item For $i < j \leq d$, the $j$-th location contains at least $l+3$ balls. If location $j$ contained less, the Always-go-left scheme would have put the ball $b_v$ into the bin it points to. The topmost ball in the bin that location $j$ points to is assigned to the child node $u$ of $v$ labeled with $(l-1, j)$. \todo{the paper claims that the locations $j$ point to bins with $l+2$ balls. This can not be true, since the topmost, i.e., the $l+2$ ball - call it $b_t$ - gets assigned to a node with label $(l'=l-1, j)$. Since there are $l+1=l'+2$ balls below it, at the time of the placement of ball $b_t$, the bin $j$ it gets put into has only $l'+2$ balls in it, violating the invariant. Same with the case $j<i$.} 
+\item For $i < j \leq d$, the $j$-th location contains at least $l+3$ balls. If location $j$ contained less, the Always-go-left scheme would have put the ball $b_v$ into the bin location $j$ points to. The topmost ball in the bin that location $j$ points to is assigned to the child node $u$ of $v$ labelled with $(l-1, j)$. \todo{the paper claims that the locations $j$ point to bins with $l+2$ balls. This can not be true, since the topmost, i.e., the $l+2$ ball - call it $b_t$ - gets assigned to a node with label $(l'=l-1, j)$. Since there are $l+1=l'+2$ balls below it, at the time of the placement of ball $b_t$, the bin $j$ it gets put into has only $l'+2$ balls in it, violating the invariant. Same with the case $j<i$.} 
 \end{compactitem}
 \end{proof}
 
 \subsubsection{Probability of activation}
 \label{sec:analysis:probabilityAsymWT}
 \begin{lemma}\label{lemma:awt:activation}
-For some arbitrary $\alpha$ and large enough $L$, the activation of an asymmetric witness tree of order $L$ occurs with probability at most $n^{-\alpha}$.
+For some arbitrary $\alpha$ and large enough $L$, the activation of an AWT of order $L$ occurs with probability at most $n^{-\alpha}$.
 \end{lemma}
 
 \begin{proof}
-Analogously to the symmetric witness tree, the possible number of asymmetric witness trees is upper-bounded by $w=n^k$ and the probability that all edge events occur is\footnote{As in Section~\ref{sec:analysis:greedy}, $k$ denotes the number of nodes of the witness tree and $l$ the number of leaves.} 
+Analogously to the SWT, the possible number of AWTs is upper-bounded by $w\leq	n^k$, and the probability that all edge events occur is\footnote{As in Section~\ref{sec:analysis:greedy}, $k$ denotes the number of nodes of the witness tree and $l$ the number of leaves.} 
 \begin{align*}
-p_e = \left(\frac{d}{n}\right)^{k-1}\quad .
+p_\mathrm{e} = \left(\frac{d}{n}\right)^{k-1}\quad .
 \end{align*}
-
-The probability that all leaf events occur too is the same as for the symmetric witness tree, but its derivation differs. Again, at any time at most $b'=n/3$ bins contain 3 or more balls, but we do not know how those bins are distributed among the groups. Let $b_i$ be the number of bins in group $i$ that contain 3 or more balls. Then $\beta_i = b_i d/ n$ is the fraction of the bins $b_i$ in group $i$. Since no more than $n/3$ bins can contain 3 or more balls, the values $b_i$ are subject to the constraint
+The probability that all leaf events occur is the same as for the SWT, but its derivation differs. Again, at any time at most $n/3$ bins contain 3 or more balls, but we do not know how those bins are distributed among the groups. Let $b_i$ be the number of bins in group $i$ that contain 3 or more balls. Then $\beta_i = b_i d/ n$ is the fraction of the bins $b_i$ in group $i$. Since no more than $n/3$ bins can contain 3 or more balls, the values $b_i$ are subject to the constraint
 \begin{align*}
 \frac{n}{d}\sum_{i=1}^d \beta_i \leq \frac{n}{3}\quad ,
 \end{align*}
@@ -379,63 +357,59 @@ and thus
 \begin{align*}
 \sum_{i=1}^d \beta_i \leq \frac{d}{3}\quad .
 \end{align*}
-
 The probability that all $d$ locations of a ball point to a bin containing 3 or more balls is then 
 \begin{align*}
-p_{l_1} = \prod_{i=1}^{d} \beta_i \quad .
+p_\mathrm{l}' = \prod_{i=1}^{d} \beta_i \quad ,
 \end{align*}
-In other words, a leaf event occurs with probability $p_{l_1}$, which is maximized when all $b_i$ are equal. We thus set $b_i \leq 1/3$ for all $i$ and get as upper bound for the probability that all leaf events occur 
+i.e., a leaf event occurs with probability $p_\mathrm{l}'$, which is maximized when all $b_i$ are equal. We thus set $b_i = 1/3$ for all $i$ and get as upper bound for the probability that all leaf events occur 
 \begin{align*}
-p_l \leq 3^{-d l}\quad .
+p_\mathrm{l} \leq 3^{-d l}\quad .
 \end{align*}
-
-The above results imply the same probability for the activation of an asymmetric witness tree as we derived in Section~\ref{sec:analysis:probabilitySymWT} for the activation of a symmetric witness tree, that is
+The above results imply the same probability for the activation of an AWT as for the activation of an SWT (Eq. \ref{eqn:swt:result}); that is
 \begin{align*}
-p_{awt} &\leq n  2^{-l}\quad .
+P_\mathrm{a} &\leq n  2^{-l}\quad .
 \end{align*}
 However, the number of leaves is larger, since 
 \begin{align*}
 l \geq \Phi_d^{d L -1}
 \end{align*}
-holds\footnote{see Section~\ref{sec:analysis:definitionAsymWT} for details}.
-
-For any constant $\alpha > 0$, let 
+for the AWT (Section~\ref{sec:analysis:definitionAsymWT}) whereas $l = d^L$ for the SWT.
+For any $\alpha > 0$, let 
 \begin{align*}
 L &\geq \left\lceil{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d \ln \Phi_d}}\right\rceil+\frac{1}{d} \neqn{awt:chooseL}\quad .
 \end{align*}
 \todo{the paper uses $+1$, instead of $+1/d$, but I can't workout the below result then} 
 Then, 
 \begin{align*}
-p_{awt} &\leq n  2^{-\Phi_d^{d L -1}} \\
-        &= n  2^{-\Phi_d^{d \left(\left\lceil{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d \ln \Phi_d}}\right\rceil+\frac{1}{d}\right) -1}} \\
-        &\leq n  2^{-\Phi_d^{d \left({\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d \ln \Phi_d}}+\frac{1}{d}\right) -1}} \\
-        &= n  2^{-\Phi_d^{{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d \ln \Phi_d}}}} \\
-        &= n  2^{-\Phi_d^{\log_{\Phi_d}\log_2 n + \log_{\Phi_d}\left(1+\alpha\right)}} \\
-         &= n  2^{-\Phi_d^{\log_{\Phi_d}\log_2 n} \Phi_d^{ \log_{\Phi_d}\left(1+\alpha\right)}} \\
-         &= n  2^{-\log_2 n \left(1+\alpha\right)} \\
-         &= n  n ^{-(1+\alpha)} = n^{-\alpha} \neqn{awt:result} \quad .
+P_\mathrm{a} &\leq n  2^{-\Phi_d^{d L -1}} 
+        = n  2^{-\Phi_d^{d \left(\left\lceil{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d \ln \Phi_d}}\right\rceil+\frac{1}{d}\right) -1}} 
+        \leq n  2^{-\Phi_d^{d \left({\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d \ln \Phi_d}}+\frac{1}{d}\right) -1}} \\
+        &= n  2^{-\Phi_d^{{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d \ln \Phi_d}}}} 
+        = n  2^{-\Phi_d^{\log_{\Phi_d}\log_2 n + \log_{\Phi_d}\left(1+\alpha\right)}} 
+        = n  2^{-\Phi_d^{\log_{\Phi_d}\log_2 n} \Phi_d^{ \log_{\Phi_d}\left(1+\alpha\right)}} \\
+         &= n  2^{-\log_2 n \left(1+\alpha\right)} 
+         = n  n ^{-(1+\alpha)} = n^{-\alpha} \neqn{awt:result} \quad .
 \end{align*}
-Thus, for any constant $\alpha$ and large enough $L$ as specified in Equation~\ref{eqn:awt:chooseL} the probability that a symmetric witness tree of order $L$ is activated is bounded above by $p_{awt }\leq n^{-\alpha}$.
+Thus, for any $\alpha>0$ and large enough $L$ as specified in Eq.~\ref{eqn:awt:chooseL}, the probability that an AWT of order $L$ is activated is bounded from above as $P_\mathrm{a}\leq n^{-\alpha}$.
 \end{proof}
-
-Since the probabilty for the activation of an asymmetric witness tree of order $L$ upper-bounds the probability of the bad event that some bin contains more than $L+3$ balls, Equation~\ref{eqn:awt:result} also is an upper bound for the latter. Note that Equation~\ref{eqn:awt:chooseL} can be written as
+Since the probability for the activation of an AWT of order $L$ upper-bounds the probability of the bad event that some bin contains more than $L+3$ balls, Eq.~\ref{eqn:awt:result} is also an upper bound for the latter. Note that Eq.~\ref{eqn:awt:chooseL} can be written as
 \begin{align*}
-L &\geq \frac{\ln\log_2 n}{d \ln \Phi_d} + \frac{\ln\left(1+\alpha\right)}{d \ln \Phi_d} + \frac{1}{d}\\
-  &\geq \frac{\ln\ln n}{d \ln \Phi_d} + O\left(1\right)\quad .
+L &\geq \frac{\ln\log_2 n}{d \ln \Phi_d} + \frac{\ln\left(1+\alpha\right)}{d \ln \Phi_d} + \frac{1}{d}
+  \geq \frac{\ln\ln n}{d \ln \Phi_d} + O\left(1\right)\quad ,
 \end{align*}
-This proves Theorem~\ref{theorem:aglm}, under the assumption that all events are stochastically independent (Assumption~\ref{assumption:independence}). \qed
+thus proving Theorem~\ref{theorem:aglm}, under Assumption~\ref{assumption:independence} (i.e., that all events are stochastically independent). \qed
 
 \subsection{Non-distinct balls}
 \label{sec:analysis:nondistinctBalls}
-So far, we have assumed that all balls represented by nodes in a witness tree are stochastically independent (Assumption~\ref{assumption:independence}). Obviously, to get a valid upper bound on the probability for the activation of a witness tree, the possibility of non-distinct balls has to be accounted for. In other words, the edge and leaf events of the witness tree are not independent anymore. Will start with a witness tree referencing non-distinct balls and prune it such that dependencies between edge and leaf events are removed. Note that pruning will reduce the size of the witness tree and thus increase the probability of its activation. To compensate for this loss in size, we start with a larger witness tree, which we call a full witness tree and will show that, speaking informally, the pruning of many events is unlikely. Note that the technique presented in this section is applicable to both symmetric and asymmetric witness trees. 
+So far, we have assumed that all balls represented by nodes in a witness tree are stochastically independent (Assumption~\ref{assumption:independence}). Obviously, to get a valid upper bound on the probability for the activation of a witness tree, the possibility of non-distinct balls has to be accounted for. In other words, the edge and leaf events of the witness tree are not independent any more. Will start with a witness tree referencing non-distinct balls and prune it such that dependencies between edge and leaf events are removed. Note that pruning will reduce the size of the witness tree and thus increase the probability of its activation. To compensate for this loss in size, we start with a larger witness tree, which we call a full witness tree and will show that, speaking informally, the pruning of many events is unlikely. Note that the technique presented in this section is applicable to both symmetric and asymmetric witness trees. 
 
 \subsubsection{Full witness trees}
 \label{sec:analysis:FullWT}
-Let $\gamma \geq 2$ be a suitable constant. The root node of a full witness tree has $\gamma$ children, denoted by $v_{c_i}$ with $1\leq i \leq \gamma$. The nodes $v_{c_i}$ have exactly one child each and the balls assigned to them are pairwise distinct. The root thus has $\gamma$ grandchildren, each of which is the root of a witness tree of order $L$. The time constraints and activation of a full witness tree is defined analogously to the previous variants.
+Let $\gamma \geq 2$ be a suitable constant. The root node of a full witness tree (FWT) has $\gamma$ children, denoted by $v_{c_i}$ with $1\leq i \leq \gamma$. The nodes $v_{c_i}$ have exactly one child each and the balls assigned to them are pairwise distinct. The root thus has $\gamma$ grandchildren, each of which is the root of a witness tree of order $L$. The time constraints and activation of a FWT is defined analogously to the previous variants.
 
 \subsubsection{Construction}
 \label{sec:analysis:constructionFullWT}
-Assume a bin $x$ contains at least $L+3+\gamma$ balls at time $t$. We construct a witness tree as follows.
+Assume a bin $x$ contains at least $L+3+\gamma$ balls at time $t$. We construct an FWT as follows.
 \begin{compactitem}
 \item The root is not assigned any ball.
 \item Each child of the root is assigned one of the topmost $\gamma$ balls in bin $x$, which are necessarily distinct.
@@ -445,16 +419,16 @@ Notice that the $\gamma$ additional balls in bin $x$ are assigned to the child n
 
 \subsubsection{Pruning}
 \label{sec:analysis:pruningFullWT}
-To remove all dependencies in the witness tree, we have to find nodes that represent the same ball and prune the tree such that each ball is referenced only once. Thus, traverse the witness tree in breadth-first order. When we reach a node $v$ that represents a ball $b$ already encountered before, let $e = (v,u)$ be the edge connecting $v$ and its parent node $u$. We call $e$ a cutoff edge and use it as a witness that one of the $d$ locations of the ball $b_u$ is the same as one of the locations of some other ball $b_{u'}$, represented by a node $u'$, which was already traversed. Furthermore, we remove the whole tree rooted at node $v$ from our witness tree. We continue this pruning until either the breath-first traversal terminates or until we have obtained $\gamma$ cut-off edges. Note that more than $\gamma$ cut-off edges cannot exist. When finished, the pruned witness tree does not contain any ball twice and thus all its events are independent. 
+To remove all dependencies in the witness tree, we have to find nodes that represent the same ball and prune the tree such that each ball is referenced only once. Thus, traverse the witness tree in breadth-first order. When we reach a node $v$ that represents a ball $b$ already encountered before, let $e = (v,u)$ be the edge connecting $v$ and its parent node $u$. We call $e$ a cut-off edge and use it as a witness that one of the $d$ locations of the ball $b_u$ is the same as one of the locations of some other ball $b_{u'}$, represented by a node $u'$, which was already traversed. Furthermore, we remove the whole tree rooted at node $v$ from our witness tree. We continue this pruning until either the breath-first traversal terminates or until we have obtained $\gamma$ cut-off edges. Note that more than $\gamma$ cut-off edges cannot exist. When finished, the pruned witness tree does not contain any ball twice and thus all its events are independent. 
 
 \subsubsection{Probability of activation}
 \label{sec:analysis:probabilityFullWT}
 \begin{lemma}\label{lemma:fwt:activation}
-For some suitable $\gamma \geq 2$ and large enough $L$, the activation of a prunded witness tree occurs with probability at most $n^{-\gamma +1 +o(1)}$.
+For some suitable $\gamma \geq 2$ and large enough $L$, the activation of a pruned witness tree occurs with probability at most $n^{-\gamma +1 +o(1)}$.
 \end{lemma}
-If there are less than $\gamma$ cut-off edges, in at least one of the $\gamma$ symmetric or asymmetric witness trees contained in the full witness tree the referenced balls are distinct. Let this symmetric or asymmetric witness tree be denoted by $T$. Then, the probability for the activation of the full witness tree is upper-bounded by the probability for the activation of $T$, implying a probability for activation of this witness tree of $p = n^{- \alpha}$, as shown in Sections~\ref{sec:analysis:probabilitySymWT} and~\ref{sec:analysis:probabilityAsymWT}, respectively.
+If there are less than $\gamma$ cut-off edges, in at least one of the $\gamma$ symmetric or asymmetric witness trees contained in the full witness tree the referenced balls are distinct. Let this symmetric or asymmetric witness tree be denoted by $T$. Then, the probability for the activation of the FWT is upper-bounded by the probability for the activation of $T$, implying a probability for activation of this witness tree of $p = n^{- \alpha}$, as shown in Sections~\ref{sec:analysis:probabilitySymWT} and~\ref{sec:analysis:probabilityAsymWT}, respectively.
 
-Thus, it remains to find an upper-bound for the activation of a full witness tree with $\gamma$ cut-off edges. Let $K$ be the number of references to balls by the full witness tree\footnote{Since no ball was assigned to the root node, the full witness tree consists of $K+1$ nodes} and assume that $K  \leq 2 \gamma\left(\alpha+1\right) \log_2 n$, for some arbitrary $\alpha > 0$. Then, there are at most $w_p=K^\gamma$ possibilities to transform a full witness tree with $K+1$ nodes to a pruned witness tree with $\gamma$ cut-off edges. Fix the shape of the tree to be one of those. 
+Thus, it remains to find an upper-bound for the activation of an FWT with $\gamma$ cut-off edges. Let $K$ be the number of references to balls by the FWT\footnote{Since no ball was assigned to the root node, the FWT consists of $K+1$ nodes} and assume that $K  \leq 2 \gamma\left(\alpha+1\right) \log_2 n$, for some arbitrary $\alpha > 0$. Then, there are at most $w_p=K^\gamma$ possibilities to transform an FWT with $K+1$ nodes to a pruned witness tree with $\gamma$ cut-off edges. Fix the shape of the tree to be one of those. 
 
 To bound the probability for the activation of all edge events, we need to specify which event is represented by an edge $e_i = (v_r, v_i)$, where $v_i$ with $1 \leq i \leq \gamma$ is a child of the root node $v_r$. Assume that the root node $v_r$ represents an arbitrary bin. Then the edge $e_i$ represents the event that one of the locations of the ball represented by node $v_i$ points to this bin. This implies that the probability of activation for an each $e_i$ is $p_{e_i} = 1/n \leq d/n$. 
 
@@ -469,21 +443,21 @@ p_l \leq 3^{-d l}\quad .
 
 The number of edges $k$ and the number of leaves $l$ in a pruned witness tree may be small compared to a symmetric or asymmetric witness tree, but we will use the cut-off edges to compensate. By definition (Section~\ref{sec:analysis:pruningFullWT}), a cut-off edge $e=(v, u)$ represents the event that the ball $b_u$ represented by node $u$ shares a common location $i$ with another ball $b_{u'}$, represented by node $u'$. Since $u'$ has already been visited by the time the breadth-first traversal reaches node $v$, it is part of the pruned witness tree and was assigned one of $k\leq K$ balls. The probability that location $i$ of ball $b_u$ points to one of the $d$ locations of ball $b_{u'}$ is at most $d/n$. The probability that there are $\gamma$ cut-off edges is thus at most 
 \begin{align*}
-p_c &= \left(k \frac{d}{n}\right)^\gamma \\
-    & \leq \left(K \frac{d}{n}\right)^\gamma \quad .
+p_c &= \left(k \frac{d}{n}\right)^\gamma 
+    \leq \left(K \frac{d}{n}\right)^\gamma \quad .
 \end{align*}
 
 Putting it all together, we get 
 \begin{align*}
-p_{pwt} &= w_p w  p_e  p_l  p_c \\
-		&= K\gamma n^{k+1} \left(\frac{d}{n}\right)^k3^{-d l}  \left(K \frac{d}{n}\right)^\gamma\\
-		&= n  d^k 3^{-d l}  \left(K^2 \frac{d}{n} \right)^\gamma \quad .
+p_{pwt} &= w_p w  p_e  p_l  p_c 
+		= K\gamma n^{k+1} \left(\frac{d}{n}\right)^k3^{-d l}  \left(K \frac{d}{n}\right)^\gamma
+		= n  d^k 3^{-d l}  \left(K^2 \frac{d}{n} \right)^\gamma \quad .
 \end{align*}
 
 Using $K \leq 2l$, $d^2 \leq 3^d$ and $K \leq 2\gamma  \left( \alpha +1 \right)  \log_2 n$ this becomes
 \begin{align*}
-p_{pwt} &\leq n \left(\frac{\left(2\gamma  \left(\alpha +1 \right)  \log_2 n\right)^2 d}{n}\right)^\gamma \\
-        &= n^{-\gamma +1}  n ^{\log_n\left( \left(2\gamma \left(\alpha+1\right) \log_2n \right)^{2\gamma}  d^\gamma \right)}\\
+p_{pwt} &\leq n \left(\frac{\left(2\gamma  \left(\alpha +1 \right)  \log_2 n\right)^2 d}{n}\right)^\gamma 
+        = n^{-\gamma +1}  n ^{\log_n\left( \left(2\gamma \left(\alpha+1\right) \log_2n \right)^{2\gamma}  d^\gamma \right)} \\
         &= n^{-\gamma+1+o\left(1\right)} \quad .
 \end{align*}
 \todo{Where are our $L$ and $\alpha$ here?}
