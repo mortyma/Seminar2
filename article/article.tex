@@ -293,68 +293,63 @@ Thus, for any $\alpha>0$ and large enough $L$ as specified in Eq.~\ref{eqn:swt:c
 Since the probability for the activation of an SWT of order $L$ upper-bounds the probability of the bad event that some bin contains more than $L+3$ balls, Eq.~\ref{eqn:swt:result} is also an upper bound for the latter. Note that Eq.~\ref{eqn:swt:chooseL} can be rewritten as
 \begin{align*}
 L &\geq  \frac{\ln\log_2 n}{\ln d} + \frac{\ln(1+\alpha)}{\ln d} 
-   = \frac{\ln \log_2 n}{\ln d}  \left(1 + \frac{\ln\left(1+\alpha\right)}{\ln \log_2 n}\right) \\
-  &=  \frac{\ln \ln n}{\ln d}  \left( 1+ o\left( 1\right)\right) \neqn{swt:boundL} \quad ,
+   = \frac{\ln \log_2 n}{\ln d} +O(1) 
+  \geq \frac{\ln \ln n}{\ln d} +O(1) \neqn{swt:boundL} \quad ,
 \end{align*}
 thus proving Theorem~\ref{theorem:greedy}, under Assumption~\ref{assumption:independence} (i.e., that all events are stochastically independent). \qed
 
 \subsection{Always-go-left}
 \label{sec:analysis:alg}
-Similarly to Section~\ref{sec:analysis:greedy}, where we used symmetric witness trees to upper-bound the probability that a bin contains too many balls when using the Greedy scheme, we will use asymmetric witness trees (AWT) to get an analogous upper bound for the Always-go-left scheme. Again, we will use Assumption~\ref{assumption:independence}, i.e., we assume that all the events represented by the edges and nodes of a witness tree are stochastically independent.
+Similarly to Section~\ref{sec:analysis:greedy}, where we used symmetric witness trees to upper-bound the probability that a bin contains too many balls when using Greedy as allocation algorithm, we will use asymmetric witness trees (AWT) to obtain an analogous upper bound for the Always-go-left scheme. Again, we will use Assumption~\ref{assumption:independence}, i.e., we assume that all the events represented by the edges and nodes of a witness tree are stochastically independent.
 
 \subsubsection{Asymmetric witness trees}
 \label{sec:analysis:definitionAsymWT}
-An AWT is defined in the same way as an SWT  (Section~\ref{sec:analysis:definitionSymWT}), except for its structure, which is a $d$-ary Fibonacci tree $T_d\left(k \right)$:
+An AWT differes from an SWT (Section~\ref{sec:analysis:definitionSymWT}) only by its structure, which is that of a $d$-ary Fibonacci tree $T_d\left(k \right)$:
 
 \begin{compactitem}
-\item $T_d(1)$ is a single node.
-\item $T_d(2) = T_d(1)$.
+\item $T_d(1)$ is a single node and  $T_d(2) = T_d(1)$.
 \item For $3\leq k \leq d$, $T_d(k)$ is a tree with $k-1$ children, which are the roots of the trees $T_d(k-1),\ldots,T_d(1)$.
 \item For $k>d$, $T_d(k)$ is a tree with $d$ children, which are the roots of the trees $T_d(k-1),\ldots,T_d(k-d)$.
 \end{compactitem}
-A $d$-ary AWT of order $L$ has the structure of the Fibonacci tree $T_d(d  L+1)$ and thus has $F_d(d L + 1) \geq \Phi_d^{d L-1}$ leaves (Eq.~\ref{eqn:goldenFib}). 
-
+A $d$-ary AWT of order $L$ has the structure of a Fibonacci tree $T_d(d  L+1)$ and thus has $l=F_d(d L + 1) \geq \Phi_d^{d L-1}$ leaves (Eq.~\ref{eqn:goldenFib})\todo{Can we just rewrite Eq.~\ref{eqn:goldenFib} like this? what about the limes?}. 
+Furthermore, for each node we define a label $(h, i)$, where $h, i \in \mathbb{N}$, $0 \leq h \leq L$ and  $1\leq i \leq d$:
+\begin{compactitem}
+\item The root nodes of the Fibonacci trees $T_d(1)$ and $T_d(2)$ are assigned the labels $(0,1)$ and $(0,2)$, respectively. Thus, nodes labelled $(0,1)$ or $(0,2)$ do not have any children.
+\item A node with label $(0, i)$, where $i>2$, has $i-1$ children with the labels $(0,i-1),\dots,(0,1)$
+\item A node with label $(h,i)$, where $h>0$, has $d$ children labelled $(h,i-1),\dots,(h,1)$,$(h-1,d),\dots,(h-1, i)$.
+\item The root of a Fibonacci tree $T_d(d h+i)$ is labelled $(h, i)$. 
+\end{compactitem}
+Thus, the root node of an AWT of order $L$ is assigned the label $(L, 1)$. Note that the labels are unique for the set of children of any node $v$, but not necessarily for all nodes of the tree. 
 \begin{lemma}
-When using the Always-go-left algorithm to put balls into bins, a bin containing more than $L+3$ balls implies the activation of an AWT of order $L$.
+When using the Always-go-left algorithm to put balls into bins, a bin containing more than $L+3$ balls activates an AWT of order $L$.
 \end{lemma}
 \begin{proof}
-For each node we define a label $(h, i)$, where $h, i \in \mathbb{N}$, $0 \leq h \leq L$ and  $1\leq i \leq d$. 
-\begin{compactitem}
-\item A node that is the root of a Fibonacci tree $T_d(1)$ is assigned the label $(0,1)$.
-\item Analogously, a node that is the root of a Fibonacci tree $T_d(2)$ is assigned the label $(0,2)$. Thus, nodes labelled $(0,1)$ or $(0,2)$ do not have any children.
-\item A node with label $(0, i)$, where $i>2$, has $i-1$ children with labels $(0,i-1),\dots,(0,1)$
-\item A node with label $(h,i)$ , where $h>0$, has $d$ children with the labels $(h,i-1),\dots,(h,1)$,$(h-1,d),\dots,(h-1, i)$.
-\item The root of a Fibonacci tree $T_d(d h+i)$ has the label $(h, i)$. 
-\end{compactitem}
-Thus, the root node of the witness tree will be labelled $(L, 1)$. Note that the labels are unique for the set of children of any node $v$, but not necessarily for all nodes of the tree. The labels are useful to state the following invariant, which will be maintained while assigning balls to the nodes of the witness tree.
-
+The following invariant will be maintained while assigning balls to the nodes of the AWT:
 \begin{invariant}
-Ball $b_v$ referenced by a node $v$ with label $(h,i)$ was placed in a bin belonging to group $i$. The bin contained at least $h+3$ other balls at the time of insertion of the ball $b_v$.
+A ball $b_v$ referenced by a node $v$ with label $(h,i)$ was placed in a bin $x$ belonging to group $i$ that, at the time of insertion of the ball $b_v$, contained at least $h+3$ other ball. The ball represented by the root node may be put in a bin belonging to any group.
 \end{invariant}
-Let $x$ be the bin that contains $L+4$ balls. The root node gets assigned the topmost ball $b_t$ in bin $x$, thus each of the $d$ locations of this ball points to a bin with at least $L+3$ balls in it, at the time of insertion of $b_t$. These are the $d$ bins that were sampled by the Always-go-left scheme and thus bin $i$ belongs to the $i$'th group of bins, where each group consists of $n/d$ bins. The child node of the root with label $(L-1, i)$ is assigned the topmost ball of the bin the $i$' location points to. The assignment of balls to nodes than proceeds recursively. Given a node $v$ with label $(h, i)$ and referencing ball $b_v$ that was put into some bin belonging to group $i$ and containing at least $l+3$ other balls, we can conclude the following:
+\noindent
+Let $x$ be the bin that contains $L+4$ balls and assign the topmost ball $b_t$ in $x$ to the root node of the AWT. Thus, at the time of insertion of $b_t$, each of the $d$ locations of this ball points to a bin containing at least $L+3$ balls. These are the $d$ bins that were sampled by the Always-go-left scheme, i.e., bin $i$ belongs to the $i$'th group of bins, where each group consists of $n/d$ bins. The child node of the root with label $(L-1, i)$ is assigned the topmost ball of the $i$'th location. The assignment of balls to nodes then proceeds recursively: Given a node $v$ labelled $(h, i)$ that references a ball $b_v$ (which was put into some bin of the $i$-th group that, at the time of insertion of ball $b_v$, contained at least $h+3$ other balls), we can conclude the following:
 \begin{compactitem}
-\item For $1\leq j < i$, the $j$'th location of the ball $b_v$ points to a bin containing at least $l+4$ balls at the insertion time of the ball $b_v$. If the $j$-th location contained less balls than the $i$-th location, the Always-go-left scheme would have put the ball $b_v$ into the bin pointed to by location $j$. The topmost ball in location $j$ is assigned to the  child $u$ of $v$ with label $(l,j)$. 
-\item For $i < j \leq d$, the $j$-th location contains at least $l+3$ balls. If location $j$ contained less, the Always-go-left scheme would have put the ball $b_v$ into the bin location $j$ points to. The topmost ball in the bin that location $j$ points to is assigned to the child node $u$ of $v$ labelled with $(l-1, j)$. \todo{the paper claims that the locations $j$ point to bins with $l+2$ balls. This can not be true, since the topmost, i.e., the $l+2$ ball - call it $b_t$ - gets assigned to a node with label $(l'=l-1, j)$. Since there are $l+1=l'+2$ balls below it, at the time of the placement of ball $b_t$, the bin $j$ it gets put into has only $l'+2$ balls in it, violating the invariant. Same with the case $j<i$.} 
+\item For $1\leq j < i$, the $j$'th location of the ball $b_v$ contains at least $h+4$ balls, at the insertion time of the ball $b_v$. If the $j$-th location contained less balls than the $i$-th location, the Always-go-left scheme would have put the ball $b_v$ into the bin pointed to by location $j$. The topmost ball in location $j$ is assigned to the  child $u$ of $v$ with label $(h,j)$. 
+\item For $i < j \leq d$, the $j$-th location contains at least $h+3$ balls. If location $j$ contained less, the Always-go-left scheme would have put the ball $b_v$ into the bin location $j$ points to. The topmost ball in the bin that location $j$ points to is assigned to the child node $u$ of $v$ labelled with $(h-1, j)$. \todo{the paper claims that the locations $j$ point to bins with $h+2$ balls. This can not be true, since the topmost, i.e., the $h+2$-th ball - call it $b_t$ - gets assigned to a node with label $(h'=h-1, j)$. Since there are $h+1=h'+2$ balls below it, at the time of the placement of ball $b_t$, the bin $j$ it gets put into has only $h'+2$ balls in it, violating the invariant. Same with the case $j<i$.} 
 \end{compactitem}
 \end{proof}
 
 \subsubsection{Probability of activation}
 \label{sec:analysis:probabilityAsymWT}
 \begin{lemma}\label{lemma:awt:activation}
-For some arbitrary $\alpha$ and large enough $L$, the activation of an AWT of order $L$ occurs with probability at most $n^{-\alpha}$.
+For any $\alpha>0$ and large enough $L$, the activation of an AWT of order $L$ occurs with probability at most $n^{-\alpha}$.
 \end{lemma}
 
 \begin{proof}
-Analogously to the SWT, the possible number of AWTs is upper-bounded by $w\leq	n^k$, and the probability that all edge events occur is\footnote{As in Section~\ref{sec:analysis:greedy}, $k$ denotes the number of nodes of the witness tree and $l$ the number of leaves.} 
+Analogously to the SWT, the possible number of AWTs is upper-bounded as $w\leq	n^k$, and the probability that all edge events occur is
 \begin{align*}
-p_\mathrm{e} = \left(\frac{d}{n}\right)^{k-1}\quad .
+p_\mathrm{e} = \left(\frac{d}{n}\right)^{k-1}\quad ,
 \end{align*}
-The probability that all leaf events occur is the same as for the SWT, but its derivation differs. Again, at any time at most $n/3$ bins contain 3 or more balls, but we do not know how those bins are distributed among the groups. Let $b_i$ be the number of bins in group $i$ that contain 3 or more balls. Then $\beta_i = b_i d/ n$ is the fraction of the bins $b_i$ in group $i$. Since no more than $n/3$ bins can contain 3 or more balls, the values $b_i$ are subject to the constraint
+where $k$ is the number of nodes in a Fibonacci tree. The probability that all leaf events occur is the same as for the SWT, but its derivation differs. Again, at any time at most $n/3$ bins contain 3 or more balls, but we do not know how those bins are distributed among the $d$ groups. Let $b_i$ be the number of bins in group $i$ that contain 3 or more balls. Then $\beta_i = b_i d/ n$ is the fraction of the bins $b_i$ in group $i$. Since no more than $n/3$ bins can contain 3 or more balls, the values $b_i$ are subject to the constraint
 \begin{align*}
-\frac{n}{d}\sum_{i=1}^d \beta_i \leq \frac{n}{3}\quad ,
-\end{align*}
-and thus 
-\begin{align*}
+\frac{n}{d}\sum_{i=1}^d \beta_i \leq \frac{n}{3} \Rightarrow
 \sum_{i=1}^d \beta_i \leq \frac{d}{3}\quad .
 \end{align*}
 The probability that all $d$ locations of a ball point to a bin containing 3 or more balls is then 
@@ -367,7 +362,7 @@ p_\mathrm{l} \leq 3^{-d l}\quad .
 \end{align*}
 The above results imply the same probability for the activation of an AWT as for the activation of an SWT (Eq. \ref{eqn:swt:result}); that is
 \begin{align*}
-P_\mathrm{a} &\leq n  2^{-l}\quad .
+P_\mathrm{a} \leq wp_\mathrm{e}p_\mathrm{l} \leq n  2^{-l}\quad .
 \end{align*}
 However, the number of leaves is larger, since 
 \begin{align*}
@@ -384,13 +379,13 @@ Then,
 P_\mathrm{a} &\leq n  2^{-\Phi_d^{d L -1}} 
         = n  2^{-\Phi_d^{d \left(\left\lceil{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d \ln \Phi_d}}\right\rceil+\frac{1}{d}\right) -1}} 
         \leq n  2^{-\Phi_d^{d \left({\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d \ln \Phi_d}}+\frac{1}{d}\right) -1}} \\
-        &= n  2^{-\Phi_d^{{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d \ln \Phi_d}}}} 
+        &= n  2^{-\Phi_d^{{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{\ln \Phi_d}}}} 
         = n  2^{-\Phi_d^{\log_{\Phi_d}\log_2 n + \log_{\Phi_d}\left(1+\alpha\right)}} 
         = n  2^{-\Phi_d^{\log_{\Phi_d}\log_2 n} \Phi_d^{ \log_{\Phi_d}\left(1+\alpha\right)}} \\
          &= n  2^{-\log_2 n \left(1+\alpha\right)} 
          = n  n ^{-(1+\alpha)} = n^{-\alpha} \neqn{awt:result} \quad .
 \end{align*}
-Thus, for any $\alpha>0$ and large enough $L$ as specified in Eq.~\ref{eqn:awt:chooseL}, the probability that an AWT of order $L$ is activated is bounded from above as $P_\mathrm{a}\leq n^{-\alpha}$.
+Thus, for any $\alpha>0$ and large enough $L$ as specified in Eq.~\ref{eqn:awt:chooseL}, the probability that an AWT of order $L$ is activated is bounded from above by $P_\mathrm{a}\leq n^{-\alpha}$.
 \end{proof}
 Since the probability for the activation of an AWT of order $L$ upper-bounds the probability of the bad event that some bin contains more than $L+3$ balls, Eq.~\ref{eqn:awt:result} is also an upper bound for the latter. Note that Eq.~\ref{eqn:awt:chooseL} can be written as
 \begin{align*}
