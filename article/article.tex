@@ -59,7 +59,7 @@ The \emph{Single-choice} strategy is a simple allocation scheme for the BiB prob
 \begin{align*}
 \load = \frac{\ln n}{\ln \ln n}  \left(1 + o\left(1\right)\right)
 \end{align*}
-for the case $m=n$, with high probability\footnote{We say that an event $\mathcal E_n$ occurs \emph{with high probability} (w.h.p.) if $\Pr\left[\mathcal E_n \right] \geq 1 - n^{-\alpha}$ for some arbitrary constant $\alpha > 0$.}~\cite{RS98}. This implies (see Theorem \ref{theorem:asymptotic} in Appendix \ref{sec:asymptotic})
+for the case $m=n$, with high probability\footnote{We say that an event $\mathcal E_n$ occurs \emph{with high probability} (w.h.p.) if $\Pr\left[\mathcal E_n \right] \geq 1 - n^{-\alpha}$ for some arbitrary constant $\alpha > 0$.}~\cite{RS98}. This implies
 \begin{align*}
 \load\in \Theta\left(\frac{\ln n}{\ln \ln n}\right)\quad .
 \end{align*}
@@ -460,79 +460,59 @@ p_{pwt} &\leq n \left(\frac{\left(2\gamma  \left(\alpha +1 \right)  \log_2 n\rig
  
 \section{Conclusion}
 \label{sec:conclusion}
-BiB games have many applications in Computer Science and have been studied extensively. The single-choice BiB strategy chooses a bin uniformly and independently at random for each ball. The classical result for this scheme upper-bounds the gap with~\cite{RS98}
+BiB games have many applications in computer science and have been studied extensively. The single-choice BiB strategy chooses a bin uniformly and independently at random for each ball. The classical result for this scheme upper-bounds the gap with~\cite{RS98}
 \begin{align*}
 \delta =  \Theta\left(\sqrt{\frac{m  \log n}{n}}\right) \quad ,
 \end{align*}
 w.h.p.
-In this paper we have presented two different multiple-choice BiB placement algorithms: The Greedy-scheme due to Azar et al.\cite{ABKU99}, which achieves a gap of 
+In this paper we have presented two different multiple-choice BiB placement algorithms: The Greedy scheme due to Azar et al.\cite{ABKU99}, which achieves a gap of 
 \begin{align*}
 \delta = \frac{\ln\ln n}{\ln d} + O(1) \quad ,
 \end{align*}
-w.h.p., and the Always-go-left scheme due to V\"ocking~\cite{VOC03}, which achieves a slightly better gap of
+w.h.p., and the Always-go-left scheme due to V\"ocking~\cite{VOC03}, which achieves a gap of
 \begin{align*}
 \delta = \frac{\ln \ln n}{d \ln \Phi_d} + O(1) \quad ,
 \end{align*}
 w.h.p., for all $m$. We used witness trees, a very useful technique in the BiB context, to prove these upper-bounds for the case $m=n$ in detail.
 
-
 \appendix
 \section{Generalized Fibonacci numbers}
 \label{sec:fibonacci}
-We define $d$-ary Fibonacci numbers as follows. For $k \leq0$, $F_d(k) = 0$, $F_d(1) = 1$ and for $k \geq 1$,
+We define $d$-ary Fibonacci numbers as follows:
 
 \begin{align*}
-F_d(k) = \sum_{i=1}^{d}F_d(k-i) \quad .
+F_d(k) := \begin{cases}
+                0               & k \leq 0\\
+                1               & k = 1\\
+                \sum_{i=1}^{d}F_d(k-i) & k > 1
+            \end{cases}
+\quad .
 \end{align*}
-Furthermore, define 
+Furthermore, we define $\Phi_d$ as
 \begin{align*}
-\Phi_d = \lim_{k \rightarrow \infty} \sqrt[k]{F_d(k)} \neqn{goldenFib} \quad .
+\Phi_d := \lim_{k \rightarrow \infty} \sqrt[k]{F_d(k)} \neqn{goldenFib} \quad ,
 \end{align*}
-Notice that $F_2$ corresponds to the usual Fibonacci numbers, while $\Phi_2 $ corresponds to the golden ratio~\cite{Knuth73}, which is generalized to $\Phi_d$, for which 
+which has the following properties:
 \begin{align*}
-i, j \in \mathbb{N}, i < j \Rightarrow \Phi_i < \Phi_j
+\forall i\; \forall j \in \mathbb{N}: i < j \quad \Rightarrow \quad \Phi_i < \Phi_j \quad , \quad \lim_{d\rightarrow \infty} \Phi_d = 2 \quad .
 \end{align*}
-and 
-\begin{align*}
-\lim_{d\rightarrow \infty} \Phi_d = 2
-\end{align*}
-hold.
+Notice that $F_2$ corresponds to the usual Fibonacci numbers, while $\Phi_d$ is a generalization of the golden ratio~\cite{Knuth73} and $\Phi_2 $ corresponds to the golden ratio.
 
 \section{Asymptotic notations}
 \label{sec:asymptotic}
-We use the following definitions for the asymptotic notations~\cite{CLRS01}, where $f(\cdot)$ and $g(\cdot)$ are positive functions with one argument $n\in \mathbb{N}$ and $n_0 \in \mathbb{N}$, $c \in \mathbb{R}_{\geq 0}$ are suitable constants.
+We use the following definitions for the asymptotic notations~\cite{CLRS01}, where $f$ and $g$ are non-negative functions with one argument $n\in \mathbb{N}$ and $n_0 \in \mathbb{N}$, $c \in \mathbb{R}_{\geq 0}$ are suitable constants.
 
 \begin{align*}
-f(n) \in O(g(n)) &\Leftrightarrow \exists c, n_0 \;\forall n> n_0: f(n)\leq c  g(n) \\
-f(n) \in \Omega(g(n)) &\Leftrightarrow \exists c, n_0\;\forall n> n_0: cg(n) \leq f(n) \\
-f(n) \in \Theta(g(n)) &\Leftrightarrow f(n) \in \Omega(g(n)) \land f(n)\in O(g(n)) \\
-f(n) \in o(g(n)) &\Leftrightarrow \forall c \; \exists n_0\;\forall n> n_0: f(n) < cg(n)
+f \in O(g) &\Leftrightarrow \exists c\; \exists n_0 \;\forall n> n_0: f(n)\leq c g(n) \\
+f \in \Omega(g) &\Leftrightarrow \exists c \; \exists n_0\;\forall n> n_0: cg(n) \leq f(n) \\
+f \in \Theta(g) &\Leftrightarrow f \in \Omega(g) \land f\in O(g) \\
+f \in o(g) &\Leftrightarrow \forall c \; \exists n_0\;\forall n> n_0: f(n) < cg(n) \\
+f \in \omega(g) &\Leftrightarrow \forall c \; \exists n_0\;\forall n> n_0: cg(n) < f(n) \\
 \end{align*}
-
-The following theorem is useful for understanding the asymptotic bounds presented throughout the paper.
-\begin{theorem}\label{theorem:asymptotic}
-\begin{align*}
-f(n) = g(n)  (1+o(1)) \Rightarrow f(n) \in \Theta(g(n)) 
-\end{align*}
-\end{theorem}
-\begin{proof}
-\begin{align*}
-f(n) &= g(n)+o(1) g(n) \\
-&\Rightarrow f(n) \in \Omega(g(n)) \land f(n) \in O(g(n)) \\
-&\Rightarrow f(n) \in \Theta(g(n))
-\end{align*}
-However, the reverse
-\begin{align*}
-f(n) \in \Theta(g(n)) \Rightarrow f(n) = g(n)  (1+o(1)) 
-\end{align*}
-is not true. As a counter example, consider $f(n) = n$ and $g(n) = 2n$.
-\end{proof}
 
 \section{A bit of history}
 \label{sec:historyOfGreedy}
-The history of proving the remarkable property of the two-choice paradigm (see Theorem~\ref{theorem:greedy}) is in itself quite interesting. It was first proven by Azar et al.~\cite{ABKU99} for the case $m = n$. In the same paper, they claimed that the bound holds for arbitrary $m$. Unfortunately, their analysis breaks down for the heavily loaded case, where $m \in \Omega\left(n  \log n\right)$. Berenbrink at. all~\cite{BCSV06} were the first to proof that the same bound indeed holds for the heavily loaded case. Their proof is fairly complex and a simpler analysis may be found in~\cite{TW13}, which also provides a tight lower bound for the heavily loaded case. Curiously, the case $d = 2$ was implicitly proven by Karp et al. in the context of simulating PRAMs on distributed memory machines\cite{KLM92}.
-
-As discussed in Section~\ref{sec:AlwaysGoLeft}, V\"ocking~\cite{VOC03} was able to slightly improve the bound as well as to show that the Always-go-left strategy that he introduces is optimal up to additive constants.
+The history of proving the remarkable property of the two-choice paradigm (see Theorem~\ref{theorem:greedy}) is in itself quite interesting. It was first proven by Azar et al.~\cite{ABKU99} for the case $m = n$. In the same paper, they claimed that the bound holds for arbitrary $m$. Unfortunately, their analysis breaks down for the heavily loaded case, where $m \in \Omega\left(n  \log n\right)$. Berenbrink at. all~\cite{BCSV06} were the first to prove that the same bound indeed holds for the heavily loaded case. Their proof is fairly complex and a simpler analysis may be found in~\cite{TW13}, which also provides a tight lower bound for the heavily loaded case. Curiously, the case $d = 2$ was implicitly proven by Karp et al. in the context of simulating PRAMs on distributed memory machines\cite{KLM92}. As discussed in Section~\ref{sec:AlwaysGoLeft}, V\"ocking~\cite{VOC03} was able to improve the bound as well as to show that the Always-go-left strategy that he introduces is optimal up to additive constants.
 
 
 %bibliography
