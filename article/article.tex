@@ -210,11 +210,11 @@ We define edge and leaf events:
 \end{description}
 To avoid dependencies, the crucial step is to define edge events in terms of the possible locations of balls, not by their finally assigned bin. 
 
-The following constraints have to be fulfilled by a witness tree. 
-\begin{enumerate}
-\item The ball $b_r$ that is represented by the root node $r$ has to exist at time step $t$. 
-\item Each ball $b_v$ represented by a node $v \neq r$ with parent node $u$ has to exist when the ball $b_u$ is inserted.
-\end{enumerate}
+The following constraints have to be fulfilled by a witness tree:
+\begin{inparaenum}[(i)]
+\item The ball $b_r$ that is represented by the root node $r$ has to exist at time step $t$ and 
+\item each ball $b_v$ represented by a node $v \neq r$ with parent node $u$ has to exist when the ball $b_u$ is inserted.
+\end{inparaenum}
 We say that an edge or leaf event is activated if the associated event occurs. A witness tree is activated when all its edge and leaf events are activated. 
 
 We say that a ``bad event'' occurs when a bin contains more than $L+3$ balls at time $t$. We will use an activated SWT of order $L$ to witness this event and provide an upper bound for its occurrence. Thus, we have to show that the existence of a bin containing at least $L+4$ balls implies the existence of an activated SWT of order $L$. 
