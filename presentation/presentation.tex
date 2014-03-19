@@ -24,7 +24,7 @@
 %Front matter
 %---------------------------------------------------------------------
 \title{The Power of Two Random Choices}
-\subtitle{ A follow up seminar to the lecture "Parallel Algorithms"}
+\subtitle{ A follow up seminar to the "Parallel Algorithms" lecture}
 \author{Martin Kalany}
 \institute
 {
@@ -122,17 +122,77 @@
 %---------------------------------------------------------------------
 %document
 %---------------------------------------------------------------------
+
+% Structure:
+% 30 min
+% 5 min easy stuff (so that everyone understands)
+% 5 min more advanced stuff 
+% 15 min difficult stuff (the proof, either of the symmetric or asymmetric allocation scheme using the infamous assumption 1
+% 5 min further results and wrap up
+
 \begin{document}
 \frame{\titlepage}
 
+\section{Balls into bins}
 \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents
+\end{frame}
+
+\begin{frame}
+\frametitle{Model}
+\end{frame}
+
+\begin{frame}
+\frametitle{Applications}
+\end{frame}
+
+%Table of contents at the start of each section
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\section{Allocation shemes}
+\begin{frame}
+\frametitle{Single choice}
+\end{frame}
+
+\begin{frame}
+\frametitle{Multiple choice}
+\end{frame}
+
+\begin{frame}
+\frametitle{Greedy}
+\end{frame}
+
+\begin{frame}
+\frametitle{Always-go-left}
+\end{frame}
+
+\section{Proof}
+\begin{frame}
+\frametitle{Proof of either Greedy or Always-go-left}
+\end{frame}
+
+\begin{comment}
+\section{Test}
+\begin{frame}
+\frametitle{Ignore the following}
 \begin{tikzpicture}[scale=\scalefac]
 
 	\bab{1 2 3 4 5 6}
 
 \end{tikzpicture}
 \end{frame}
+\end{comment}
 
+\begin{frame}
+\frametitle{}
+\end{frame}
 
 %---------------------------------------------------------------------
 %bibliography
