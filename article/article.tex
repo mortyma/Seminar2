@@ -63,9 +63,9 @@ for the case $m=n$, with high probability\footnote{We say that an event $\mathca
 \begin{align*}
 \load\in \Theta\left(\frac{\ln n}{\ln \ln n}\right)\quad .
 \end{align*}
-Note that, since the average load is 1, $\delta \in \Theta\left( L_{max} \right)$ in this case. For the heavily loaded case~\cite{RS98}, the maximum gap is, w.h.p.,
+Note that, since the average load is 1, $\delta \in \Theta\left( L_{max} \right)$ in this case. For the heavily loaded case~\cite{RS98}, the maximum load is, w.h.p.,
 \begin{align*}
-\delta = \Theta\left(\sqrt{\frac{m  \ln n}{n}}\right)\quad .
+\load = \frac{m}{n} + \Theta\left(\sqrt{\frac{m  \ln n}{n}}\right)\quad .
 \end{align*}
 
 \subsection{Multiple-choice BiB}
@@ -79,9 +79,9 @@ Curiously, the exponential decrease in the gap is already achieved having just t
 \end{comment}
 Extensive research following the influential paper by Azar et al.~\cite{ABKU99}, who were the first ones to explicitly prove this phenomenon\footnote{For a brief history of the proof, which is quite interesting by itself, refer to Appendix \ref{sec:historyOfGreedy}.}, suggests that this \emph{two-choice paradigm} is not just an artefact of the simple BiB model, but a general principle applicable to a variety of problems. 
 
-Consider the slightly more involved \emph{Always-go-left} scheme: Suppose that the $n$ bins are partitioned evenly into $d$ groups, each of size $\lfloor \frac{n}{d}\rfloor$ or $\left\lceil\frac{n}{d}\right\rceil$ (to simplify the presentation, we will assume that $d$ divides $n$ evenly in the remainder of this survey). We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. For tie-breaking, we assume a fixed ordering of bins $i$ for $1 \leq i \leq n$ and put the ball into the bin with smallest index $i$ among those with the same minimal load. Somewhat surprisingly, V\"ocking~\cite{VOC03} showed that such a strategy employing asymmetric tie-breaking in combination with non-uniform bin selection reduces the bound for the gap to\
+Consider the slightly more involved \emph{Always-go-left} scheme: Suppose that the $n$ bins are partitioned evenly into $d$ groups, each of size $\lfloor \frac{n}{d}\rfloor$ or $\left\lceil\frac{n}{d}\right\rceil$ (to simplify the presentation, we will assume that $d$ divides $n$ evenly in the remainder of this survey). We select one bin from each group uniformly and independently at random and put the ball into the least full of those $d$ bins. For tie-breaking, we assume a fixed ordering of bins $i$ for $1 \leq i \leq n$ and put the ball into the bin with smallest index $i$ among those with the same minimal load. Somewhat surprisingly, V\"ocking~\cite{VOC03} showed that such a strategy employing asymmetric tie-breaking in combination with non-uniform bin selection reduces the bound for the maximum load to
 \begin{align*}
-\delta = \frac{\ln\ln n}{d  \ln \Phi_d} + O(1),
+\load = \frac{m}{n} + \frac{\ln\ln n}{d  \ln \Phi_d} + O(1),
 \end{align*}
 w.h.p., for all $m$. (The symbol $\Phi_d$ denotes a generalization of the golden ratio, based on generalized Fibonacci numbers. Refer to Appendix \ref{sec:fibonacci} for the definition.) V\"ocking was also able to show that the Always-go-left strategy is optimal up to additive constants~\cite{VOC03}.
 
