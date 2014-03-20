@@ -1,3 +1,6 @@
+*.smn
+*.nav
+*.fls
 *.acn
 *.acr
 *.alg
