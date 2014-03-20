@@ -1,0 +1,150 @@
+\documentclass[serif,professionalfonts]{beamer}
+
+%\documentclass[a4paper]{article}
+%\usepackage{beamerarticle}
+
+%\usepackage{pgfpages}
+%\setbeameroption{show only notes}
+%\setbeameroption{show notes on second screen=top}
+
+\usetheme{Forcellini}
+
+\usepackage{amsmath}
+
+
+% \vec makes bold symbols
+\def\vec#1{\mathchoice{\mbox{\boldmath$\displaystyle#1$}}
+  {\mbox{\boldmath$\textstyle#1$}}
+  {\mbox{\boldmath$\scriptstyle#1$}}
+  {\mbox{\boldmath$\scriptscriptstyle#1$}}}
+
+% Hermann Zapf Optima clone (wonderful sanserif font) -- URW Classico
+\renewcommand{\sfdefault}{uop}
+\renewcommand{\rmdefault}{ppl}
+\usepackage{eulervm}
+\usepackage[right]{eurosym}
+% \usepackage{paralist}
+\usepackage{algorithm2e}
+
+% professional tables
+\usepackage{booktabs}
+\usepackage{pdfpages}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{dcolumn}
+\usepackage{subfigure}
+\usepackage{epsdice}
+
+\usepackage{fixltx2e}
+\usepackage{microtype}
+
+\usepackage{dot2texi}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathmorphing,arrows,shapes}
+
+\setbeamertemplate{navigation symbols}{}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{comment}
+% description with short indentation
+\setbeamersize{description width of=x}
+
+% some math operators
+\DeclareMathOperator{\har}{H}
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\lag}{lag}
+\DeclareMathOperator{\var}{Var}
+\DeclareMathOperator{\mf}{\enspace .}
+\DeclareMathOperator{\mc}{\enspace ,}
+\newcommand{\eye}{\mathbb{I}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\dom}{\{0,1\}^n}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\nats}{\mathbb{N}}
+\newcommand{\deq}{\triangleq}
+\newcommand{\pd}{\cdot_p}
+\newcommand{\pp}{+_p}
+\newcommand{\pmn}{-_p}
+\newcommand{\ed}{\epsdice}
+\newcommand{\bled}{\epsdice[black]}
+\newcommand{\bitup}{\vspace*{-4mm}}
+\newcommand{\nospace}{\abovedisplayskip=0pt}
+
+\setbeamertemplate{caption}
+{
+  \raggedright%
+  \insertcaption\par%
+}
+
+\setbeamercolor{green}{fg=green}
+
+\title{The Power of Two Random Choices}
+%\subtitle{ A follow up seminar to the "Parallel Algorithms" lecture}
+\author[M. Kalany]{Martin Kalany}
+\institute[TU Wien]
+{
+  Graduate student in Computer Science\\
+  Vienna University of Technology\\
+}
+\date{\today}
+
+\AtBeginSubsubsection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Outline}
+    \tableofcontents[subsubsectionstyle=show/shaded,currentsection,currentsubsection]
+  \end{frame}
+}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Outline}
+    \tableofcontents[subsubsectionstyle=show/shaded,currentsection,currentsubsection]
+  \end{frame}
+}
+
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Outline}
+    \tableofcontents[subsubsectionstyle=show/shaded,currentsection,currentsubsection]
+  \end{frame}
+}
+
+
+\begin{document}
+\begin{frame}
+  \titlepage
+\end{frame}
+\note{}
+
+\begin{comment}
+\begin{frame}[label=references]
+  \frametitle{References}
+  %\nocite{*}
+  %\setbeamertemplate{bibliography item}[book]
+  \bibliographystyle{acm}
+  \bibliography{distrib}
+\end{frame}
+\note{}
+\end{comment}
+
+
+
+\begin{frame}{Introduction}
+\end{frame}
+\note{}
+
+%\againframe{references}
+
+
+\end{document}
+
+\begin{frame}{Title}
+\end{frame}
+\note{}
+
+%  LocalWords: 
