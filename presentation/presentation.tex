@@ -3,7 +3,29 @@
 \usetheme{Amsterdam}
 \usecolortheme{dolphin}
 
-\usepackage{readarray}
+\usepackage{fixltx2e} %some latex fixes
+\usepackage{microtype} %Subliminal refinements towards typographical perfection
+\setlength{\emergencystretch}{2em}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs} %Support use of the Raph Smith’s Formal Script font in mathematics
+\usepackage[sc]{mathpazo} %mathematical fonts
+\usepackage{amsfonts}
+
+\usepackage{color}
+\newcommand\todo[1]{\textcolor{red}{(TODO: #1)}}
+\newcommand\load{L_{\mathrm{max}}}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+% within an align* environment, number and label the equation. #1 is the label text to be appended to eqn:
+\newcommand\neqn[1]{\numberthis\label{eqn:#1}}
+
+%TODO: why are the following defined when using beamer but not for an article?
+%\newtheorem{lemma}{Lemma}
+%\newtheorem{corollary}{Corollary}
+%\newtheorem{theorem}{Theorem}
+\newtheorem{assumption}{Assumption}
+\newtheorem{invariant}{Invariant}
 
 %graphs, pictures
 \usepackage{tikz}
