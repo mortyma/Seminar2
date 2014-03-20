@@ -2,6 +2,7 @@
 \let\Tiny=\tiny %to avoid warnings related to font size and beamer 
 \usetheme{Amsterdam}
 \usecolortheme{dolphin}
+\usecolortheme{orchid}
 
 \usepackage{fixltx2e} %some latex fixes
 \usepackage{microtype} %Subliminal refinements towards typographical perfection
@@ -12,7 +13,6 @@
 \usepackage{mathrsfs} %Support use of the Raph Smith’s Formal Script font in mathematics
 \usepackage[sc]{mathpazo} %mathematical fonts
 \usepackage{amsfonts}
-
 \usepackage{color}
 \newcommand\todo[1]{\textcolor{red}{(TODO: #1)}}
 \newcommand\load{L_{\mathrm{max}}}
@@ -24,10 +24,12 @@
 %\newtheorem{lemma}{Lemma}
 %\newtheorem{corollary}{Corollary}
 %\newtheorem{theorem}{Theorem}
+\newtheorem{claim}{Claim}
 \newtheorem{assumption}{Assumption}
 \newtheorem{invariant}{Invariant}
 
 %graphs, pictures
+\usepackage{readarray}
 \usepackage{tikz}
 \usepackage{pgf}
 \usepackage{xxcolor}
@@ -55,11 +57,24 @@
 }
 \date{\today}
 
+% Create Color definition From Template: 
+% #1 template name, 
+% #2 foreground color name
+% #3 background color name
+\newcommand{\ccft}[3]{
+\usebeamercolor{#1}
+\definecolor{#2}{named}{fg}
+\definecolor{#3}{named}{bg}
+}
+%get some colors from the scheme
+\ccft{block body}{myblock body fg}{myblock body bg}
+\ccft{block title}{myblock title fg}{myblock title bg}
+
 %---------------------------------------------------------------------
 %parameters for balls into bins graphs
 %---------------------------------------------------------------------
 %scale factor
-\newcommand\scalefac{0.5}
+\newcommand\scalefac{0.55}
 %diameter of balls
 \newcommand\ballsize{5mm}
 %number of bins
@@ -67,13 +82,12 @@
 %space between ball and bin
 \newcommand\padding{0.1*\ballsize}
 %height of a bin
-\newcommand\binheight{6*\balldiameter}
+\newcommand\binheight{5*\balldiameter}
 %width of a bin
 \newcommand\binwidth{\balldiameter}
 %gap from bin to bin
 \newcommand\bingap{1.6*\balldiameter}
 %color of balls
-
 \tikzstyle{ballstyle} = [ball color=black!30!red]
 
 %---------------------------------------------------------------------
@@ -84,10 +98,10 @@
 %bin style
 \tikzstyle{topflat} = [
 	minimum width=(\binwidth+2*\padding)*\scalefac, 
-	minimum height=(\binheight+5*\padding)*\scalefac,
+	minimum height=(\binheight+4*\padding)*\scalefac,
 	append after command={
     		\pgfextra
-        		\fill[fill=blue!40] 
+        		\fill[fill=myblock body bg] 
         			(\tikzlastnode.north east) [rounded corners] |-
         			(\tikzlastnode.south)  -| 
         			(\tikzlastnode.west) [sharp corners] |- 
@@ -162,12 +176,71 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{Model}
+\frametitle{The Problem}
+\begin{block}{Balls-into-bins games}
+Suppose we have $n$ initially empty bins and need to distribute $m \geq n$ balls among them, as evenly as possible. We are interested in the maximum load $\load$, i.e, how many balls are in the fullest bin?
+\end{block}
+\pause
+Applications:
+\begin{itemize}
+	\item Hashing
+	\item Online load balancing
+	\item Emulating PRAMs on DMMs
+	\item Low congestion circuit routing
+\end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{Applications}
+\frametitle{Single choice}
+\framesubtitle{A basic allocation scheme}
+\begin{block}{Single choice strategy}
+For each ball, choose one of the $n$ bins uniformly and independently at random.
+\end{block}
+\bigskip
+\begin{center}
+\begin{tikzpicture}[scale=\scalefac]
+	\bab{2 1 5 2 3 0}
+\end{tikzpicture}
+\end{center}
 \end{frame}
+
+\begin{frame}
+\frametitle{Randomized allocation process}
+
+Since we deal with a randomized process, we cannot give upper bounds for the maximum load $\load$ with absolute certainty. 
+
+\bigskip
+
+\begin{block}{Definition}
+We say that an event $\mathcal E_n$ occurs \emph{with high probability} (w.h.p.) if $\Pr\left[\mathcal E_n \right] \geq 1 - n^{-\alpha}$ for some $\alpha > 0$.
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Single choice: Upper bound for the maximum load}
+\begin{claim}
+When using the single choice strategy to distribute $m$ balls to $n$ bins, the maximum load will be, w.h.p.,
+\begin{align}
+\load = 
+	\begin{cases}
+    \frac{\ln n}{\ln\ln n} + O(1)              & m = n \\
+    \frac{m}{n} + \Theta\left(\sqrt{\frac{m\ln n}{n}} \right)              & m > n
+    \end{cases}
+\end{align}
+\end{claim}
+\end{frame}
+
+\begin{comment}
+\begin{frame}
+\frametitle{Applications}
+\begin{itemize}
+	\item Hashing
+	\item Online load balancing
+	\item Emulating PRAMs on DMMs
+	\item Low congestion circuit routing
+\end{itemize}
+\end{frame}
+\end{comment}
 
 %Table of contents at the start of each section
 \AtBeginSection[]
@@ -180,11 +253,11 @@
 
 \section{Allocation shemes}
 \begin{frame}
-\frametitle{Single choice}
+\frametitle{BiB Model}
 \end{frame}
 
 \begin{frame}
-\frametitle{Multiple choice}
+\frametitle{Multiple choice strategies}
 \end{frame}
 
 \begin{frame}
@@ -195,7 +268,6 @@
 \frametitle{Always-go-left}
 \end{frame}
 
-\section{Proof}
 \begin{frame}
 \frametitle{Proof of either Greedy or Always-go-left}
 \end{frame}
@@ -205,16 +277,10 @@
 \begin{frame}
 \frametitle{Ignore the following}
 \begin{tikzpicture}[scale=\scalefac]
-
 	\bab{1 2 3 4 5 6}
-
 \end{tikzpicture}
 \end{frame}
 \end{comment}
-
-\begin{frame}
-\frametitle{}
-\end{frame}
 
 %---------------------------------------------------------------------
 %bibliography
