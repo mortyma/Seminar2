@@ -1,4 +1,4 @@
-\documentclass[serif,professionalfonts]{beamer}
+	\documentclass[serif,professionalfonts]{beamer}
 
 %\usepackage{pgfpages}
 %\setbeameroption{show only notes}
@@ -97,6 +97,7 @@
 }
 \date{\today}
 
+\begin{comment}
 \AtBeginSubsubsection[]
 {
   \begin{frame}<beamer>
@@ -120,6 +121,7 @@
     \tableofcontents[subsubsectionstyle=show/shaded,currentsection,currentsubsection]
   \end{frame}
 }
+\end{comment}
 
 %---------------------------------------------------------------------
 % Create Color definition From Template
@@ -133,9 +135,7 @@
 \definecolor{#3}{named}{bg}
 }
 %get some colors from the scheme
-\ccft{block body}{myblock body fg}{myblock body bg}
-\ccft{block title}{myblock title fg}{myblock title bg}
-
+\ccft{block body example}{myblock body fg}{myblock body bg} 
 %---------------------------------------------------------------------
 %parameters for balls into bins graphs
 %---------------------------------------------------------------------
@@ -236,19 +236,36 @@
 \end{frame}
 \note{}
 
-\section{Balls into bins}
+\begin{comment}
 \begin{frame}
     \frametitle{Table of Contents}
     \tableofcontents
 \end{frame}
+\end{comment}
 
+\section{Balls into bins}
 \begin{frame}
 \frametitle{The Problem}
-\begin{block}{Balls-into-bins games}
-Suppose we have $n$ initially empty bins and need to distribute $m \geq n$ balls among them, as evenly as possible. We are interested in the maximum load $\load$, i.e, how many balls are in the fullest bin?
-\end{block}
-\pause
-\bigskip
+\begin{exampleblock}{Balls-into-bins games}
+Suppose we have $n$ initially empty bins and need to distribute $m \geq n$ balls among them, \alert{as evenly as possible}. 
+\end{exampleblock}
+
+\begin{exampleblock}{Definition}
+We are interested in the \alert{maximum load $\load$}, i.e, how many balls are in the fullest bin?
+\end{exampleblock}
+
+\begin{exampleblock}{Definition}
+Equivalently, we can look at the \alert{additive gap} $\delta$:
+\begin{align*}
+\delta = \load - \frac{m}{n}
+\end{align*}
+\end{exampleblock}
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Applications}
 Applications:
 \begin{itemize}
 	\item Hashing
@@ -261,9 +278,9 @@ Applications:
 \begin{frame}
 \frametitle{Single choice}
 \framesubtitle{A basic allocation scheme}
-\begin{block}{Single choice strategy}
+\begin{exampleblock}{Single choice strategy}
 For each ball, choose one of the $n$ bins uniformly and independently at random.
-\end{block}
+\end{exampleblock}
 \bigskip
 \begin{center}
 \begin{tikzpicture}[scale=\scalefac]
@@ -273,45 +290,44 @@ For each ball, choose one of the $n$ bins uniformly and independently at random.
 \end{frame}
 
 \begin{frame}
-\frametitle{Randomized allocation process}
+\frametitle{Some definitions}
 
-Since we deal with a randomized process, we cannot give upper bounds for the maximum load $\load$ with absolute certainty. 
+Since we deal with a \alert{randomized process}, we cannot give upper bounds for the maximum load $\load$ with absolute certainty. 
+
+\begin{exampleblock}{Definition}
+We say that an event $\mathcal E_n$ occurs \alert{with high probability} (w.h.p.) if $\Pr\left[\mathcal E_n \right] \geq 1 - n^{-\alpha}$ for some $\alpha > 0$.
+\end{exampleblock}
 
 \bigskip
+\pause
 
-\begin{block}{Definition}
-We say that an event $\mathcal E_n$ occurs \emph{with high probability} (w.h.p.) if $\Pr\left[\mathcal E_n \right] \geq 1 - n^{-\alpha}$ for some $\alpha > 0$.
-\end{block}
+%\begin{exampleblock}{Definition}
+We distinguish:
+\begin{itemize}
+\item The \alert{lightly loaded} case: $m = n$
+\item The \alert{heavily loaded} case:	 $m \in \omega(n\ln n)$
+\end{itemize}
+%\end{exampleblock}
+
 \end{frame}
 
 \begin{frame}
 \frametitle{Single choice}
 \framesubtitle{Upper bound for the maximum load}
-\begin{claim}
+\begin{theorem}[Raab and Steger, 1998]
 When using the single choice strategy to distribute $m$ balls to $n$ bins, the maximum load will be, w.h.p.,
-\begin{align}
+\begin{align*}
 \load = 
 	\begin{cases}
     \frac{\ln n}{\ln\ln n} + O(1)              & m = n \\
     \frac{m}{n} + \Theta\left(\sqrt{\frac{m\ln n}{n}} \right)              & m \in \omega(n \ln n)
     \end{cases}
-\end{align}
-\end{claim}
+\end{align*}
+\end{theorem}
 \end{frame}
-
-\begin{comment}
-\begin{frame}
-\frametitle{Applications}
-\begin{itemize}
-	\item Hashing
-	\item Online load balancing
-	\item Emulating PRAMs on DMMs
-	\item Low congestion circuit routing
-\end{itemize}
-\end{frame}
-\end{comment}
 
 %Table of contents at the start of each section
+\begin{comment}
 \AtBeginSection[]
 {
   \begin{frame}
@@ -319,26 +335,113 @@ When using the single choice strategy to distribute $m$ balls to $n$ bins, the m
     \tableofcontents[currentsection]
   \end{frame}
 }
+\end{comment}
 
 \section{Allocation schemes}
 \begin{frame}
-\frametitle{BiB Model}
-\end{frame}
-
-\begin{frame}
 \frametitle{Multiple choice strategies}
+
+\begin{exampleblock}{Idea}
+Put a ball into the \alert{least full} of $d\geq2$ randomly chosen bins.
+\end{exampleblock}
+
+\pause
+\bigskip
+We can distinguish placement algorithms by the way the $d$ \alert{bins are sampled}:
+\begin{itemize}
+\item Uniformly and independently
+\item Non-unfiromly and independently
+\item Non-uniformly and dependently
+\end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Greedy}
+\begin{exampleblock}{The Greedy algorithm}
+\begin{enumerate}
+\item For each ball, choose $d$ bins independently and uniformly at random. 
+\item Put the ball into the least full bin.
+\item In case a tie occurs, choose one of the $d$ bins arbitrarily.
+\end{enumerate}
+\end{exampleblock}
+\todo{visualize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Greedy}
+\begin{theorem}[Azar, Broder, Karlin and Upfal, 1999]
+When using the \alert{Greedy} algorithm to distribute $m$ balls to $n$ bins, the maximum load will be (w.h.p.~and for all $m$): 
+\begin{align*}
+\load = \frac{m}{n} + \frac{\ln \ln n}{\ln d} + O(1) \quad .
+\end{align*}
+\end{theorem}
+\pause
+\medskip
+Compared to the \alert{single choice} strategy, with 
+\begin{align*}
+\load = 
+	\begin{cases}
+    \frac{\ln n}{\ln\ln n} + O(1)              & m = n \\
+    \frac{m}{n} + \Theta\left(\sqrt{\frac{m\ln n}{n}} \right)              & m \in \omega(n \ln n)
+    \end{cases} \quad ,
+\end{align*}
+\alert{Greedy} with $d=2$:
+\begin{itemize}
+\item achieves an \alert{exponential decrease} of the additive gap $\delta$ and
+\item $\delta$ does \alert{not depend on} the number of balls \alert{$m$} anymore.
+\end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Always-go-left}
+\begin{exampleblock}{The Always-go-left algorithm}
+\begin{enumerate}
+\item Partition the $n$ bins into $d$ groups.
+\item Assume a fixed ordering of the bins $b_i$, $1\leq i \leq n$.
+\item Choose one bin from each group uniformly and independently.
+\item Put the ball into the least full bin.
+\item In case a tie occurs, put the ball into the leftmost bin (i.e., the bin with smallest index) among those with same minimal load.
+\end{enumerate}
+\end{exampleblock}
+\todo{visualize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Always-go-left}
+\begin{theorem}[V\"ocking, 2003]
+When using the \alert{Always-go-left} algorithm to distribute $m$ balls to $n$ bins, the maximum load will be  (w.h.p.~and for all $m$): 
+\begin{align*}
+\load = \frac{m}{n} + \frac{\ln \ln n}{d \ln \Phi_d} + O(1) \quad .
+\end{align*}
+\end{theorem}
+\todo{$\Phi_d$ is undefined. I think a full definition only makes sense if we present the proof for Always-go-left.}
+
+\bigskip
+The combination of \alert{asymmetric tie breaking} and \alert{non-uniform} (and independent) sampling of the $d$ bins is crucial to achieve this upper bound.
+\end{frame}
+
+\begin{frame}
+\frametitle{BiB Model}
+We will assume a sequential, infinite, dynamic process.
+
+\begin{description}
+\item[\alert{Sequential:}] The balls arrive one after another.
+\item[\alert{Infinite:}] Ball placements and deletions are given for an infinite time span.
+\item[\alert{Dynamic:}] At each time step $t$, one ball is removed from the bins.
+\begin{itemize}
+\item An oblivious adversary provides a sequence $\sigma = \sigma_1 \sigma_2 \dots$, where $\sigma_t = (d_t, a_t)$.
+\item $d_t$/$a_t$: ball to delete/add at time step t. \\
+\item $\sigma$ is fixed in advance.
+\end{itemize}
+\end{description}
 \end{frame}
 
 \begin{frame}
 \frametitle{Proof of either Greedy or Always-go-left}
+\end{frame}
+
+\begin{frame}
+\frametitle{Conclusion}
 \end{frame}
 
 \begin{comment}
@@ -351,32 +454,16 @@ When using the single choice strategy to distribute $m$ balls to $n$ bins, the m
 \end{frame}
 \end{comment}
 
-
-
-\begin{comment}
-\begin{frame}[label=references]
-  \frametitle{References}
-  %\nocite{*}
-  %\setbeamertemplate{bibliography item}[book]
-  \bibliographystyle{acm}
-  \bibliography{../sources}
-\end{frame}
-\note{}
-\end{comment}
-
-
-
-\begin{frame}{Introduction}
-\end{frame}
-\note{}
-
 %\againframe{references}
 
+\begin{frame}[allowframebreaks, label=references]
+\frametitle<presentation>{References}    
+\bibliographystyle{acm}
+\nocite{*}
+\setbeamertemplate{bibliography item}[text]
+\bibliography{../sources}
+\end{frame} 	
 
 \end{document}
-
-\begin{frame}{Title}
-\end{frame}
-\note{}
 
 %  LocalWords: 
