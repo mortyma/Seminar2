@@ -34,8 +34,10 @@
 \usepackage{readarray}
 \usepackage{tikz}
 \usetikzlibrary{calc} %for calculations in tikz commands
-\usepackage{xxcolor}
 \usetikzlibrary{positioning}
+\usetikzlibrary{arrows}
+\usepackage{xxcolor}
+
 
 \setbeamertemplate{navigation symbols}{}
 \usepackage{hyperref}
@@ -136,7 +138,8 @@
 \definecolor{#3}{named}{bg}
 }
 %get some colors from the scheme
-\ccft{block body example}{myblock body fg}{myblock body bg} 
+\ccft{block body example}{examplefg}{examplebg} 
+
 %---------------------------------------------------------------------
 %parameters for balls into bins graphs
 %---------------------------------------------------------------------
@@ -162,13 +165,22 @@
 %---------------------------------------------------------------------
 \newcommand\balldiameter{2*\ballsize}
 
+%arrow style
+\tikzstyle{insert} = [
+	thick,->,>=stealth'
+]
+
+%draw an arrow symbolizing a location
+\newcommand\iA[2][0]{
+	\path (\nbid) edge[insert, bend left=#1] (#2);
+}
 %bin style
 \tikzstyle{topflat} = [
 	minimum width=(\binwidth+2*\padding)*\scalefac, 
 	minimum height=(\binheight+4*\padding)*\scalefac,
 	append after command={
     		\pgfextra
-        		\fill[fill=myblock body bg] 
+        		\fill[fill=examplebg] 
         			(\tikzlastnode.north east) [rounded corners] |-
         			(\tikzlastnode.south)  -| 
         			(\tikzlastnode.west) [sharp corners] |- 
@@ -192,10 +204,28 @@
 		\bin{\ibin};
 }
 
-%paint a ball in bin #1, position #2 with node id = #1+(#2-1)*6
-\newcommand\ball[2]{
+%set a node at bin #1, position #2 with node id = #1+(#2-1)*6
+\newcommand\setNode[2]{
 	\draw let \n1 ={#1#2} in node[circle, minimum size = \ballsize](n\n1) at (#1*\bingap,#2*\balldiameter-\ballsize) {};
+}
+
+%create nodes for all possible balls
+\newcommand\nodes{
+	\foreach \i in {1,...,6}
+		\foreach \j in {1,...,5}
+			\setNode{\i}{\j};
+}
+
+%paint a ball in bin #1, position #2
+\newcommand\ball[2]{
 	\shade[ballstyle] (#1*\bingap,#2*\balldiameter-\ballsize) circle (\ballsize) {};
+}
+
+%paint a ball that is to be inserted
+\newcommand\nbid{nb}
+\newcommand\newball{
+	\draw node[circle, minimum size = \ballsize](\nbid) at (0*\bingap,6*\balldiameter-\ballsize) {};
+	\ball{0}{6};
 }
 
 %put #2 balls into bin 1 <= #1 <= 6
@@ -220,7 +250,12 @@
 %draw balls and bins. #i: number of balls to put in i'th bin
 \newcommand\bab[1]{%
 	\bins
+	\nodes
 	\balls{#1}
+}
+%draw group seperator after bin #1
+\newcommand\groupSep[1]{
+	\draw[thick, color=red!40] let \n1={(#1+0.5)*\bingap} in (\n1,-\ballsize) -- (\n1,\binheight +\ballsize);
 }
 
 %---------------------------------------------------------------------
@@ -237,13 +272,6 @@
   \titlepage
 \end{frame}
 \note{}
-
-\begin{comment}
-\begin{frame}
-    \frametitle{Table of Contents}
-    \tableofcontents
-\end{frame}
-\end{comment}
 
 \section{Balls into bins}
 \begin{frame}
@@ -262,8 +290,6 @@ Equivalently, we can look at the \alert{additive gap} $\delta$:
 \delta = \load - \frac{m}{n}
 \end{align*}
 \end{exampleblock}
-
-
 \end{frame}
 
 \begin{frame}
@@ -283,10 +309,14 @@ Applications:
 \begin{exampleblock}{Single choice strategy}
 For each ball, choose one of the $n$ bins uniformly and independently at random.
 \end{exampleblock}
+
 \bigskip
+
 \begin{center}
 \begin{tikzpicture}[scale=\scalefac]
-	\bab{2 1 5 2 3 0}
+	\bab{2 1 4 2 3 0}
+	\newball
+	\iA[40]{n23};
 \end{tikzpicture}
 \end{center}
 \end{frame}
@@ -310,7 +340,6 @@ We distinguish:
 \item The \alert{heavily loaded} case:	 $m \in \omega(n\ln n)$
 \end{itemize}
 %\end{exampleblock}
-
 \end{frame}
 
 \begin{frame}
@@ -366,7 +395,17 @@ We can distinguish placement algorithms by the way the $d$ \alert{bins are sampl
 \item In case a tie occurs, choose one of the $d$ bins arbitrarily.
 \end{enumerate}
 \end{exampleblock}
-\todo{visualize}
+
+\begin{center}
+\begin{tikzpicture}[scale=\scalefac]
+	\bab{2 1 4 2 3 0}
+	\newball
+	\iA[25]{n13};
+	\iA[20]{n35};
+	\iA[35]{n44};
+\end{tikzpicture}
+\end{center}
+
 \end{frame}
 
 \begin{frame}
@@ -394,7 +433,7 @@ Compared to the \alert{single choice} strategy, with
 \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[shrink]
 \frametitle{Always-go-left}
 \begin{exampleblock}{The Always-go-left algorithm}
 \begin{enumerate}
@@ -405,7 +444,19 @@ Compared to the \alert{single choice} strategy, with
 \item In case a tie occurs, put the ball into the leftmost bin (i.e., the bin with smallest index) among those with same minimal load.
 \end{enumerate}
 \end{exampleblock}
-\todo{visualize}
+
+\begin{center}
+\begin{tikzpicture}[scale=\scalefac]
+	\bab{2 1 4 2 3 0}
+	\newball
+	\groupSep{2};
+	\groupSep{4};
+	\iA[25]{n13};
+	\iA[35]{n43};
+	\iA[30]{n54};	
+\end{tikzpicture}
+\end{center}
+
 \end{frame}
 
 \begin{frame}
