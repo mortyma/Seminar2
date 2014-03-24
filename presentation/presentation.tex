@@ -33,6 +33,7 @@
 \usepackage{dot2texi}
 \usepackage{readarray}
 \usepackage{tikz}
+\usetikzlibrary{calc} %for calculations in tikz commands
 \usepackage{xxcolor}
 \usetikzlibrary{positioning}
 
@@ -191,9 +192,10 @@
 		\bin{\ibin};
 }
 
-%paint a ball in bin #1, position #2 
+%paint a ball in bin #1, position #2 with node id = #1+(#2-1)*6
 \newcommand\ball[2]{
-	\shade[ballstyle] (#1*\bingap,#2*\balldiameter-\ballsize) circle (\ballsize)
+	\draw let \n1 ={#1#2} in node[circle, minimum size = \ballsize](n\n1) at (#1*\bingap,#2*\balldiameter-\ballsize) {};
+	\shade[ballstyle] (#1*\bingap,#2*\balldiameter-\ballsize) circle (\ballsize) {};
 }
 
 %put #2 balls into bin 1 <= #1 <= 6
