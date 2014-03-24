@@ -248,6 +248,7 @@
 Suppose we have $n$ initially empty bins and need to distribute $m \geq n$ balls among them, as evenly as possible. We are interested in the maximum load $\load$, i.e, how many balls are in the fullest bin?
 \end{block}
 \pause
+\bigskip
 Applications:
 \begin{itemize}
 	\item Hashing
@@ -292,7 +293,7 @@ When using the single choice strategy to distribute $m$ balls to $n$ bins, the m
 \load = 
 	\begin{cases}
     \frac{\ln n}{\ln\ln n} + O(1)              & m = n \\
-    \frac{m}{n} + \Theta\left(\sqrt{\frac{m\ln n}{n}} \right)              & m > n
+    \frac{m}{n} + \Theta\left(\sqrt{\frac{m\ln n}{n}} \right)              & m \in \omega(n \ln n)
     \end{cases}
 \end{align}
 \end{claim}
@@ -319,7 +320,7 @@ When using the single choice strategy to distribute $m$ balls to $n$ bins, the m
   \end{frame}
 }
 
-\section{Allocation shemes}
+\section{Allocation schemes}
 \begin{frame}
 \frametitle{BiB Model}
 \end{frame}
