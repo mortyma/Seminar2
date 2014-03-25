@@ -71,7 +71,7 @@ Note that, since the average load is 1, $\delta \in \Theta\left( L_{max} \right)
 \subsection{Multiple-choice BiB}
 Consider a variation of the  single-choice BiB strategy: For each ball, choose $d \geq 2$ bins independently and uniformly at random and place the ball into the least full bin. If there are multiple bins with the same minimal load, choose one among them arbitrarily. This simple multiple-choice scheme, called the \emph{Greedy} algorithm, achieves a maximum load of
 \begin{align*}
-\load = \frac{m}{n}+\frac{\ln \ln n}{\ln d} + O(1) \Rightarrow \delta = \frac{\ln \ln n}{\ln d} + O(1)
+\load = \frac{m}{n}+\frac{\ln \ln n}{\ln d} + O(1) \implies \delta = \frac{\ln \ln n}{\ln d} + O(1) \quad ,
 \end{align*}
 w.h.p., for all $m$~\cite{ABKU99, BCSV06}, i.e., this additional choice leads to an exponential reduction of the additional gap. 
 \begin{comment}
@@ -300,18 +300,18 @@ thus proving Theorem~\ref{theorem:greedy}, under Assumption~\ref{assumption:inde
 
 \subsection{Always-go-left}
 \label{sec:analysis:alg}
-Similarly to Section~\ref{sec:analysis:greedy}, where we used symmetric witness trees to upper-bound the probability that a bin contains too many balls when using Greedy as allocation algorithm, we will use asymmetric witness trees (AWT) to obtain an analogous upper bound for the Always-go-left scheme. Again, we will use Assumption~\ref{assumption:independence}, i.e., we assume that all the events represented by the edges and nodes of a witness tree are stochastically independent.
+Similarly to Section~\ref{sec:analysis:greedy}, where we used SWTs to upper-bound the probability that a bin contains too many balls when using Greedy as allocation algorithm, we will use asymmetric witness trees (AWT) to derive an analogous upper bound for the Always-go-left scheme. Again, we will adopt Assumption~\ref{assumption:independence}, i.e., we assume that all the events represented by the edges and nodes of a witness tree are stochastically independent.
 
 \subsubsection{Asymmetric witness trees}
 \label{sec:analysis:definitionAsymWT}
-An AWT differes from an SWT (Section~\ref{sec:analysis:definitionSymWT}) only by its structure, which is that of a $d$-ary Fibonacci tree $T_d\left(k \right)$:
+An AWT differes from an SWT (Section~\ref{sec:analysis:definitionSymWT}) only by its structure, which is a $d$-ary Fibonacci tree $T_d\left(k \right)$:
 
 \begin{compactitem}
 \item $T_d(1)$ is a single node and  $T_d(2) = T_d(1)$.
 \item For $3\leq k \leq d$, $T_d(k)$ is a tree with $k-1$ children, which are the roots of the trees $T_d(k-1),\ldots,T_d(1)$.
 \item For $k>d$, $T_d(k)$ is a tree with $d$ children, which are the roots of the trees $T_d(k-1),\ldots,T_d(k-d)$.
 \end{compactitem}
-A $d$-ary AWT of order $L$ has the structure of a Fibonacci tree $T_d(d  L+1)$ and thus has $l=F_d(d L + 1) \geq \Phi_d^{d L-1}$ leaves (Eq.~\ref{eqn:goldenFib})\todo{Can we just rewrite Eq.~\ref{eqn:goldenFib} like this? what about the limes?}. 
+A $d$-ary AWT of order $L$ has the structure of a Fibonacci tree $T_d(d  L+1)$ and thus has $l=F_d(d L + 1) \geq \Phi_d^{d L-1}$ leaves (Eq.~\ref{eqn:goldenFib})\todo{Can we just rewrite Eq.~\ref{eqn:goldenFib} like this? what about the limes? It's not Eq.~6. Try to find a reference}. 
 Furthermore, for each node we define a label $(h, i)$, where $h, i \in \mathbb{N}$, $0 \leq h \leq L$ and  $1\leq i \leq d$:
 \begin{compactitem}
 \item The root nodes of the Fibonacci trees $T_d(1)$ and $T_d(2)$ are assigned the labels $(0,1)$ and $(0,2)$, respectively. Thus, nodes labelled $(0,1)$ or $(0,2)$ do not have any children.
@@ -326,13 +326,17 @@ When using the Always-go-left algorithm to put balls into bins, a bin containing
 \begin{proof}
 The following invariant will be maintained while assigning balls to the nodes of the AWT:
 \begin{invariant}
-A ball $b_v$ referenced by a node $v$ with label $(h,i)$ was placed in a bin $x$ belonging to group $i$ that, at the time of insertion of the ball $b_v$, contained at least $h+3$ other ball. The ball represented by the root node may be put in a bin belonging to any group.
+A ball $b_v$ referenced by a node $v$ with label $(h,i)$ was placed in a bin $x$ belonging to group $i$ that, at the time of insertion of the ball $b_v$, contained at least $h+3$ other balls. The ball represented by the root node may be put in a bin belonging to any group.
 \end{invariant}
 \noindent
 Let $x$ be the bin that contains $L+4$ balls and assign the topmost ball $b_t$ in $x$ to the root node of the AWT. Thus, at the time of insertion of $b_t$, each of the $d$ locations of this ball points to a bin containing at least $L+3$ balls. These are the $d$ bins that were sampled by the Always-go-left scheme, i.e., bin $i$ belongs to the $i$'th group of bins, where each group consists of $n/d$ bins. The child node of the root with label $(L-1, i)$ is assigned the topmost ball of the $i$'th location. The assignment of balls to nodes then proceeds recursively: Given a node $v$ labelled $(h, i)$ that references a ball $b_v$ (which was put into some bin of the $i$-th group that, at the time of insertion of ball $b_v$, contained at least $h+3$ other balls), we can conclude the following:
 \begin{compactitem}
 \item For $1\leq j < i$, the $j$'th location of the ball $b_v$ contains at least $h+4$ balls, at the insertion time of the ball $b_v$. If the $j$-th location contained less balls than the $i$-th location, the Always-go-left scheme would have put the ball $b_v$ into the bin pointed to by location $j$. The topmost ball in location $j$ is assigned to the  child $u$ of $v$ with label $(h,j)$. 
-\item For $i < j \leq d$, the $j$-th location contains at least $h+3$ balls. If location $j$ contained less, the Always-go-left scheme would have put the ball $b_v$ into the bin location $j$ points to. The topmost ball in the bin that location $j$ points to is assigned to the child node $u$ of $v$ labelled with $(h-1, j)$. \todo{the paper claims that the locations $j$ point to bins with $h+2$ balls. This can not be true, since the topmost, i.e., the $h+2$-th ball - call it $b_t$ - gets assigned to a node with label $(h'=h-1, j)$. Since there are $h+1=h'+2$ balls below it, at the time of the placement of ball $b_t$, the bin $j$ it gets put into has only $h'+2$ balls in it, violating the invariant. Same with the case $j<i$.} 
+\item For $i < j \leq d$, the $j$-th location contains at least $h+3$ balls. If location $j$ contained less, the Always-go-left scheme would have put the ball $b_v$ into the bin location $j$ points to. The topmost ball in the bin that location $j$ points to is assigned to the child node $u$ of $v$ labelled with $(h-1, j)$.
+
+\begin{comment}
+Note: The paper claims that the locations $j$ point to bins with $h+2$ balls. This can not be true, since the topmost, i.e., the $h+2$-th ball - call it $b_t$ - gets assigned to a node with label $(h'=h-1, j)$. Since there are $h+1=h'+2$ balls below it, at the time of the placement of ball $b_t$, the bin $j$ it gets put into has only $h'+2$ balls in it, violating the invariant. Same with the case $j<i$.
+\end{comment}
 \end{compactitem}
 \end{proof}
 
@@ -349,7 +353,7 @@ p_\mathrm{e} = \left(\frac{d}{n}\right)^{k-1}\quad ,
 \end{align*}
 where $k$ is the number of nodes in a Fibonacci tree. The probability that all leaf events occur is the same as for the SWT, but its derivation differs. Again, at any time at most $n/3$ bins contain 3 or more balls, but we do not know how those bins are distributed among the $d$ groups. Let $b_i$ be the number of bins in group $i$ that contain 3 or more balls. Then $\beta_i = b_i d/ n$ is the fraction of the bins $b_i$ in group $i$. Since no more than $n/3$ bins can contain 3 or more balls, the values $b_i$ are subject to the constraint
 \begin{align*}
-\frac{n}{d}\sum_{i=1}^d \beta_i \leq \frac{n}{3} \Rightarrow
+\frac{n}{d}\sum_{i=1}^d \beta_i \leq \frac{n}{3} \implies
 \sum_{i=1}^d \beta_i \leq \frac{d}{3}\quad .
 \end{align*}
 The probability that all $d$ locations of a ball point to a bin containing 3 or more balls is then 
@@ -373,7 +377,6 @@ For any $\alpha > 0$, let
 \begin{align*}
 L &\geq \left\lceil{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d \ln \Phi_d}}\right\rceil+\frac{1}{d} \neqn{awt:chooseL}\quad .
 \end{align*}
-\todo{the paper uses $+1$, instead of $+1/d$, but I can't workout the below result then} 
 Then, 
 \begin{align*}
 P_\mathrm{a} &\leq n  2^{-\Phi_d^{d L -1}} 
@@ -494,7 +497,7 @@ Furthermore, we define $\Phi_d$ as
 \end{align*}
 which has the following properties:
 \begin{align*}
-\forall i\; \forall j \in \mathbb{N}: i < j \quad \Rightarrow \quad \Phi_i < \Phi_j \quad , \quad \lim_{d\rightarrow \infty} \Phi_d = 2 \quad .
+\forall i\; \forall j \in \mathbb{N}: i < j \implies \Phi_i < \Phi_j \quad , \quad \lim_{d\rightarrow \infty} \Phi_d = 2 \quad .
 \end{align*}
 Notice that $F_2$ corresponds to the usual Fibonacci numbers, while $\Phi_d$ is a generalization of the golden ratio~\cite{Knuth73} and $\Phi_2 $ corresponds to the golden ratio.
 
@@ -503,11 +506,11 @@ Notice that $F_2$ corresponds to the usual Fibonacci numbers, while $\Phi_d$ is 
 We use the following definitions for the asymptotic notations~\cite{CLRS01}, where $f$ and $g$ are non-negative functions with one argument $n\in \mathbb{N}$ and $n_0 \in \mathbb{N}$, $c \in \mathbb{R}_{\geq 0}$ are suitable constants.
 
 \begin{align*}
-f \in O(g) &\Leftrightarrow \exists c\; \exists n_0 \;\forall n> n_0: f(n)\leq c g(n) \\
-f \in \Omega(g) &\Leftrightarrow \exists c \; \exists n_0\;\forall n> n_0: cg(n) \leq f(n) \\
-f \in \Theta(g) &\Leftrightarrow f \in \Omega(g) \land f\in O(g) \\
-f \in o(g) &\Leftrightarrow \forall c \; \exists n_0\;\forall n> n_0: f(n) < cg(n) \\
-f \in \omega(g) &\Leftrightarrow \forall c \; \exists n_0\;\forall n> n_0: cg(n) < f(n) \\
+f \in O(g) &\iff \exists c\; \exists n_0 \;\forall n> n_0: f(n)\leq c g(n) \\
+f \in \Omega(g) &\iff \exists c \; \exists n_0\;\forall n> n_0: cg(n) \leq f(n) \\
+f \in \Theta(g) &\iff f \in \Omega(g) \land f\in O(g) \\
+f \in o(g) &\iff \forall c \; \exists n_0\;\forall n> n_0: f(n) < cg(n) \\
+f \in \omega(g) &\iff \forall c \; \exists n_0\;\forall n> n_0: cg(n) < f(n) \\
 \end{align*}
 
 \section{A bit of history}
