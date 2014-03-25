@@ -352,7 +352,7 @@ When using the single choice strategy to distribute $m$ balls to $n$ bins, the m
 	\begin{cases}
     \frac{\ln n}{\ln\ln n} + O(1)              & m = n \\
     \frac{m}{n} + \Theta\left(\sqrt{\frac{m\ln n}{n}} \right)              & m \in \omega(n \ln n)
-    \end{cases}
+    \end{cases} \quad .
 \end{align*}
 \end{theorem}
 \end{frame}
@@ -381,7 +381,7 @@ Put a ball into the \alert{least full} of $d\geq2$ randomly chosen bins.
 We can distinguish placement algorithms by the way the $d$ \alert{bins are sampled}:
 \begin{itemize}
 \item Uniformly and independently
-\item Non-unfiromly and independently
+\item Non-uniformly and independently
 \item Non-uniformly and dependently
 \end{itemize}
 \end{frame}
@@ -411,7 +411,7 @@ We can distinguish placement algorithms by the way the $d$ \alert{bins are sampl
 \begin{frame}
 \frametitle{Greedy}
 \begin{theorem}[Azar, Broder, Karlin and Upfal, 1999]
-When using the \alert{Greedy} algorithm to distribute $m$ balls to $n$ bins, the maximum load will be (w.h.p.~and for all $m$): 
+When using the \alert{Greedy} algorithm to distribute $m$ balls to $n$ bins, the maximum load will be, w.h.p.,
 \begin{align*}
 \load = \frac{m}{n} + \frac{\ln \ln n}{\ln d} + O(1) \quad .
 \end{align*}
@@ -426,7 +426,7 @@ Compared to the \alert{single choice} strategy, with
     \frac{m}{n} + \Theta\left(\sqrt{\frac{m\ln n}{n}} \right)              & m \in \omega(n \ln n)
     \end{cases} \quad ,
 \end{align*}
-\alert{Greedy} with $d=2$:
+\alert{Greedy}
 \begin{itemize}
 \item achieves an \alert{exponential decrease} of the additive gap $\delta$ and
 \item $\delta$ does \alert{not depend on} the number of balls \alert{$m$} anymore.
@@ -462,15 +462,20 @@ Compared to the \alert{single choice} strategy, with
 \begin{frame}
 \frametitle{Always-go-left}
 \begin{theorem}[V\"ocking, 2003]
-When using the \alert{Always-go-left} algorithm to distribute $m$ balls to $n$ bins, the maximum load will be  (w.h.p.~and for all $m$): 
+When using the \alert{Always-go-left} algorithm to distribute $m$ balls to $n$ bins, the maximum load will be, w.h.p.,
 \begin{align*}
 \load = \frac{m}{n} + \frac{\ln \ln n}{d \ln \Phi_d} + O(1) \quad .
 \end{align*}
 \end{theorem}
 \todo{$\Phi_d$ is undefined. I think a full definition only makes sense if we present the proof for Always-go-left.}
 
+\pause
 \bigskip
 The combination of \alert{asymmetric tie breaking} and \alert{non-uniform} (and independent) sampling of the $d$ bins is crucial to achieve this upper bound.
+
+\medskip
+V\"ocking further proved a matching lower bound for $\load$, i.e., the upper bound is tight.
+
 \end{frame}
 
 \begin{frame}
@@ -478,9 +483,9 @@ The combination of \alert{asymmetric tie breaking} and \alert{non-uniform} (and 
 We will assume a sequential, infinite, dynamic process.
 
 \begin{description}
-\item[\alert{Sequential:}] The balls arrive one after another.
+\item[\alert{Sequential:}] The balls arrive one after another, one at each time step $t$.
 \item[\alert{Infinite:}] Ball placements and deletions are given for an infinite time span.
-\item[\alert{Dynamic:}] At each time step $t$, one ball is removed from the bins.
+\item[\alert{Dynamic:}] Balls do not stay in the bins forever.
 \begin{itemize}
 \item An oblivious adversary provides a sequence $\sigma = \sigma_1 \sigma_2 \dots$, where $\sigma_t = (d_t, a_t)$.
 \item $d_t$/$a_t$: ball to delete/add at time step t. \\
@@ -491,7 +496,26 @@ We will assume a sequential, infinite, dynamic process.
 
 \begin{frame}
 \frametitle{Proof of either Greedy or Always-go-left}
+I suggest to present the Greedy proof:
+\begin{itemize}
+\item Both proofs have the same structure, but Always-go-left is a lot more technical
+\item For Always-go-left, d-ary Fibonacci trees and a generalized golden ratio need to be introduced
+\item complete d-ary trees are easier to think and reason about (number of nodes/leaves, the inductive argument used)
+\end{itemize}
 \end{frame}
+
+\begin{frame}
+\frametitle{Witness trees}
+\end{frame}
+
+\begin{frame}
+\frametitle{Witness trees}
+\begin{alertblock}{Assumption}
+All the events represented by the nodes and edges of a witness tree are stochastically independent. 
+\end{alertblock}
+\end{frame}
+
+
 
 \begin{frame}
 \frametitle{Conclusion}
@@ -508,7 +532,7 @@ We will assume a sequential, infinite, dynamic process.
 \end{comment}
 
 %\againframe{references}
-
+%todo: why so few references shown?
 \begin{frame}[allowframebreaks, label=references]
 \frametitle<presentation>{References}    
 \bibliographystyle{acm}
