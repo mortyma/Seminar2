@@ -1,31 +1,10 @@
-	\documentclass[serif,professionalfonts]{beamer}
-
-%\usepackage{pgfpages}
-%\setbeameroption{show only notes}
-%\setbeameroption{show notes on second screen=top}
+\documentclass[serif,professionalfonts]{beamer}
 
 \usetheme{Forcellini}
 
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
-
-% Hermann Zapf Optima clone (wonderful sanserif font) -- URW Classico
-%\renewcommand{\sfdefault}{uop}
-%\renewcommand{\rmdefault}{ppl}
-%\usepackage{eulervm}
-%\usepackage[right]{eurosym}
-%\usepackage{paralist}
-%\usepackage{algorithm2e}
-
-% professional tables
-%\usepackage{booktabs}
-%\usepackage{pdfpages}
-%\usepackage{multirow}
-%\usepackage{array}
-%\usepackage{dcolumn}
-%\usepackage{subfigure}
-%\usepackage{epsdice}
 
 \usepackage{fixltx2e}
 \usepackage{microtype}
@@ -48,26 +27,6 @@
 % description with short indentation
 \setbeamersize{description width of=x}
 
-% some math operators
-%\DeclareMathOperator{\har}{H}
-%\DeclareMathOperator{\E}{E}
-%\DeclareMathOperator{\lag}{lag}
-%\DeclareMathOperator{\var}{Var}
-%\DeclareMathOperator{\mf}{\enspace .}
-%\DeclareMathOperator{\mc}{\enspace ,}
-%\newcommand{\eye}{\mathbb{I}}
-%\newcommand{\Z}{\mathbb{Z}}
-%\newcommand{\dom}{\{0,1\}^n}
-%\newcommand{\reals}{\mathbb{R}}
-%\newcommand{\nats}{\mathbb{N}}
-%\newcommand{\deq}{\triangleq}
-%\newcommand{\pd}{\cdot_p}
-%\newcommand{\pp}{+_p}
-%\newcommand{\pmn}{-_p}
-%\newcommand{\ed}{\epsdice}
-%\newcommand{\bled}{\epsdice[black]}
-%\newcommand{\bitup}{\vspace*{-4mm}}
-%\newcommand{\nospace}{\abovedisplayskip=0pt}
 
 \setbeamertemplate{caption}
 {
@@ -99,32 +58,6 @@
   Vienna University of Technology\\
 }
 \date{\today}
-
-\begin{comment}
-\AtBeginSubsubsection[]
-{
-  \begin{frame}<beamer>
-    \frametitle{Outline}
-    \tableofcontents[subsubsectionstyle=show/shaded,currentsection,currentsubsection]
-  \end{frame}
-}
-
-\AtBeginSubsection[]
-{
-  \begin{frame}<beamer>
-    \frametitle{Outline}
-    \tableofcontents[subsubsectionstyle=show/shaded,currentsection,currentsubsection]
-  \end{frame}
-}
-
-\AtBeginSection[]
-{
-  \begin{frame}<beamer>
-    \frametitle{Outline}
-    \tableofcontents[subsubsectionstyle=show/shaded,currentsection,currentsubsection]
-  \end{frame}
-}
-\end{comment}
 
 %---------------------------------------------------------------------
 % Create Color definition From Template
@@ -475,7 +408,6 @@ The combination of \alert{asymmetric tie breaking} and \alert{non-uniform} (and 
 
 \medskip
 V\"ocking further proved a matching lower bound for $\load$, i.e., the upper bound is tight.
-
 \end{frame}
 
 \begin{frame}
@@ -516,24 +448,11 @@ All the events represented by the nodes and edges of a witness tree are stochast
 \end{alertblock}
 \end{frame}
 
-
-
 \begin{frame}
 \frametitle{Conclusion}
 \end{frame}
 
-\begin{comment}
-\section{Test}
-\begin{frame}
-\frametitle{Ignore the following}
-\begin{tikzpicture}[scale=\scalefac]
-	\bab{1 2 3 4 5 6}
-\end{tikzpicture}
-\end{frame}
-\end{comment}
-
 %\againframe{references}
-%todo: why so few references shown?
 \begin{frame}[allowframebreaks, label=references]
 \frametitle<presentation>{References}    
 \bibliographystyle{acm}
