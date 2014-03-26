@@ -9,7 +9,6 @@
 % Hermann Zapf Optima clone (wonderful sanserif font) -- URW Classico
 \renewcommand{\sfdefault}{uop}
 \renewcommand{\rmdefault}{ppl}
-%\usepackage{eulervm}
 
 \usepackage{fixltx2e}
 \usepackage{microtype}
@@ -20,8 +19,8 @@
 \usetikzlibrary{calc} %for calculations in tikz commands
 \usetikzlibrary{positioning}
 \usetikzlibrary{arrows}
+\usepackage{tikz-qtree}
 \usepackage{xxcolor}
-
 
 \setbeamertemplate{navigation symbols}{}
 \usepackage{hyperref}
@@ -32,7 +31,6 @@
 % description with short indentation
 \setbeamersize{description width of=x}
 
-
 \setbeamertemplate{caption}
 {
   \raggedright%
@@ -40,29 +38,15 @@
 }
 \setbeamercolor{green}{fg=green}
 
-%reduce font size of footnotes
-%\let\oldfootnotesize\footnotesize
-%\renewcommand*{\footnotesize}{\oldfootnotesize\tiny}
-
-%
 \newcommand\todo[1]{\textcolor{red}{(TODO: #1)}}
 \newcommand\load{L_{\mathrm{max}}}
+\newcommand\loadS{\load^{\mathrm{S}}}
+\newcommand\loadG{\load^{\mathrm{G}}}
+\newcommand\loadAgl{\load^{\mathrm{A}}}
 \newtheorem{claim}{Claim}
 \newtheorem{assumption}{Assumption}
 \newtheorem{invariant}{Invariant}
 
-%---------------------------------------------------------------------
-%Front matter
-%---------------------------------------------------------------------
-\title{The Power of Two Random Choices}
-%\subtitle{ A follow up seminar to the "Parallel Algorithms" lecture}
-\author[M. Kalany]{Martin Kalany}
-\institute[TU Wien]
-{
-  Graduate student in Computer Science\\
-  Vienna University of Technology\\
-}
-\date{\today}
 
 %---------------------------------------------------------------------
 % Create Color definition From Template
@@ -197,13 +181,35 @@
 }
 
 %---------------------------------------------------------------------
+% tikz stuff
+%---------------------------------------------------------------------
+
+% nicer tikz qtrees
+\tikzset{edge from parent/.style=
+     {draw, edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}}
+\tikzset{every tree node/.style={font=\tiny, thick}}
+     
+%---------------------------------------------------------------------
+%Front matter
+%---------------------------------------------------------------------
+\title{The Power of Two Random Choices}
+\subtitle{TODO}
+\author[M. Kalany]{Martin Kalany}
+\institute[TU Wien]
+{
+  Graduate student in Computer Science\\
+  Vienna University of Technology\\
+}
+\date{\today}
+
+%---------------------------------------------------------------------
 %document
 %---------------------------------------------------------------------
 % Structure:
 % 30 min
 % 5 min easy stuff (so that everyone understands)
 % 5 min more advanced stuff 
-% 15 min difficult stuff (the proof, either of the symmetric or asymmetric allocation scheme using the infamous assumption 1
+% 15 min difficult stuff (the proof, of the asymmetric allocation scheme using the infamous assumption 1)
 % 5 min further results and wrap up
 \begin{document}
 \begin{frame}
@@ -211,7 +217,6 @@
 \end{frame}
 \note{}
 
-\section{Balls into bins}
 \begin{frame}
 \frametitle{The Problem}
 \begin{exampleblock}{Balls-into-bins games}
@@ -231,23 +236,11 @@ Equivalently, we can look at the \alert{additive gap} $\delta$:
 \end{frame}
 
 \begin{frame}
-\frametitle{Applications}
-Applications:
-\begin{itemize}
-	\item Hashing
-	\item Online load balancing
-	\item Emulating PRAMs on DMMs
-	\item Low congestion circuit routing
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Single choice}
+\frametitle{Single choice strategy}
 \framesubtitle{A basic allocation scheme}
-\begin{exampleblock}{Single choice strategy}
-For each ball, choose one of the $n$ bins uniformly and independently at random.
+\begin{exampleblock}{Basic idea}
+For each ball, choose one of the $n$ bins \alert{uniformly and independently at random}.
 \end{exampleblock}
-
 \bigskip
 
 \begin{center}
@@ -261,32 +254,30 @@ For each ball, choose one of the $n$ bins uniformly and independently at random.
 
 \begin{frame}
 \frametitle{Some definitions}
-
-Since we deal with a \alert{randomized process}, we cannot give upper bounds for the maximum load $\load$ with absolute certainty. 
+\todo{merge with next slide?}
+Since we deal with a \alert{random process}, we cannot give upper bounds for the maximum load $\load$ with absolute certainty. 
 
 \begin{exampleblock}{Definition}
 We say that an event $\mathcal E_n$ occurs \alert{with high probability} (w.h.p.) if $\Pr\left[\mathcal E_n \right] \geq 1 - n^{-\alpha}$ for some $\alpha > 0$.
 \end{exampleblock}
 
 \bigskip
-\pause
+%\pause
 
-%\begin{exampleblock}{Definition}
 We distinguish:
 \begin{itemize}
 \item The \alert{lightly loaded} case: $m = n$
 \item The \alert{heavily loaded} case:	 $m \in \omega(n\ln n)$
 \end{itemize}
-%\end{exampleblock}
 \end{frame}
 
 \begin{frame}
-\frametitle{Single choice}
+\frametitle{Single choice strategy}
 \framesubtitle{Upper bound for the maximum load}
 \begin{theorem}[Raab and Steger, 1998]
 When using the single choice strategy to distribute $m$ balls to $n$ bins, the maximum load will be, w.h.p.,
 \begin{align*}
-\load = 
+\loadS \leq 
 	\begin{cases}
     \frac{\ln n}{\ln\ln n} + O(1)              & m = n \\
     \frac{m}{n} + \Theta\left(\sqrt{\frac{m\ln n}{n}} \right)              & m \in \omega(n \ln n)
@@ -295,18 +286,6 @@ When using the single choice strategy to distribute $m$ balls to $n$ bins, the m
 \end{theorem}
 \end{frame}
 
-%Table of contents at the start of each section
-\begin{comment}
-\AtBeginSection[]
-{
-  \begin{frame}
-    \frametitle{Table of Contents}
-    \tableofcontents[currentsection]
-  \end{frame}
-}
-\end{comment}
-
-\section{Allocation schemes}
 \begin{frame}
 \frametitle{Multiple choice strategies}
 
@@ -314,19 +293,18 @@ When using the single choice strategy to distribute $m$ balls to $n$ bins, the m
 Put a ball into the \alert{least full} of $d\geq2$ randomly chosen bins.
 \end{exampleblock}
 
-\pause
 \bigskip
 We can distinguish placement algorithms by the way the $d$ \alert{bins are sampled}:
-\begin{itemize}
+\begin{enumerate}
 \item Uniformly and independently
 \item Non-uniformly and independently
 \item Non-uniformly and dependently
-\end{itemize}
+\end{enumerate}
 \end{frame}
 
 \begin{frame}
-\frametitle{Greedy}
-\begin{exampleblock}{The Greedy algorithm}
+\frametitle{The Greedy algorithm}
+\begin{exampleblock}{Algorithm}
 \begin{enumerate}
 \item For each ball, choose $d$ bins independently and uniformly at random. 
 \item Put the ball into the least full bin.
@@ -334,6 +312,7 @@ We can distinguish placement algorithms by the way the $d$ \alert{bins are sampl
 \end{enumerate}
 \end{exampleblock}
 
+\only<1>{
 \begin{center}
 \begin{tikzpicture}[scale=\scalefac]
 	\bab{2 1 4 2 3 0}
@@ -343,37 +322,55 @@ We can distinguish placement algorithms by the way the $d$ \alert{bins are sampl
 	\iA[35]{n44};
 \end{tikzpicture}
 \end{center}
+}
 
-\end{frame}
-
-\begin{frame}
-\frametitle{Greedy}
+\only<2->{
 \begin{theorem}[Azar, Broder, Karlin and Upfal, 1999]
 When using the \alert{Greedy} algorithm to distribute $m$ balls to $n$ bins, the maximum load will be, w.h.p.,
 \begin{align*}
-\load = \frac{m}{n} + \frac{\ln \ln n}{\ln d} + O(1) \quad .
+\loadG \leq \frac{m}{n} + \frac{\ln \ln n}{\ln d} + O(1) \quad .
 \end{align*}
 \end{theorem}
-\pause
-\medskip
-Compared to the \alert{single choice} strategy, with 
+}
+\end{frame}
+
+\begin{frame}
+\frametitle{Single choice vs.~Greedy}
+%\begin{columns}[onlytextwidth]
+%\begin{column}{0.5\textwidth}
 \begin{align*}
-\load = 
+\loadS \leq 
 	\begin{cases}
     \frac{\ln n}{\ln\ln n} + O(1)              & m = n \\
     \frac{m}{n} + \Theta\left(\sqrt{\frac{m\ln n}{n}} \right)              & m \in \omega(n \ln n)
-    \end{cases} \quad ,
+    \end{cases}
 \end{align*}
-\alert{Greedy}
-\begin{itemize}
-\item achieves an \alert{exponential decrease} of the additive gap $\delta$ and
-\item $\delta$ does \alert{not depend on} the number of balls \alert{$m$} anymore.
-\end{itemize}
+%\end{column}
+%\begin{column}{0.5\textwidth}
+\begin{align*}
+\loadG \leq \frac{m}{n} + \frac{\ln \ln n}{\ln d} + O(1) 
+\end{align*}
+%\end{column}
+%\end{columns}
+
+\begin{alertblock}{The two-choice paradigm}
+Even for $d=2$, Greedy achieves an \alert{exponential decrease} of the additive gap $\delta$, which does \alert{not depend on} the number of balls \alert{$m$} anymore.
+\end{alertblock}
 \end{frame}
 
-\begin{frame}[shrink]
-\frametitle{Always-go-left}
-\begin{exampleblock}{The Always-go-left algorithm}
+\begin{frame}
+\frametitle{Applications}
+\begin{description}
+	\item[Hashing:] Assuming a perfect hash function, $n$ elements (balls) are mapped to $m$ table entries (bins). Using two hash functions: look-up time $\Theta(\ln\ln n)$, w.h.p. \alert{Easy to parallelize} and no \alert{re-hashing}!
+	\item[Online load balancing:] Assign tasks (balls) to servers/processors (bins). The two-choice paradigm helps to \alert{reduce the overhead} (of e.g., a central dispatcher), while the maximum load will be at most  $\Theta(\ln\ln n)$, w.h.p.
+	\item[Emulating PRAMs on DMMs:] Distribute processors and memory cells of the PRAM on the DMM s.t.~the overhead of the emulation is minimized.
+	\item[Low congestion circuit routing:] \alert{Valiant's paradigm} (a permuation routing problem can be split into two sub-problems: route to random intermediate destination and then on to the actual destination) is analogous to the single-choice technique.
+\end{description}
+\end{frame}
+
+
+\newcommand\aglAlgorithm{
+\begin{exampleblock}{Algorithm}
 \begin{enumerate}
 \item Partition the $n$ bins into $d$ groups.
 \item Assume a fixed ordering of the bins $b_i$, $1\leq i \leq n$.
@@ -382,6 +379,11 @@ Compared to the \alert{single choice} strategy, with
 \item In case a tie occurs, put the ball into the leftmost bin (i.e., the bin with smallest index) among those with same minimal load.
 \end{enumerate}
 \end{exampleblock}
+}
+
+\begin{frame}[shrink]
+\frametitle{The Always-go-left algorithm}
+\aglAlgorithm
 
 \begin{center}
 \begin{tikzpicture}[scale=\scalefac]
@@ -398,21 +400,69 @@ Compared to the \alert{single choice} strategy, with
 \end{frame}
 
 \begin{frame}
-\frametitle{Always-go-left}
+\frametitle{$d$-step Fibonacci numbers and the golden ratio}
+\framesubtitle{(Capocelli, Cull, 1990)}
+
+$d$-step Fibonacci numbers:
+\begin{align*}
+F_d(k) := \begin{cases}
+                0               & k \leq 0\\
+                1               & k = 1\\
+                \sum_{i=1}^{d}F_d(k-i) & k > 1
+            \end{cases}
+\end{align*}
+Generalized golden ratio $\Phi_d$:
+\begin{align*}
+\Phi_d := \lim_{k \rightarrow \infty} \frac{F_d(k)}{F_d(k-1)}
+\end{align*}
+\begin{align*}
+\Phi_2 = 1.61 \quad , \quad \forall i\; \forall j \in \mathbb{N}: i < j \implies \Phi_i < \Phi_j \quad , \quad \lim_{d\rightarrow \infty} \Phi_d = 2 \quad .
+\end{align*}
+
+\begin{align*}
+F_d(k) \geq \Phi_d^{k-2}
+\end{align*}
+\end{frame}
+
+\newcommand\theoremVocking{
 \begin{theorem}[V\"ocking, 2003]
 When using the \alert{Always-go-left} algorithm to distribute $m$ balls to $n$ bins, the maximum load will be, w.h.p.,
 \begin{align*}
-\load = \frac{m}{n} + \frac{\ln \ln n}{d \ln \Phi_d} + O(1) \quad .
+\loadAgl \leq \frac{m}{n} + \frac{\ln \ln n}{d \ln \Phi_d} + O(1) \quad .
 \end{align*}
 \end{theorem}
-\todo{$\Phi_d$ is undefined. I think a full definition only makes sense if we present the proof for Always-go-left.}
+}
 
-\pause
+\begin{frame}[shrink]
+\frametitle{The Always-go-left algorithm}
+\aglAlgorithm
+
+\theoremVocking
+\end{frame}
+
+\begin{frame}
+\frametitle{The Always-go-left algorithm}
+\begin{columns}[onlytextwidth]
+\begin{column}{0.5\textwidth}
+\begin{align*}
+\loadG \leq \frac{m}{n} + \frac{\ln \ln n}{\ln d} + O(1) 
+\end{align*}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{align*}
+\loadAgl \leq \frac{m}{n} + \frac{\ln \ln n}{d \ln \Phi_d} + O(1)
+\end{align*}
+\end{column}
+\end{columns}
 \bigskip
 The combination of \alert{asymmetric tie breaking} and \alert{non-uniform} (and independent) sampling of the $d$ bins is crucial to achieve this upper bound.
-
-\medskip
-V\"ocking further proved a matching lower bound for $\load$, i.e., the upper bound is tight.
+\bigskip
+\begin{theorem}[V\"ocking, 2003]
+For $m=n$, using an arbitrary allocation scheme that chooses $d$ bins for each ball at random (i.e., class 3) the maximum load is, w.h.p,
+\begin{align*}
+\loadAgl \leq \frac{\ln \ln n}{d \ln \Phi_d} - O(1) \quad .
+\end{align*}
+\end{theorem}
 \end{frame}
 
 \begin{frame}
@@ -420,9 +470,9 @@ V\"ocking further proved a matching lower bound for $\load$, i.e., the upper bou
 We will assume a sequential, infinite, dynamic process.
 
 \begin{description}
-\item[\alert{Sequential:}] The balls arrive one after another, one at each time step~$t$.
-\item[\alert{Infinite:}] Ball placements and deletions are given for an infinite time span.
-\item[\alert{Dynamic:}] Balls do not stay in the bins forever.
+\item[Sequential:] The balls arrive one after another, one at each time step~$t$.
+\item[Infinite:] Ball placements and deletions are given for an infinite time span.
+\item[Dynamic:] Balls do not stay in the bins forever.
 \begin{itemize}
 \item An oblivious adversary provides a sequence $\sigma = \sigma_1 \sigma_2 \dots$, where $\sigma_t = (d_t, a_t)$.
 \item $d_t$/$a_t$: ball to delete/add at time step t. \\
@@ -431,42 +481,259 @@ We will assume a sequential, infinite, dynamic process.
 \end{description}
 \end{frame}
 
+% Outline of the proof section:
+% - State what will be proved
+% - Outline the proof
+% - Witness trees 
+% - Fibonacci trees and labelling
+% - Lemma 3
+% - Prob. of activation
 \begin{frame}
-\frametitle{Proof of either Greedy or Always-go-left}
-I suggest to present the Greedy proof:
-\begin{itemize}
-\item Both proofs have the same structure, but Always-go-left is a lot more technical.
-\item For Always-go-left, d-ary Fibonacci trees and a generalized golden ratio need to be introduced.
-\item Complete d-ary trees are easier to think and reason about (number of nodes/leaves, the inductive argument used).
-\end{itemize}
-\todo{The following slides are preliminary.}
+\frametitle{The Always-go-left algorithm}
+\framesubtitle{Proof of the upper bound for $m=n$}
+\begin{theorem}[V\"ocking, 2003]
+\label{theorem:aglm}
+Consider any sequence of insertions and deletions s.t.~at most $n$ balls are in the bins at any time. If the balls are placed into bins by the Always-go-left algorithm, the maximum load at any time step $t$ is, w.h.p., 
+\begin{align*}
+\loadAgl \leq \frac{\ln\ln n}{d  \ln \Phi_d} + O(1) \quad .
+\end{align*}
+\end{theorem}
+
+\bigskip
+In case $\load$ exceeds a given threshold of $L+3$ balls ("a bad event occurs"), we construct an activated \alert{witness tree of order $L$}. The probability for its existance upper bounds the probabilty that the associated bad event occurs.  
 \end{frame}
 
-\begin{frame}
-\frametitle{Witness trees}
-\end{frame}
 
-\begin{frame}
-\frametitle{Witness trees}
+\newcommand\assumptionOne{
 \begin{alertblock}{Assumption}
 All the events represented by the nodes and edges of a witness tree are stochastically independent. 
 \end{alertblock}
+}
+
+
+\begin{frame}
+\frametitle{Witness trees}
+A witness tree
+\begin{itemize}
+\item is a \alert{tree-like structure},
+\item where each node $v$ references a ball $b_v$ and
+\item nodes and edges represent \alert{events} (that may occur or not),
+\item that are, in general, \alert{not independent}.
+\item It is \alert{activated} when all its leaf and edge events occur. 
+\end{itemize}
+
+\bigskip
+
+\assumptionOne
+
+I.e., we assume that a ball is referenced by at most one node.
 \end{frame}
+
+\begin{frame}
+\frametitle{Asymmetric witness trees (AWT)} 
+A $d$-ary AWT of order $L$ has the structure of a Fibonacci tree $T_d(dL+1)$:
+
+\begin{center}
+\begin{tikzpicture}
+\matrix{
+ \Tree 
+	[.$T_d(6)$
+		[.$T_d(5)$
+			[.$T_d(4)$ 
+				[.$T_d(3)$ $T_d(2)$ $T_d(1)$ ]
+				$T_d(2)$ $T_d(1)$
+			]
+			[.$T_d(3)$ $T_d(2)$ $T_d(1)$ ]
+			$T_d(2)$ %$T_d(1)$
+		]
+		[.$T_d(4)$ 
+			[.$T_d(3)$ $T_d(2)$ $T_d(1)$ ]
+			$T_d(2)$ $T_d(1)$
+		]
+		[.$T_d(3)$ $T_d(2)$ $T_d(1)$ ]
+		%$T_d(2)$ 
+	]
+\\};
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\newcommand\defEdgeEvent{
+\begin{exampleblock}{Edge event}
+Edge $e =(u,v)$, s.t.~$v$ is $i$-th child of $u$: $e$ represents the event that the $i$-th location of ball $b_u$ points to the same bin as one of the locations of ball $b_v$.
+\end{exampleblock}
+}
+
+\newcommand\defLeafEvent{
+\begin{exampleblock}{Leaf event}
+A leaf node $v$ represents the event that each of the $d$ locations of the ball $b_v$ points to a bin that contains at least three additional balls, at the time of the insertion of the ball $b_v$.
+\end{exampleblock}
+}
+
+\begin{frame}
+\frametitle{Edge and leaf events}
+\begin{columns}[onlytextwidth]
+\begin{column}{0.7\textwidth}
+\defEdgeEvent
+
+\defLeafEvent
+\end{column}
+\begin{column}{0.3\textwidth}
+\begin{tikzpicture}
+\todo{illustrate}
+\end{tikzpicture}
+\end{column}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}[shrink]
+\frametitle{Asymmetric witness trees (AWT)} 
+We assign a label $(h,i)$, with $0\leq h \leq L$, $1\leq i \leq d$, to each node:
+\begin{itemize}
+\item Node $T_d(1)$/$T_d(2)$ is labelled $(0,1)$/$(0,2)$.
+\item A node labelled $(0,i)$, $i>2$, has $i-1$ children labelled $(0,i-1),\dots,(0,1)$.
+\item A node with label $(h,i)$, $h>0$, has $d$ children labelled
+$(h,i-1),\dots,(h,1)$,$(h-1,d),\dots,(h-1, i)$.
+\item Thus, the node $T_d(dh+i)$ is labelled $(h,i)$.
+\end{itemize}
+\begin{center}
+\begin{tikzpicture}
+\matrix{
+ \Tree 
+	[.$(1,2)$ 
+		[.$(1,1)$
+			[.$(0,3)$ $(0,2)$ $(0,1)$ ]
+			$(0,2)$ $(0,1)$
+		]
+		[.$(0,3)$ $(0,2)$ $(0,1)$ ]
+		$(0,2)$
+	]
+\\};
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Proof of activation}
+We assign balls to the nodes of the AWT s.t.~th
+
+\begin{exampleblock}{Invariant}
+A ball $b_v$ referenced by a node $v$ with label $(h,i)$ was placed in a bin $x$ belonging to group $i$ that, at the time of insertion of the ball $b_v$, contained at least $h+3$ other balls. 
+\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Probability of activation}
+\begin{lemma}
+For any $\alpha > 0$ and large enough $L$, the activation of an AWT of order L occurs with probability at most $n^{-\alpha}$.
+\end{lemma}
+
+\bigskip
+\begin{itemize}
+\item $k$\dots number of nodes
+\item $l$\dots number of leaves
+\item $\omega$\dots number of ways to assign balls to the nodes of an AWT
+\item $p_\mathrm{e}$\dots probability that all edge events occur
+\item $p_\mathrm{l}$\dots probability that all edge events occur
+\item $P_\mathrm{a}$\dots probability of activation of an AWT of order $L$
+\end{itemize}
+
+\begin{align*}
+P_\mathrm{a} = \omega p_e p_l \quad , \quad \omega = n^k 
+\end{align*}
+\end{frame}
+
+\begin{frame}
+\frametitle{Edge events}
+\defEdgeEvent
+\bigskip
+One edge is activated with probability at most $d/n$ and we have $k-1$ edges; thus
+\begin{align*}
+p_\mathrm{e} = \left(\frac{d}{n}\right)^{k-1} \quad .
+\end{align*}
+\end{frame}
+
+\begin{frame}
+\frametitle{Leaf events}
+\only<1>{
+\defLeafEvent
+At any time step $t$, at most $n/3$ bins contain 3 or more balls. \alert{But how are they distributed among the $d$ groups?}
+
+\medskip
+$b_i$\dots number of bins in group $i$ containing 3 or more balls.
+$\beta_i = b_i d/n$\dots fraction of bins $b_i$ in group $i$. 
+}
+\only<1-2>{
+\begin{align*}
+\frac{n}{d}\sum_{i=1}^d \beta_i \leq \frac{n}{3} \implies
+\sum_{i=1}^d \beta_i \leq \frac{d}{3}
+\end{align*}
+}
+
+\only<2>{
+The probability that all $d$ locations of a ball point to a bin containing 3 or more balls is
+\begin{align*}
+p_\mathrm{l}' = \prod_{i=1}^{d} \beta_i \quad ,
+\end{align*}
+which is maximized when all $\beta_i$ are equal and thus
+\begin{align*}
+p_\mathrm{l}' \leq  \left(\frac{1}{3}\right)^d \implies p_\mathrm{l} \leq 3^{-dl} \quad .
+\end{align*}
+}
+\end{frame}
+
+\begin{frame}
+\frametitle{Probability of activation}
+Putting it together, we get
+\begin{align*}
+P_\mathrm{a} = \omega p_e p_l \leq  n^k \left(\frac{d}{n}\right)^{k-1} 3^{-dl} \quad .
+\end{align*}
+Using $ k\leq 2l$, $2d^2\leq 3^d$ and $l \geq \Phi_d^{dL-1}$, we can simplify to
+\begin{align*}
+P_\mathrm{a} \leq n 2 ^{-\Phi_d^{dL-1}} \quad .
+\end{align*}
+For arbitrary $\alpha > 0$, let
+\begin{align*}
+L &\geq \left\lceil{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d \ln \Phi_d}}\right\rceil+\frac{1}{d} \implies \frac{\ln\ln n}{d \ln \Phi_d} + O\left(1\right) ,
+\end{align*}
+and we get
+\begin{align*}
+P_\mathrm{a} \leq n^{-\alpha} \quad  \qed
+\end{align*}
+\end{frame}
+
+\begin{frame}
+\frametitle{Recap.}
+\theoremVocking
+\assumptionOne
+\bigskip 
+Next steps:
+\begin{itemize}
+\item Proof \alert{without} the simplifying assumption (V\"ocking, 2003).
+\item Proof for the \alert{heavily loaded} case (Berenbrink et al.,~2006).
+\end{itemize}
+
+\end{frame}
+
 
 \begin{frame}
 \frametitle{Conclusion}
 \end{frame}
 
-%\againframe{references}
-\begin{frame}[allowframebreaks, label=references]
+\begin{frame}[allowframebreaks]
 \frametitle<presentation>{References}    
 \bibliographystyle{acm}
-\nocite{ABKU99}
-%\nocite{RS98}
 \nocite{VOC03}
+\nocite{ABKU99}
+\nocite{RS98}
+\nocite{BCSV06}
+\nocite{capocelli1990generalized}
 \setbeamertemplate{bibliography item}[text]
-\bibliography{sources}
+\bibliography{../sources}
 \end{frame} 	
+
 
 \end{document}
 

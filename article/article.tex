@@ -33,6 +33,7 @@
 \newtheorem{theorem}{Theorem}
 \newtheorem{assumption}{Assumption}
 \newtheorem{invariant}{Invariant}
+
 \begin{document}
 
 \title{The Power of Two Random Choices\\ 
@@ -304,18 +305,18 @@ Similarly to Section~\ref{sec:analysis:greedy}, where we used SWTs to upper-boun
 
 \subsubsection{Asymmetric witness trees}
 \label{sec:analysis:definitionAsymWT}
-An AWT differes from an SWT (Section~\ref{sec:analysis:definitionSymWT}) only by its structure, which is a $d$-ary Fibonacci tree $T_d\left(k \right)$:
+An AWT differes from an SWT (Section~\ref{sec:analysis:definitionSymWT}) only by its structure, which is a $d$-step Fibonacci tree $T_d\left(k \right)$:
 
 \begin{compactitem}
 \item $T_d(1)$ is a single node and  $T_d(2) = T_d(1)$.
 \item For $3\leq k \leq d$, $T_d(k)$ is a tree with $k-1$ children, which are the roots of the trees $T_d(k-1),\ldots,T_d(1)$.
 \item For $k>d$, $T_d(k)$ is a tree with $d$ children, which are the roots of the trees $T_d(k-1),\ldots,T_d(k-d)$.
 \end{compactitem}
-A $d$-ary AWT of order $L$ has the structure of a Fibonacci tree $T_d(d  L+1)$ and thus has $l=F_d(d L + 1) \geq \Phi_d^{d L-1}$ leaves (Eq.~\ref{eqn:goldenFib})\todo{Can we just rewrite Eq.~\ref{eqn:goldenFib} like this? what about the limes? It's not Eq.~6. Try to find a reference}. 
+A $d$-ary AWT of order $L$ has the structure of a Fibonacci tree $T_d(d  L+1)$ and thus has $l=F_d(d L + 1) \geq \Phi_d^{d L-1}$ leaves (Eq.~\ref{eqn:capocelli}).
 Furthermore, for each node we define a label $(h, i)$, where $h, i \in \mathbb{N}$, $0 \leq h \leq L$ and  $1\leq i \leq d$:
 \begin{compactitem}
 \item The root nodes of the Fibonacci trees $T_d(1)$ and $T_d(2)$ are assigned the labels $(0,1)$ and $(0,2)$, respectively. Thus, nodes labelled $(0,1)$ or $(0,2)$ do not have any children.
-\item A node with label $(0, i)$, where $i>2$, has $i-1$ children with the labels $(0,i-1),\dots,(0,1)$
+\item A node with label $(0, i)$, where $i>2$, has $i-1$ children with the labels $(0,i-1),\dots,(0,1)$.
 \item A node with label $(h,i)$, where $h>0$, has $d$ children labelled $(h,i-1),\dots,(h,1)$,$(h-1,d),\dots,(h-1, i)$.
 \item The root of a Fibonacci tree $T_d(d h+i)$ is labelled $(h, i)$. 
 \end{compactitem}
@@ -360,7 +361,7 @@ The probability that all $d$ locations of a ball point to a bin containing 3 or 
 \begin{align*}
 p_\mathrm{l}' = \prod_{i=1}^{d} \beta_i \quad ,
 \end{align*}
-i.e., a leaf event occurs with probability $p_\mathrm{l}'$, which is maximized when all $b_i$ are equal. We thus set $b_i = 1/3$ for all $i$ and get as upper bound for the probability that all leaf events occur 
+i.e., a leaf event occurs with probability $p_\mathrm{l}'$, which is maximized when all $\beta_i$ are equal. We thus set $\beta_i = 1/3$ for all $i$ and get as upper bound for the probability that all leaf events occur 
 \begin{align*}
 p_\mathrm{l} \leq 3^{-d l}\quad .
 \end{align*}
@@ -481,7 +482,7 @@ w.h.p., for all $m$. We used witness trees, a very useful technique in the BiB c
 \appendix
 \section{Generalized Fibonacci numbers}
 \label{sec:fibonacci}
-We define $d$-ary Fibonacci numbers as follows:
+We define $d$-step Fibonacci numbers as follows:
 
 \begin{align*}
 F_d(k) := \begin{cases}
@@ -499,7 +500,11 @@ which has the following properties:
 \begin{align*}
 \forall i\; \forall j \in \mathbb{N}: i < j \implies \Phi_i < \Phi_j \quad , \quad \lim_{d\rightarrow \infty} \Phi_d = 2 \quad .
 \end{align*}
-Notice that $F_2$ corresponds to the usual Fibonacci numbers, while $\Phi_d$ is a generalization of the golden ratio~\cite{Knuth73} and $\Phi_2 $ corresponds to the golden ratio.
+Notice that $F_2$ corresponds to the usual Fibonacci numbers and $\Phi_2 $ corresponds to the golden ratio~\cite{Knuth73}, of which $\Phi_d$ is a generalization, for which
+\begin{align*}
+F_d(k) \geq \Phi_d^{k-2} \neqn{capocelli}
+\end{align*}
+holds ~\cite{capocelli1990generalized}.
 
 \section{Asymptotic notations}
 \label{sec:asymptotic}
