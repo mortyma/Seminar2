@@ -84,7 +84,7 @@ Consider the slightly more involved \emph{Always-go-left} scheme: Suppose that t
 \begin{align*}
 \load = \frac{m}{n} + \frac{\ln\ln n}{d  \ln \Phi_d} + O(1),
 \end{align*}
-w.h.p., for all $m$. (The symbol $\Phi_d$ denotes a generalization of the golden ratio, based on generalized Fibonacci numbers. Refer to Appendix \ref{sec:fibonacci} for the definition.) V\"ocking was also able to show that the Always-go-left strategy is optimal up to additive constants~\cite{VOC03}.
+w.h.p., for all $m$. (The symbol $\Phi_d$ denotes a generalization of the golden ratio, based on generalized Fibonacci numbers. Refer to Appendix \ref{sec:fibonacci} for the definition.) Berenbrink et al.~\cite{BCSV06} and V\"ocking~\cite{VOC03} were able to show that the Always-go-left strategy is optimal up to additive constants.
 
 \subsubsection*{Outline}
 In Section \ref{sec:classification}, we give a basic classification of BiB games to provide an overview of the research, followed by some applications in Section \ref{sec:applications}. Section \ref{sec:model} contains a detailed definition of the model we use, which can be classified as a sequential, finite and dynamic process with random deletions. In Section \ref{sec:multiple-choice} we provide a brief definition of three different classes of random placement strategies and present two placement algorithms outlined in the introduction: Greedy (Section \ref{sec:greedy}) and Always-go-left (Section \ref{sec:AlwaysGoLeft}). Section \ref{sec:analysis} contains a detailed analysis of both strategies for the case $m=n$. 
@@ -180,6 +180,17 @@ Consider any sequence of insertions and deletions s.t.~at most $n$ balls are in 
 \end{align*}
 w.h.p.,~for all $t$~\cite{VOC03}.
 \end{theorem}
+\noindent
+V\"ocking~\cite{VOC03} also proved a matching lower bound for the lightly loaded case:
+\begin{theorem}
+\label{theorem:aglmLower}
+For $m=n$, using an arbitrary allocation scheme that chooses $d$ bins for each ball at random (i.e., any allocation scheme in class 3) the maximum load is
+\begin{align*}
+\load = \frac{\ln \ln n}{d \ln \Phi_d} - O(1) \quad 
+\end{align*}
+\end{theorem}
+\noindent
+w.h.p.,~for all $t$~\cite{VOC03}. We not that the combination of asymmetric tie-breaking and and non-uniform (but independent) sampling of the $d$ bins is crucial to achieve bounds given in Theorems~\ref{theorem:aglm} and~\ref{theorem:aglmLower}.
 
 \section{Analysis}
 \label{sec:analysis}
@@ -332,8 +343,8 @@ A ball $b_v$ referenced by a node $v$ with label $(h,i)$ was placed in a bin $x$
 \noindent
 Let $x$ be the bin that contains $L+4$ balls and assign the topmost ball $b_t$ in $x$ to the root node of the AWT. Thus, at the time of insertion of $b_t$, each of the $d$ locations of this ball points to a bin containing at least $L+3$ balls. These are the $d$ bins that were sampled by the Always-go-left scheme, i.e., bin $i$ belongs to the $i$'th group of bins, where each group consists of $n/d$ bins. The child node of the root with label $(L-1, i)$ is assigned the topmost ball of the $i$'th location. The assignment of balls to nodes then proceeds recursively: Given a node $v$ labelled $(h, i)$ that references a ball $b_v$ (which was put into some bin of the $i$-th group that, at the time of insertion of ball $b_v$, contained at least $h+3$ other balls), we can conclude the following:
 \begin{compactitem}
-\item For $1\leq j < i$, the $j$'th location of the ball $b_v$ contains at least $h+4$ balls, at the insertion time of the ball $b_v$. If the $j$-th location contained less balls than the $i$-th location, the Always-go-left scheme would have put the ball $b_v$ into the bin pointed to by location $j$. The topmost ball in location $j$ is assigned to the  child $u$ of $v$ with label $(h,j)$. 
-\item For $i < j \leq d$, the $j$-th location contains at least $h+3$ balls. If location $j$ contained less, the Always-go-left scheme would have put the ball $b_v$ into the bin location $j$ points to. The topmost ball in the bin that location $j$ points to is assigned to the child node $u$ of $v$ labelled with $(h-1, j)$.
+\item For $1\leq j < i$, the $j$-th location of the ball $b_v$ contains at least $h+4$ balls, at the insertion time of the ball $b_v$. If it contained less balls than the $i$-th location, the Always-go-left scheme would have put the ball $b_v$ into the bin pointed to by location $j$. The topmost ball in location $j$ is assigned to the child $u$ of $v$ with label $(h,j)$. 
+\item For $i < j \leq d$, the $j$-th location contains at least $h+3$ balls. If it contained less, the Always-go-left scheme would have put the ball $b_v$ into the bin location $j$ points to. The topmost ball in the bin that location $j$ points to is assigned to the child node $u$ of $v$ labelled with $(h-1, j)$.
 
 \begin{comment}
 Note: The paper claims that the locations $j$ point to bins with $h+2$ balls. This can not be true, since the topmost, i.e., the $h+2$-th ball - call it $b_t$ - gets assigned to a node with label $(h'=h-1, j)$. Since there are $h+1=h'+2$ balls below it, at the time of the placement of ball $b_t$, the bin $j$ it gets put into has only $h'+2$ balls in it, violating the invariant. Same with the case $j<i$.
@@ -520,7 +531,7 @@ f \in \omega(g) &\iff \forall c \; \exists n_0\;\forall n> n_0: cg(n) < f(n) \\
 
 \section{A bit of history}
 \label{sec:historyOfGreedy}
-The history of proving the remarkable property of the two-choice paradigm (see Theorem~\ref{theorem:greedy}) is in itself quite interesting. It was first proven by Azar et al.~\cite{ABKU99} for the case $m = n$. In the same paper, they claimed that the bound holds for arbitrary $m$. Unfortunately, their analysis breaks down for the heavily loaded case, where $m \in \Omega\left(n  \log n\right)$. Berenbrink at. all~\cite{BCSV06} were the first to prove that the same bound indeed holds for the heavily loaded case. Their proof is fairly complex and a simpler analysis may be found in~\cite{TW13}, which also provides a tight lower bound for the heavily loaded case. Curiously, the case $d = 2$ was implicitly proven by Karp et al. in the context of simulating PRAMs on distributed memory machines\cite{KLM92}. As discussed in Section~\ref{sec:AlwaysGoLeft}, V\"ocking~\cite{VOC03} was able to improve the bound as well as to show that the Always-go-left strategy that he introduces is optimal up to additive constants.
+The history of proving the remarkable property of the two-choice paradigm (see Theorem~\ref{theorem:greedy}) is in itself quite interesting. It was first proven by Azar et al.~\cite{ABKU99} for the case $m = n$. In the same paper, they claimed that the bound holds for arbitrary $m$. Unfortunately, their analysis breaks down for the heavily loaded case, where $m \in \Omega\left(n  \log n\right)$. Berenbrink at. all~\cite{BCSV06} were the first to prove that the same bound indeed holds for the heavily loaded case. Their proof is fairly complex but provides a tight analysis of the heavily loaded case; a simpler analysis may be found in~\cite{TW13}. Curiously, the case $d = 2$ was implicitly proven by Karp et al. in the context of simulating PRAMs on distributed memory machines\cite{KLM92}. As discussed in Section~\ref{sec:AlwaysGoLeft}, V\"ocking~\cite{VOC03} was able to improve the bound as well as to show that the Always-go-left strategy that he introduces is optimal up to additive constants.
 
 
 %bibliography
