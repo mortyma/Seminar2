@@ -47,6 +47,9 @@
 \newtheorem{assumption}{Assumption}
 \newtheorem{invariant}{Invariant}
 
+\newcommand\xqed[1]{%
+   \rlap{\hbox to#1{\hfil\llap{\ensuremath{\qed}}}}
+}
 
 %---------------------------------------------------------------------
 % Create Color definition From Template
@@ -81,6 +84,7 @@
 \newcommand\bingap{1.6*\balldiameter}
 %color of balls
 \tikzstyle{ballstyle} = [ball color=black!30!red]
+\tikzstyle{specialBallstyle} = [ball color=black!30!red,  opacity=0.2]
 
 %---------------------------------------------------------------------
 %tikz styles and commands
@@ -138,7 +142,12 @@
 			\setNode{\i}{\j};
 }
 
-%paint a ball in bin #1, position #2
+%paint a ball in bin #1, position #2 with style specialBallstyle
+\newcommand\specialBall[2]{
+	\shade[specialBallstyle] (#1*\bingap,#2*\balldiameter-\ballsize) circle (\ballsize) {};
+}
+
+%paint a ball in bin #1, position #2 with style = ballstyle
 \newcommand\ball[2]{
 	\shade[ballstyle] (#1*\bingap,#2*\balldiameter-\ballsize) circle (\ballsize) {};
 }
@@ -187,13 +196,13 @@
 % nicer tikz qtrees
 \tikzset{edge from parent/.style=
      {draw, edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}}
-\tikzset{every tree node/.style={font=\tiny, thick}}
+\tikzset{every tree node/.style={font=\tiny, thick, align=center}}    
      
 %---------------------------------------------------------------------
 %Front matter
 %---------------------------------------------------------------------
 \title{The Power of Two Random Choices}
-\subtitle{TODO}
+\subtitle{And the Surprising Influence of Asymmetry}
 \author[M. Kalany]{Martin Kalany}
 \institute[TU Wien]
 {
@@ -215,14 +224,14 @@
 \begin{frame}
   \titlepage
 \end{frame}
-\note{}
 
 \begin{frame}
-\frametitle{The Problem}
+\frametitle{The problem}
+\framesubtitle{...and the goal}
 \begin{exampleblock}{Balls-into-bins games}
 Suppose we have $n$ initially empty bins and need to distribute $m \geq n$ balls among them, \alert{as evenly as possible}. 
 \end{exampleblock}
-
+\pause
 \begin{exampleblock}{Definition}
 We are interested in the \alert{maximum load $\load$}, i.e, how many balls are in the fullest bin?
 \end{exampleblock}
@@ -253,42 +262,35 @@ For each ball, choose one of the $n$ bins \alert{uniformly and independently at 
 \end{frame}
 
 \begin{frame}
-\frametitle{Some definitions}
-\todo{merge with next slide?}
-Since we deal with a \alert{random process}, we cannot give upper bounds for the maximum load $\load$ with absolute certainty. 
+\frametitle{Single choice strategy}
+\framesubtitle{Upper bound for the maximum load}
+%&Since we deal with a \alert{random process}, we cannot give upper bounds for the maximum load $\load$ with absolute certainty! 
 
 \begin{exampleblock}{Definition}
 We say that an event $\mathcal E_n$ occurs \alert{with high probability} (w.h.p.) if $\Pr\left[\mathcal E_n \right] \geq 1 - n^{-\alpha}$ for some $\alpha > 0$.
 \end{exampleblock}
 
-\bigskip
-%\pause
+\pause
+\medskip
+We distinguish the \alert{lightly loaded} case ($m = n$) and the \alert{heavily loaded} case ($m \in \omega(n\ln n)$).
 
-We distinguish:
-\begin{itemize}
-\item The \alert{lightly loaded} case: $m = n$
-\item The \alert{heavily loaded} case:	 $m \in \omega(n\ln n)$
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Single choice strategy}
-\framesubtitle{Upper bound for the maximum load}
+\medskip
 \begin{theorem}[Raab and Steger, 1998]
 When using the single choice strategy to distribute $m$ balls to $n$ bins, the maximum load will be, w.h.p.,
 \begin{align*}
 \loadS \leq 
 	\begin{cases}
-    \frac{\ln n}{\ln\ln n} + O(1)              & m = n \\
+    \Theta\left(\frac{\ln n}{\ln\ln n}\right)           & m = n \\
     \frac{m}{n} + \Theta\left(\sqrt{\frac{m\ln n}{n}} \right)              & m \in \omega(n \ln n)
     \end{cases} \quad .
 \end{align*}
 \end{theorem}
+
+
 \end{frame}
 
 \begin{frame}
 \frametitle{Multiple choice strategies}
-
 \begin{exampleblock}{Idea}
 Put a ball into the \alert{least full} of $d\geq2$ randomly chosen bins.
 \end{exampleblock}
@@ -317,8 +319,7 @@ We can distinguish placement algorithms by the way the $d$ \alert{bins are sampl
 \begin{tikzpicture}[scale=\scalefac]
 	\bab{2 1 4 2 3 0}
 	\newball
-	\iA[25]{n13};
-	\iA[20]{n35};
+	\iA[35]{n22};
 	\iA[35]{n44};
 \end{tikzpicture}
 \end{center}
@@ -336,8 +337,6 @@ When using the \alert{Greedy} algorithm to distribute $m$ balls to $n$ bins, the
 
 \begin{frame}
 \frametitle{Single choice vs.~Greedy}
-%\begin{columns}[onlytextwidth]
-%\begin{column}{0.5\textwidth}
 \begin{align*}
 \loadS \leq 
 	\begin{cases}
@@ -345,26 +344,24 @@ When using the \alert{Greedy} algorithm to distribute $m$ balls to $n$ bins, the
     \frac{m}{n} + \Theta\left(\sqrt{\frac{m\ln n}{n}} \right)              & m \in \omega(n \ln n)
     \end{cases}
 \end{align*}
-%\end{column}
-%\begin{column}{0.5\textwidth}
 \begin{align*}
 \loadG \leq \frac{m}{n} + \frac{\ln \ln n}{\ln d} + O(1) 
 \end{align*}
-%\end{column}
-%\end{columns}
 
 \begin{alertblock}{The two-choice paradigm}
-Even for $d=2$, Greedy achieves an \alert{exponential decrease} of the additive gap $\delta$, which does \alert{not depend on} the number of balls \alert{$m$} anymore.
+Even for $d=2$, Greedy achieves an \alert{exponential decrease} of the additive gap $\delta$, which does \alert{not depend on} the number of balls \alert{$m$}.
 \end{alertblock}
 \end{frame}
 
 \begin{frame}
 \frametitle{Applications}
 \begin{description}
-	\item[Hashing:] Assuming a perfect hash function, $n$ elements (balls) are mapped to $m$ table entries (bins). Using two hash functions: look-up time $\Theta(\ln\ln n)$, w.h.p. \alert{Easy to parallelize} and no \alert{re-hashing}!
-	\item[Online load balancing:] Assign tasks (balls) to servers/processors (bins). The two-choice paradigm helps to \alert{reduce the overhead} (of e.g., a central dispatcher), while the maximum load will be at most  $\Theta(\ln\ln n)$, w.h.p.
+	\item[Hashing:] Assuming a perfect hash function, $n$ elements (balls) are mapped to $m$ table entries (bins). Using two hash functions: look-up time $\Theta(\ln\ln n)$, w.h.p. \alert{Easy to parallelize} and  \alert{no re-hashing}!
+	\item[Online load balancing:] Assign tasks (balls) to servers/processors (bins). The two-choice paradigm helps to \alert{reduce communication overhead}, %(of e.g., a central dispatcher)
+	while the maximum load will be $\Theta(\ln\ln n)$, w.h.p.
 	\item[Emulating PRAMs on DMMs:] Distribute processors and memory cells of the PRAM on the DMM s.t.~the overhead of the emulation is minimized.
-	\item[Low congestion circuit routing:] \alert{Valiant's paradigm} (a permuation routing problem can be split into two sub-problems: route to random intermediate destination and then on to the actual destination) is analogous to the single-choice technique.
+	\item[Low congestion circuit routing:] \alert{Valiant's paradigm} %(a permuation routing problem can be split into two sub-problems: route to random intermediate destination and then on to the actual destination) 
+	is analogous to the single-choice technique.
 \end{description}
 \end{frame}
 
@@ -389,10 +386,8 @@ Even for $d=2$, Greedy achieves an \alert{exponential decrease} of the additive 
 \begin{tikzpicture}[scale=\scalefac]
 	\bab{2 1 4 2 3 0}
 	\newball
-	\groupSep{2};
-	\groupSep{4};
-	\iA[25]{n13};
-	\iA[35]{n43};
+	\groupSep{3};
+	\iA[30]{n13};
 	\iA[30]{n54};	
 \end{tikzpicture}
 \end{center}
@@ -418,7 +413,6 @@ Generalized golden ratio $\Phi_d$:
 \begin{align*}
 \Phi_2 = 1.61 \quad , \quad \forall i\; \forall j \in \mathbb{N}: i < j \implies \Phi_i < \Phi_j \quad , \quad \lim_{d\rightarrow \infty} \Phi_d = 2 \quad .
 \end{align*}
-
 \begin{align*}
 F_d(k) \geq \Phi_d^{k-2}
 \end{align*}
@@ -436,7 +430,6 @@ When using the \alert{Always-go-left} algorithm to distribute $m$ balls to $n$ b
 \begin{frame}[shrink]
 \frametitle{The Always-go-left algorithm}
 \aglAlgorithm
-
 \theoremVocking
 \end{frame}
 
@@ -460,7 +453,7 @@ The combination of \alert{asymmetric tie breaking} and \alert{non-uniform} (and 
 \begin{theorem}[V\"ocking, 2003]
 For $m=n$, using an arbitrary allocation scheme that chooses $d$ bins for each ball at random (i.e., class 3) the maximum load is, w.h.p,
 \begin{align*}
-\loadAgl \leq \frac{\ln \ln n}{d \ln \Phi_d} - O(1) \quad .
+\loadAgl = \frac{\ln \ln n}{d \ln \Phi_d} - O(1) \quad .
 \end{align*}
 \end{theorem}
 \end{frame}
@@ -481,13 +474,6 @@ We will assume a sequential, infinite, dynamic process.
 \end{description}
 \end{frame}
 
-% Outline of the proof section:
-% - State what will be proved
-% - Outline the proof
-% - Witness trees 
-% - Fibonacci trees and labelling
-% - Lemma 3
-% - Prob. of activation
 \begin{frame}
 \frametitle{The Always-go-left algorithm}
 \framesubtitle{Proof of the upper bound for $m=n$}
@@ -499,17 +485,16 @@ Consider any sequence of insertions and deletions s.t.~at most $n$ balls are in 
 \end{align*}
 \end{theorem}
 
+\pause
 \bigskip
-In case $\load$ exceeds a given threshold of $L+3$ balls ("a bad event occurs"), we construct an activated \alert{witness tree of order $L$}. The probability for its existance upper bounds the probabilty that the associated bad event occurs.  
+In case $\load$ exceeds a given threshold of $L+3$ balls ("a bad event occurs"), we construct an activated \alert{witness tree of order $L$}. The probability for its existence upper bounds the probability that the associated bad event occurs.  
 \end{frame}
-
 
 \newcommand\assumptionOne{
 \begin{alertblock}{Assumption}
 All the events represented by the nodes and edges of a witness tree are stochastically independent. 
 \end{alertblock}
 }
-
 
 \begin{frame}
 \frametitle{Witness trees}
@@ -523,10 +508,7 @@ A witness tree
 \end{itemize}
 
 \bigskip
-
 \assumptionOne
-
-I.e., we assume that a ball is referenced by at most one node.
 \end{frame}
 
 \begin{frame}
@@ -534,26 +516,27 @@ I.e., we assume that a ball is referenced by at most one node.
 A $d$-ary AWT of order $L$ has the structure of a Fibonacci tree $T_d(dL+1)$:
 
 \begin{center}
-\begin{tikzpicture}
-\matrix{
+\begin{tikzpicture}[scale=1]
  \Tree 
-	[.$T_d(6)$
-		[.$T_d(5)$
+ 	[.$T_d(7)$ \edge[draw, dotted];
+		[.$T_d(6)$
+			[.$T_d(5)$
+				[.$T_d(4)$ 
+					[.$T_d(3)$ $T_d(2)$ $T_d(1)$ ]
+					$T_d(2)$ %$T_d(1)$
+				]
+				[.$T_d(3)$ $T_d(2)$ $T_d(1)$ ]
+				%$T_d(2)$
+			]
 			[.$T_d(4)$ 
 				[.$T_d(3)$ $T_d(2)$ $T_d(1)$ ]
-				$T_d(2)$ $T_d(1)$
+				$T_d(2)$ %$T_d(1)$
 			]
-			[.$T_d(3)$ $T_d(2)$ $T_d(1)$ ]
-			$T_d(2)$ %$T_d(1)$
+			%[.$T_d(3)$ $T_d(2)$ $T_d(1)$ ]
 		]
-		[.$T_d(4)$ 
-			[.$T_d(3)$ $T_d(2)$ $T_d(1)$ ]
-			$T_d(2)$ $T_d(1)$
-		]
-		[.$T_d(3)$ $T_d(2)$ $T_d(1)$ ]
-		%$T_d(2)$ 
+		\edge[draw=none]; {}
+		%\edge[draw=none]; {}		
 	]
-\\};
 \end{tikzpicture}
 \end{center}
 \end{frame}
@@ -571,19 +554,79 @@ A leaf node $v$ represents the event that each of the $d$ locations of the ball 
 }
 
 \begin{frame}
-\frametitle{Edge and leaf events}
-\begin{columns}[onlytextwidth]
-\begin{column}{0.7\textwidth}
+\frametitle{Edge events}
 \defEdgeEvent
-
-\defLeafEvent
-\end{column}
-\begin{column}{0.3\textwidth}
-\begin{tikzpicture}
-\todo{illustrate}
+\begin{center}
+\begin{tikzpicture}[every tree node/.style={thick}]
+ \Tree 
+ 	[.\node[draw,circle]{u}; 
+		\edge[draw, densely dotted]; {}  
+		%\edge[draw, densely dotted]; {}
+		\edge[draw] node[draw=none, thick, anchor=west] {$i$};
+		[.\node[draw,circle]{v};
+		]
+	]
+	\node (bu) at (0.75,0.5) {};
+	\node (bv) at (1.1,-1.25) {};
+	
+	\path node[topflat, xshift=3.5cm, above, yshift=-3cm]  {};
+	\node[circle] (bin1) at (3.5,-0.75) {};
+	
+	\path node[topflat, xshift=4.5cm, above, yshift=-3cm]  {};
+	\node[circle] (bin2) at (4.5,-0.75) {};
+	
+	\path node[topflat, xshift=5.5cm, above, yshift=-3cm]  {};
+	\node[circle] (bin3) at (5.5,-0.75) {};
+	
+	\path node[topflat, xshift=6.5cm, above, yshift=-3cm]  {};
+	\node[circle] (bin4) at (6.5,-0.75) {};
+	
+	\path node[topflat, xshift=7.5cm, above, yshift=-3cm]  {};
+	\node[circle] (bin5) at (7.5,-0.75) {};
+	
+	\path node[topflat, xshift=8.5cm, above, yshift=-3cm]  {};
+	\node[circle] (bin6) at (8.5,-0.75) {};
+	
+	\path (bu) edge[insert, bend left=20] node[draw=none, font=\tiny, sloped, anchor=south]{$i$-th location} (bin3);
+	\path (bu) edge[insert, dotted, bend left=30] (bin6);
+	
+	\path (bv) edge[insert, bend right=30] node[draw=none, font=\tiny, sloped, anchor=south]{any location} (bin3);
+	\path (bv) edge[insert, dotted, bend right=40] (bin4);
+	
+	\shade[ballstyle] (0.75,0.5) circle (\ballsize*\scalefac) {};
+	\shade[ballstyle] (1.1,-1.25) circle (\ballsize*\scalefac) {};
 \end{tikzpicture}
-\end{column}
-\end{columns}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Leaf events}
+\defLeafEvent
+
+\bigskip
+\begin{center}
+\begin{tikzpicture}[every tree node/.style={thick}]
+\begin{scope}[xshift=-0.9cm, yshift=4cm]
+\Tree
+ 	[.\node[draw,circle]{u}; 
+		\edge[draw, densely dotted]; {}  
+		\edge[draw] {};
+		[.\node[draw,circle]{v};
+		]
+	]
+\end{scope}
+\begin{tikzpicture}[scale=\scalefac]
+\begin{scope}[yshift=1cm]
+	\bab{3 0 0 0 3 0}
+	\newball
+	\iA[30]{n14};
+	\iA[25]{n54};	
+\end{scope}
+\end{tikzpicture}
+
+\end{tikzpicture}
+\end{center}
+
 
 \end{frame}
 
@@ -591,46 +634,110 @@ A leaf node $v$ represents the event that each of the $d$ locations of the ball 
 \frametitle{Asymmetric witness trees (AWT)} 
 We assign a label $(h,i)$, with $0\leq h \leq L$, $1\leq i \leq d$, to each node:
 \begin{itemize}
-\item Node $T_d(1)$/$T_d(2)$ is labelled $(0,1)$/$(0,2)$.
-\item A node labelled $(0,i)$, $i>2$, has $i-1$ children labelled $(0,i-1),\dots,(0,1)$.
-\item A node with label $(h,i)$, $h>0$, has $d$ children labelled
-$(h,i-1),\dots,(h,1)$,$(h-1,d),\dots,(h-1, i)$.
-\item Thus, the node $T_d(dh+i)$ is labelled $(h,i)$.
+\item Node $T_d(1)$/$T_d(2)$ is labeled $(0,1)$/$(0,2)$.
+\item For $i>2$, a node $(0,i)$ has $i-1$ children $(0,i-1),\dots,(0,1)$.
+\item For $h>0$, a node $(h,i)$, has $d$ children
+$(h,i-1),\dots,(h,1)$, $(h-1,d),\dots,(h-1, i)$.
+\item Thus, the node $T_d(dh+i)$ is labeled $(h,i)$.
 \end{itemize}
 \begin{center}
 \begin{tikzpicture}
-\matrix{
  \Tree 
-	[.$(1,2)$ 
-		[.$(1,1)$
-			[.$(0,3)$ $(0,2)$ $(0,1)$ ]
-			$(0,2)$ $(0,1)$
+	[.$T_d(6)$\\$(1,3)$ \edge[draw, dotted];
+		[.$T_d(5)$\\$(1,2)$
+			[.$T_d(4)$\\$(1,1)$
+				[.$T_d(3)$\\$(0,3)$ $T_d(2)$\\$(0,2)$ $T_d(1)$\\$(0,1)$ ]
+				$T_d(2)$\\$(0,2)$ %$T_d(1)$\\$(0,1)$
+			]
+			[.$T_d(3)$\\$(0,3)$ $T_d(2)$\\$(0,2)$ $T_d(1)$\\$(0,1)$ ]
+			%$T_d(2)$\\$(0,2)$
 		]
-		[.$(0,3)$ $(0,2)$ $(0,1)$ ]
-		$(0,2)$
+	\edge[draw=none]; {}
 	]
-\\};
 \end{tikzpicture}
 \end{center}
 \end{frame}
 
-\begin{frame}
-\frametitle{Proof of activation}
-We assign balls to the nodes of the AWT s.t.~th
-
+\newcommand\myInvariant{
 \begin{exampleblock}{Invariant}
 A ball $b_v$ referenced by a node $v$ with label $(h,i)$ was placed in a bin $x$ belonging to group $i$ that, at the time of insertion of the ball $b_v$, contained at least $h+3$ other balls. 
 \end{exampleblock}
+}
+
+\begin{frame}
+\frametitle{Proof of activation}
+\begin{block}{Lemma}
+The occurrence of a bad event (i.e., a bin contains more than $L+3$) implies the activation of an AWT of order $L$.
+\end{block}
+\bigskip
+\visible<2>{
+We assign balls to the nodes of the AWT s.t.:
+\myInvariant
+}
+\end{frame}
+
+\begin{frame}
+\frametitle{Proof of activation}
+
+\myInvariant
+
+Let a bin contain $L+4$ balls. We assign the topmost ball to the root of the AWT:
+\begin{columns}[onlytextwidth]
+\begin{column}{0.5\textwidth}
+\begin{center}
+\begin{tikzpicture}[scale=1, edge from parent/.style=
+     {draw, edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}]
+\Tree 
+	[.$(L,1)$ \edge[draw=black!30!red, thick];
+		[.$(L-1,3)$
+			[.$(L-1,2)$
+				[.$(L-1,1)$ ]
+				\edge[draw, densely dotted]; {}
+			]
+			\edge[draw, densely dotted]; {}
+		]
+		\edge[draw=black!30!red, thick];
+		[.$(L-1,2)$ \edge[draw, densely dotted]; {} \edge[draw, densely dotted]; {} ]
+	]
+\end{tikzpicture}
+\end{center}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{tikzpicture}[scale=\scalefac]
+	\bab{2 4 4 2 3 4}
+	\groupSep{3};
+	\setNode{1}{7};
+	\ball{1}{7};
+	\specialBall{2}{5};
+	\path (n17) edge[insert, bend left=25] (n25);
+	\path (n17) edge[insert, bend left=25] (n65);
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Proof of activation}
+Given a node $v$ with label $(h,i)$ that references a ball $b_v$ (which was put into some bin of group $i$ that contained at least $h+3$ other balls at the time of insertion of ball $b_v$), \alert{we conclude} that:
+\begin{enumerate}
+\only<1>{
+\item For $1\leq j < i$, the $j$-th location of the ball $b_v$ contains at least $h+4$ balls, at the insertion time of the ball $b_v$. If it contained less balls than the $i$-th location, the Always-go-left scheme would have put the ball $b_v$ into the bin pointed to by location $j$. We assign the topmost ball in location $j$ to the child $u$ of $v$ with label $(h,j)$. 
+}
+\only<2>{
+\item For $i < j \leq d$, the $j$-th location contains at least $h+3$ balls. If it contained less, the Always-go-left scheme would have put the ball $b_v$ into the bin location $j$ points to. We assign the topmost ball in location $j$ to the child node $u$ of $v$ labeled with $(h-1, j)$. \qed
+
+}
+\end{enumerate}
 
 \end{frame}
+
 
 \begin{frame}
 \frametitle{Probability of activation}
 \begin{lemma}
 For any $\alpha > 0$ and large enough $L$, the activation of an AWT of order L occurs with probability at most $n^{-\alpha}$.
 \end{lemma}
-
-\bigskip
+\medskip
 \begin{itemize}
 \item $k$\dots number of nodes
 \item $l$\dots number of leaves
@@ -659,11 +766,11 @@ p_\mathrm{e} = \left(\frac{d}{n}\right)^{k-1} \quad .
 \frametitle{Leaf events}
 \only<1>{
 \defLeafEvent
-At any time step $t$, at most $n/3$ bins contain 3 or more balls. \alert{But how are they distributed among the $d$ groups?}
+At any time step $t$, at most $n/3$ bins contain 3 or more balls. But \alert{how are they distributed} among the $d$ groups?
 
 \medskip
-$b_i$\dots number of bins in group $i$ containing 3 or more balls.
-$\beta_i = b_i d/n$\dots fraction of bins $b_i$ in group $i$. 
+$b_i$\dots number of bins in group $i$ containing 3 or more balls
+$\beta_i = b_i d/n$\dots fraction of bins $b_i$ in group $i$
 }
 \only<1-2>{
 \begin{align*}
@@ -700,29 +807,33 @@ L &\geq \left\lceil{\frac{\ln\log_2 n + \ln\left(1+\alpha\right)}{d \ln \Phi_d}}
 \end{align*}
 and we get
 \begin{align*}
-P_\mathrm{a} \leq n^{-\alpha} \quad  \qed
+P_\mathrm{a} \leq n^{-\alpha} \xqed{5cm}
 \end{align*}
 \end{frame}
 
 \begin{frame}
-\frametitle{Recap.}
+\frametitle{The big picture}
 \theoremVocking
 \assumptionOne
-\bigskip 
+\medskip 
 Next steps:
 \begin{itemize}
-\item Proof \alert{without} the simplifying assumption (V\"ocking, 2003).
-\item Proof for the \alert{heavily loaded} case (Berenbrink et al.,~2006).
+\item Prove \alert{without} the simplifying assumption (V\"ocking, 2003).
+\item Prove for the \alert{heavily loaded} case (Berenbrink et al.,~2006).
 \end{itemize}
-
 \end{frame}
-
 
 \begin{frame}
 \frametitle{Conclusion}
+\begin{enumerate}
+\item The balls-into-bins model \alert{adopts naturally} to various problems (hashing, load balancing,\dots).
+\item Applying the two-choice paradigm reduces the upper bound for the maximum load by an \alert{exponential factor} (compared to a single choice scheme).
+\item \alert{Many variations} possible: Non-uniform balls/bins; weighted balls; parallel allocation of several balls;\dots
+\item \alert{Witness trees} are a suitable proof technique for this kind of problems.
+\end{enumerate}
 \end{frame}
 
-\begin{frame}[allowframebreaks]
+\begin{frame}[shrink]
 \frametitle<presentation>{References}    
 \bibliographystyle{acm}
 \nocite{VOC03}
