@@ -1,6 +1,8 @@
 \documentclass[serif,professionalfonts]{beamer}
-
 \usetheme{Forcellini}
+
+\usepackage[backend=bibtex]{biblatex} 
+\addbibresource{../sources.bib} 
 
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -830,18 +832,19 @@ Next steps:
 \end{enumerate}
 \end{frame}
 
-\begin{frame}[shrink]
-\frametitle<presentation>{References}    
-\bibliographystyle{acm}
+\begin{frame}
+\frametitle{References}
 \nocite{VOC03}
 \nocite{ABKU99}
 \nocite{RS98}
 \nocite{BCSV06}
 \nocite{capocelli1990generalized}
-\setbeamertemplate{bibliography item}[text]
-\bibliography{../sources}
-\end{frame} 	
+\setbeamertemplate{bibliography item}[triangle]
+\printbibliography[keyword=main]
+\bigskip
 
+\printbibliography[notkeyword=main]
+\end{frame}
 
 \end{document}
 
