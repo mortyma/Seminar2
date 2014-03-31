@@ -202,7 +202,7 @@
 %Front matter
 %---------------------------------------------------------------------
 \title{The Power of Two Random Choices}
-\subtitle{And the Surprising Influence of Asymmetry}
+\subtitle{\dots and the Surprising Influence of Asymmetry}
 \author[M. Kalany]{Martin Kalany}
 \institute[TU Wien]
 {
@@ -276,7 +276,7 @@ We distinguish the \alert{lightly loaded} case ($m = n$) and the \alert{heavily 
 
 \medskip
 \begin{theorem}[Raab and Steger, 1998]
-When using the single choice strategy to distribute $m$ balls to $n$ bins, the maximum load will be, w.h.p.,
+When using the \alert{single choice} strategy to distribute $m$ balls to $n$ bins, the maximum load will be, w.h.p.,
 \begin{align*}
 \loadS \leq 
 	\begin{cases}
@@ -285,8 +285,6 @@ When using the single choice strategy to distribute $m$ balls to $n$ bins, the m
     \end{cases} \quad .
 \end{align*}
 \end{theorem}
-
-
 \end{frame}
 
 \begin{frame}
@@ -296,7 +294,7 @@ Put a ball into the \alert{least full} of $d\geq2$ randomly chosen bins.
 \end{exampleblock}
 
 \bigskip
-We can distinguish placement algorithms by the way the $d$ \alert{bins are sampled}:
+We distinguish placement algorithms by the way the $d$ \alert{bins are sampled}:
 \begin{enumerate}
 \item Uniformly and independently
 \item Non-uniformly and independently
@@ -340,7 +338,7 @@ When using the \alert{Greedy} algorithm to distribute $m$ balls to $n$ bins, the
 \begin{align*}
 \loadS \leq 
 	\begin{cases}
-    \frac{\ln n}{\ln\ln n} + O(1)              & m = n \\
+    \Theta\left(\frac{\ln n}{\ln\ln n}\right)           & m = n \\
     \frac{m}{n} + \Theta\left(\sqrt{\frac{m\ln n}{n}} \right)              & m \in \omega(n \ln n)
     \end{cases}
 \end{align*}
@@ -411,7 +409,7 @@ Generalized golden ratio $\Phi_d$:
 \Phi_d := \lim_{k \rightarrow \infty} \frac{F_d(k)}{F_d(k-1)}
 \end{align*}
 \begin{align*}
-\Phi_2 = 1.61 \quad , \quad \forall i\; \forall j \in \mathbb{N}: i < j \implies \Phi_i < \Phi_j \quad , \quad \lim_{d\rightarrow \infty} \Phi_d = 2 \quad .
+\Phi_2 = 1.61 \quad , \quad \forall i\; \forall j \in \mathbb{N}: i < j \implies \Phi_i < \Phi_j \quad , \quad \lim_{d\rightarrow \infty} \Phi_d = 2 
 \end{align*}
 \begin{align*}
 F_d(k) \geq \Phi_d^{k-2}
@@ -451,7 +449,7 @@ When using the \alert{Always-go-left} algorithm to distribute $m$ balls to $n$ b
 The combination of \alert{asymmetric tie breaking} and \alert{non-uniform} (and independent) sampling of the $d$ bins is crucial to achieve this upper bound.
 \bigskip
 \begin{theorem}[V\"ocking, 2003]
-For $m=n$, using an arbitrary allocation scheme that chooses $d$ bins for each ball at random (i.e., class 3) the maximum load is, w.h.p,
+For $m=n$, using an arbitrary allocation scheme that chooses $d$ bins for each ball at random (i.e., class 3), the maximum load is, w.h.p,
 \begin{align*}
 \loadAgl = \frac{\ln \ln n}{d \ln \Phi_d} - O(1) \quad .
 \end{align*}
@@ -667,7 +665,7 @@ A ball $b_v$ referenced by a node $v$ with label $(h,i)$ was placed in a bin $x$
 \begin{frame}
 \frametitle{Proof of activation}
 \begin{block}{Lemma}
-The occurrence of a bad event (i.e., a bin contains more than $L+3$) implies the activation of an AWT of order $L$.
+The occurrence of a bad event (i.e., a bin contains more than $L+3$ balls) implies the activation of an AWT of order $L$.
 \end{block}
 \bigskip
 \visible<2>{
@@ -728,7 +726,6 @@ Given a node $v$ with label $(h,i)$ that references a ball $b_v$ (which was put 
 
 }
 \end{enumerate}
-
 \end{frame}
 
 
@@ -758,7 +755,7 @@ P_\mathrm{a} = \omega p_e p_l \quad , \quad \omega = n^k
 \bigskip
 One edge is activated with probability at most $d/n$ and we have $k-1$ edges; thus
 \begin{align*}
-p_\mathrm{e} = \left(\frac{d}{n}\right)^{k-1} \quad .
+p_\mathrm{e} \leq \left(\frac{d}{n}\right)^{k-1} \quad .
 \end{align*}
 \end{frame}
 
@@ -795,7 +792,7 @@ p_\mathrm{l}' \leq  \left(\frac{1}{3}\right)^d \implies p_\mathrm{l} \leq 3^{-dl
 \frametitle{Probability of activation}
 Putting it together, we get
 \begin{align*}
-P_\mathrm{a} = \omega p_e p_l \leq  n^k \left(\frac{d}{n}\right)^{k-1} 3^{-dl} \quad .
+P_\mathrm{a} \leq \omega p_e p_l \leq  n^k \left(\frac{d}{n}\right)^{k-1} 3^{-dl} \quad .
 \end{align*}
 Using $ k\leq 2l$, $2d^2\leq 3^d$ and $l \geq \Phi_d^{dL-1}$, we can simplify to
 \begin{align*}
@@ -827,7 +824,7 @@ Next steps:
 \frametitle{Conclusion}
 \begin{enumerate}
 \item The balls-into-bins model \alert{adopts naturally} to various problems (hashing, load balancing,\dots).
-\item Applying the two-choice paradigm reduces the upper bound for the maximum load by an \alert{exponential factor} (compared to a single choice scheme).
+\item Applying the two-choice paradigm reduces the upper bound for the maximum load by an \alert{exponential factor} (compared to the single choice scheme).
 \item \alert{Many variations} possible: Non-uniform balls/bins; weighted balls; parallel allocation of several balls;\dots
 \item \alert{Witness trees} are a suitable proof technique for this kind of problems.
 \end{enumerate}
