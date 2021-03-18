@@ -29,6 +29,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: dist-without-markdown
-          path: article.df
+          path: article.pdf
 
   
