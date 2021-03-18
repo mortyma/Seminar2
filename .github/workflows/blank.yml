@@ -21,6 +21,6 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: make
+        run: cd "${{ github.workspace }}/" && make
 
   
