@@ -3,7 +3,7 @@
 NAME = presentation
 
 %.pdf:	%.tex
-	latexmk -pdf $<
+	pdflatex $<
 
 $(NAME).pdf: $(DIRS)
 
