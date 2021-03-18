@@ -3,7 +3,7 @@
 NAME = article
 
 %.pdf:	%.tex
-	pdflatex -pdf $<
+	pdflatex $<
 
 $(NAME).pdf: $(DIRS)
 
